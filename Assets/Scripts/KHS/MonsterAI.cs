@@ -13,11 +13,12 @@ public class MonsterAI : MonoBehaviour
     
     private Vector3 originPos = Vector3.zero;
     private BehaviorTreeRunner runnerBT = null;
-    [SerializeField]Transform detectedPlayerTr = null;
+    Transform detectedPlayerTr = null;
     private Animator anim = null;
 
     private const string _ATTACK_ANIM_STATE_NAME = "Attack";
-    private const string _ATTACK_ANIM_TRIGGER_NAME = "attack";
+    private const string _ATTACK_ANIM_BOOL_NAME = "attack";
+    private const string _DETECT_ANIM_BOOL_NAME = "detect";
 
     private void Awake()
     {
@@ -81,6 +82,7 @@ public class MonsterAI : MonoBehaviour
         {
             return INode.ENodeState.ENS_Running;
         }
+        anim.SetBool(_ATTACK_ANIM_BOOL_NAME, false);
         return INode.ENodeState.ENS_Success;
     }
 
@@ -101,7 +103,7 @@ public class MonsterAI : MonoBehaviour
     {
         if(detectedPlayerTr != null)
         {
-            anim.SetTrigger(_ATTACK_ANIM_TRIGGER_NAME);
+            anim.SetTrigger(_ATTACK_ANIM_BOOL_NAME);
             return INode.ENodeState.ENS_Success;
         }
 
@@ -132,15 +134,14 @@ public class MonsterAI : MonoBehaviour
         {
             if (Vector3.SqrMagnitude(detectedPlayerTr.position - transform.position) < (meleeAttackRange * meleeAttackRange))
             {
-                anim.SetBool("isWalking", false);
                 return INode.ENodeState.ENS_Success;
             }
-            anim.SetBool("isWalking", true);
-            transform.position = Vector3.MoveTowards(transform.position, detectedPlayerTr.position, Time.deltaTime * movSpeed);
+
+            transform.position = Vector3.MoveTowards(transform.position, new Vector3(detectedPlayerTr.position.x, 0f, detectedPlayerTr.position.z), Time.deltaTime * movSpeed);
 
             return INode.ENodeState.ENS_Running;
         }
-        anim.SetBool("isWalking", false);
+
         return INode.ENodeState.ENS_Failure;
     }
     #endregion
@@ -150,12 +151,10 @@ public class MonsterAI : MonoBehaviour
     {
         if(Vector3.SqrMagnitude(originPos - transform.position) < float.Epsilon * float.Epsilon)
         {
-            anim.SetBool("isWalking", false);
             return INode.ENodeState.ENS_Success;
         }
         else
         {
-            anim.SetBool("isWalking", false);
             transform.position = Vector3.MoveTowards(transform.position, originPos, Time.deltaTime * movSpeed);
             return INode.ENodeState.ENS_Running;
         }
