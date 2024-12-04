@@ -119,19 +119,23 @@ public class MonsterAI : MonoBehaviour
         if(overlapColliders != null && overlapColliders.Length > 0)
         {
             detectedPlayerTr = overlapColliders[0].transform;
-
+            anim.SetBool(_DETECT_ANIM_BOOL_NAME, true);
             return INode.ENodeState.ENS_Success;
         }
 
         detectedPlayerTr = null;
-
+        anim.SetBool(_DETECT_ANIM_BOOL_NAME, false);
         return INode.ENodeState.ENS_Failure;
     }
 
     INode.ENodeState MoveToDetectEnemy()
     {
+
         if(detectedPlayerTr != null)
         {
+            Vector3 lookDirection = new Vector3(detectedPlayerTr.position.x, transform.position.y, detectedPlayerTr.position.z);
+            transform.LookAt(lookDirection);
+
             if (Vector3.SqrMagnitude(detectedPlayerTr.position - transform.position) < (meleeAttackRange * meleeAttackRange))
             {
                 return INode.ENodeState.ENS_Success;
