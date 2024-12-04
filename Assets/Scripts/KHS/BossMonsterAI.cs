@@ -282,6 +282,7 @@ public class BossMonsterAI : MonoBehaviour
     {
         if(!anim.GetBool(_DETECT_ANIM_BOOL_NAME))
         {
+            anim.SetBool(_ATTACK_ANIM_BOOL_NAME, false);
             return INode.ENodeState.ENS_Success;
         }
         return INode.ENodeState.ENS_Failure;
