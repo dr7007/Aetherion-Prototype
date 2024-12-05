@@ -985,6 +985,39 @@ MonoBehaviour:
   monsterLayer:
     serializedVersion: 2
     m_Bits: 128
+  reactCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 1
+      inSlope: 0.42195535
+      outSlope: 0.42195535
+      tangentMode: 34
+      weightedMode: 0
+      inWeight: 0
+      outWeight: 0.33333334
+    - serializedVersion: 3
+      time: 0.45833334
+      value: 1.1933962
+      inSlope: 0.03245808
+      outSlope: 0.03245808
+      tangentMode: 34
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
+    - serializedVersion: 3
+      time: 1
+      value: 1
+      inSlope: -0.35703918
+      outSlope: -0.35703918
+      tangentMode: 34
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
 --- !u!1001 &1676729982
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -993,9 +1026,21 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 4925623993111209126, guid: ab0471614838b9c41b27414b39081e9c, type: 3}
+      propertyPath: m_TagString
+      value: Monster
+      objectReference: {fileID: 0}
     - target: {fileID: 4938655501378027797, guid: ab0471614838b9c41b27414b39081e9c, type: 3}
       propertyPath: m_Name
       value: Maw J Laygo
+      objectReference: {fileID: 0}
+    - target: {fileID: 4938655501378027797, guid: ab0471614838b9c41b27414b39081e9c, type: 3}
+      propertyPath: m_Layer
+      value: 7
+      objectReference: {fileID: 0}
+    - target: {fileID: 4938655501378027797, guid: ab0471614838b9c41b27414b39081e9c, type: 3}
+      propertyPath: m_TagString
+      value: Monster
       objectReference: {fileID: 0}
     - target: {fileID: 5747281073882717103, guid: ab0471614838b9c41b27414b39081e9c, type: 3}
       propertyPath: m_LocalPosition.x

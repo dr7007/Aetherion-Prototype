@@ -1,3 +1,4 @@
+using System.Collections;
 using System.Linq;
 using UnityEngine;
 
@@ -14,10 +15,14 @@ public class PlayerBattle : MonoBehaviour
 
     private Collider[] colliders;
     private Vector3 mosterPosition;
-
     private PlayerAnim pAnim;
     private Animator anim;
     private Vector3 hitDir;
+    private CharacterController controller;
+
+    [SerializeField] private AnimationCurve reactCurve;
+    private float reactTimer;
+
 
     private void Awake()
     {
@@ -28,6 +33,10 @@ public class PlayerBattle : MonoBehaviour
     {
         anim = GetComponent<Animator>();
         pAnim = GetComponent<PlayerAnim>();
+        controller = GetComponent<CharacterController>();
+
+        Keyframe dodge_lastFrame = reactCurve[reactCurve.length - 1];
+        reactTimer = dodge_lastFrame.time;
     }
 
     private void Update()
@@ -57,12 +66,13 @@ public class PlayerBattle : MonoBehaviour
 
     private void OnTriggerEnter(Collider other)
     {
-        Debug.Log("Trigger 발생");
-
         if (other.CompareTag("Monster"))
         {
             // 맞는 방향을 구하고
             hitDir = new Vector3(transform.position.x - mosterPosition.x, 0f, transform.position.z - mosterPosition.z).normalized;
+
+            // 히트 리액션 보정을 위한 움직임 코루틴
+            StartCoroutine("HitReactCoroutine", hitDir);
 
             // 방향을 플레이어 방향에 맞춰서 한번 바꾸고
             hitDir = transform.InverseTransformDirection(hitDir);
@@ -71,7 +81,25 @@ public class PlayerBattle : MonoBehaviour
             anim.SetFloat("HitDirX", hitDir.x);
             anim.SetFloat("HitDirZ", hitDir.z);
             anim.CrossFade("HitReact", 0.3f);
+
         }
+    }
+
+    // 애니메이션 시간동안 캐릭터를 움직여줄 예정
+    private IEnumerator HitReactCoroutine(Vector3 _hitDir)
+    {
+        float timer = 0f;
+        anim.applyRootMotion = !anim.applyRootMotion;
+
+        while (timer < reactTimer)
+        {
+            float speed = reactCurve.Evaluate(timer);
+            controller.SimpleMove(speed * _hitDir * 5f);
+            timer += Time.deltaTime;
+            yield return null;
+        }
+
+        anim.applyRootMotion = !anim.applyRootMotion;
     }
 
     // 만약 공격중이라면 공격 콜라이더를 킴.
