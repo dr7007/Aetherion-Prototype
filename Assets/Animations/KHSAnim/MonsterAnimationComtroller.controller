@@ -121,7 +121,7 @@ AnimatorState:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_Name: TrackingPlayer
-  m_Speed: 0.7
+  m_Speed: 0.4
   m_CycleOffset: 0
   m_Transitions:
   - {fileID: 7472850433441180516}
@@ -314,16 +314,16 @@ AnimatorStateMachine:
     m_Position: {x: 30, y: 330, z: 0}
   - serializedVersion: 1
     m_State: {fileID: 2018354780620575664}
-    m_Position: {x: 280, y: 330, z: 0}
+    m_Position: {x: 290, y: 340, z: 0}
   - serializedVersion: 1
     m_State: {fileID: -7862418330771659689}
-    m_Position: {x: 280, y: 220, z: 0}
+    m_Position: {x: 310, y: 190, z: 0}
   - serializedVersion: 1
     m_State: {fileID: -4766514429777869572}
-    m_Position: {x: 560, y: 220, z: 0}
+    m_Position: {x: 610, y: 200, z: 0}
   - serializedVersion: 1
     m_State: {fileID: -6896355487482620625}
-    m_Position: {x: 560, y: 370, z: 0}
+    m_Position: {x: 620, y: 320, z: 0}
   - serializedVersion: 1
     m_State: {fileID: -6312335715388479385}
     m_Position: {x: 280, y: 10, z: 0}

@@ -16,7 +16,8 @@ public class BossMonsterAI : MonoBehaviour
     [SerializeField] private float rotationSpeed = 2f; // 회전 속도
 
     [Header("BossStats")]
-    [SerializeField] private float hp = 30000f;
+    [SerializeField] private float maxHp = 30000f;
+    [SerializeField] private float currentHp;
     [SerializeField] private float atk = 30f;
 
     [Header("Collider")]
@@ -46,6 +47,16 @@ public class BossMonsterAI : MonoBehaviour
     private float tmpTime = 0f;
     private float offset = 5f;
 
+    public delegate void OnHpChangedDelegate(float currentHp, float maxHp);
+
+    // UI 업데이트를 위한 콜백 이벤트
+    private OnHpChangedDelegate hpChangedCallback = null;
+    public OnHpChangedDelegate HpChangedCallback
+    {
+        get {  return hpChangedCallback; }
+        set { hpChangedCallback = value; }
+    }
+
     private const string _ATTACK_ANIM_STATE_NAME = "Attack";
     private const string _ATTACK_ANIM_TRIGGER_NAME = "attack";
     private const string _FIRSTDETECT_ANIM_BOOL_NAME = "first_detect";
@@ -54,9 +65,12 @@ public class BossMonsterAI : MonoBehaviour
     private const string _COUNTER_ANIM_TRIGGER_NAME = "counter";
     private const string _RANGE_ANIM_INT_NAME = "range_level";
     private const string _PLAYERATTACK_ANIM_TRIGGER_NAME = "playerattacking";
+    private const string _DIE_ANUM_TRIGGER_NAME = "die";
+
 
     private void Awake()
     {
+        currentHp = maxHp;
         anim = GetComponent<Animator>();
         runnerBT = new BehaviorTreeRunner(SettingBT());
         originPos = transform.position;
@@ -109,6 +123,18 @@ public class BossMonsterAI : MonoBehaviour
                 Debug.Log("대상은 이미 대미지를 받았으므로 무시합니다.");
             }
         }
+
+        if (_collider.CompareTag("PlayerAttack")) // 플레이어 무기에 의해 공격받은 경우
+        {
+            Player playerAttack = _collider.GetComponentInChildren<Player>();
+            if (playerAttack != null)
+            {
+                float damage = playerAttack.GetDamage(); // 플레이어의 공격력 가져오기
+                Debug.Log("플레이어에 의해 대미지!" +  damage);
+                TakeDamage(damage); // 보스에게 대미지 적용
+            }
+        }
+        Debug.Log("태그 무관");
     }
     private void ApplyDamageToPlayer(Collider _collider)
     {
@@ -513,14 +539,24 @@ public class BossMonsterAI : MonoBehaviour
         Gizmos.color = Color.red;
         Gizmos.DrawWireSphere(this.transform.position, level_Three_Range);
     }
-    
+    public void TakeDamage(float _damage)
+    {
+        currentHp -= _damage;
+        currentHp = Mathf.Max(0, currentHp); // 체력이 0 이하로 내려가지 않도록 처리
+
+        Debug.Log($"Boss took damage: {_damage}, Current HP: {currentHp}");
+
+        // UI 업데이트를 위해 콜백 호출
+        HpChangedCallback?.Invoke(currentHp, maxHp);
+
+        // 보스 사망 처리
+        if (currentHp <= 0)
+        {
+            anim.SetTrigger(_DIE_ANUM_TRIGGER_NAME);
+        }
+    }
     public void DieCall()
     {
-        StartCoroutine(DieCoroutine());
-    }
-    private IEnumerator DieCoroutine()
-    {
-        yield return new WaitForSeconds(5.0f);
-        Destroy(gameObject);
+        Destroy(gameObject, 5f);
     }
 }

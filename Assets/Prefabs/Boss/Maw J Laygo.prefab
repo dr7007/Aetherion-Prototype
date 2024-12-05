@@ -52,6 +52,10 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 91.098
       objectReference: {fileID: 0}
+    - target: {fileID: 8009316804994446287, guid: c7341ed93d697864fadc4ab0a683e448, type: 3}
+      propertyPath: m_TagString
+      value: MonsterWeapon
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -60,6 +64,11 @@ PrefabInstance:
 --- !u!4 &65289093218097230 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 3141946610954702631, guid: c7341ed93d697864fadc4ab0a683e448, type: 3}
+  m_PrefabInstance: {fileID: 3133832295011211113}
+  m_PrefabAsset: {fileID: 0}
+--- !u!65 &8825215123261246034 stripped
+BoxCollider:
+  m_CorrespondingSourceObject: {fileID: 5838052407911521595, guid: c7341ed93d697864fadc4ab0a683e448, type: 3}
   m_PrefabInstance: {fileID: 3133832295011211113}
   m_PrefabAsset: {fileID: 0}
 --- !u!1001 &5208633776806542404
@@ -215,7 +224,7 @@ MonoBehaviour:
   rotationSpeed: 2
   hp: 30000
   atk: 30
-  weaponCollider: {fileID: 0}
+  weaponCollider: {fileID: 8825215123261246034}
   hitCooldown: 1.5
 --- !u!65 &1690495821801067573
 BoxCollider:
@@ -236,8 +245,8 @@ BoxCollider:
   m_ProvidesContacts: 0
   m_Enabled: 1
   serializedVersion: 3
-  m_Size: {x: 1, y: 0.2, z: 1}
-  m_Center: {x: 0, y: 0.1, z: 0}
+  m_Size: {x: 0.45, y: 2, z: 0.45}
+  m_Center: {x: 0, y: 1, z: 0}
 --- !u!54 &8017511034020998699
 Rigidbody:
   m_ObjectHideFlags: 0
