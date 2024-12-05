@@ -12,7 +12,9 @@ public class PlayerAnim : MonoBehaviour
         LeftEvasion = 3,
         RightEvasion = 4,
         FrontEvasion = 5,
-        BackEvasion = 6
+        BackEvasion = 6,
+        Evasion = 7,
+        AttackVisible = 8
     };
 
     [SerializeField] private float battleModeShiftSpeed = 1.5f;
@@ -124,6 +126,8 @@ public class PlayerAnim : MonoBehaviour
     {
         anim.SetBool("IsBattleMode", _IsBattleMode);
     }
+    #endregion
+
     // 현재 어떤 함수가 진행중인지 확인하는 함수
     public EAnim CheckAnim()
     {
@@ -141,10 +145,9 @@ public class PlayerAnim : MonoBehaviour
 
         if (stateInfo.IsName("EvasionBack") || stateInfo.IsName("EvasionForward") || stateInfo.IsName("EvasionRight") || stateInfo.IsName("EvasionLeft"))
         {
-            return EAnim.LeftEvasion;
+            return EAnim.Evasion;
         }
 
         return EAnim.Nothing;
     }
-    #endregion
 }

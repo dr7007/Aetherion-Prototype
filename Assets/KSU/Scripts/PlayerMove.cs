@@ -43,7 +43,7 @@ public class PlayerMove : MonoBehaviour
         Gravity();
 
         // 구르기 애니메이션 or 회피 진행중이라면 키입력 안받음.
-        if (pAnim.CheckAnim() == PlayerAnim.EAnim.Roll || pAnim.CheckAnim() == PlayerAnim.EAnim.LeftEvasion) return;
+        if (pAnim.CheckAnim() == PlayerAnim.EAnim.Roll || pAnim.CheckAnim() == PlayerAnim.EAnim.Evasion) return;
 
         // 공격 애니메이션 중에는 마우스 입력과, space바만 가능
         if (pAnim.CheckAnim() == PlayerAnim.EAnim.Attack && IsBattleMode)
