@@ -30,7 +30,7 @@ public class BossMonsterAI : MonoBehaviour
         RESIST = 1
     }
 
-
+    private Player player = null;
 
     private bool isAnimationLocked = false; // 애니메이션 도중 방향 고정 여부
     private Quaternion lockedRotation; // 고정된 회전값
@@ -60,6 +60,7 @@ public class BossMonsterAI : MonoBehaviour
         anim = GetComponent<Animator>();
         runnerBT = new BehaviorTreeRunner(SettingBT());
         originPos = transform.position;
+        player = FindAnyObjectByType<Player>();
     }
     private void Start()
     {
@@ -179,11 +180,14 @@ public class BossMonsterAI : MonoBehaviour
         }
 
         // 플레이어 공격 트리거 활성화
-        anim.SetTrigger(_PLAYERATTACK_ANIM_TRIGGER_NAME); // 공격 애니메이션 트리거
-        Debug.Log("PlayerAttacking 트리거 동작!");
+        if (player.IsPlayerAttacking)
+        {
+            anim.SetTrigger(_PLAYERATTACK_ANIM_TRIGGER_NAME); // 공격 애니메이션 트리거
+            Debug.Log("PlayerAttacking 트리거 동작!");
 
-        // 쿨타임 시작
-        StartCoroutine(StartPlayerAttackingCooldown());
+            // 쿨타임 시작
+            StartCoroutine(StartPlayerAttackingCooldown());
+        }
     }
     private IEnumerator StartPlayerAttackingCooldown()
     {
@@ -192,6 +196,7 @@ public class BossMonsterAI : MonoBehaviour
 
         yield return new WaitForSeconds(playerAttackingCooldown);
 
+        player.IsPlayerAttacking = false;
         anim.ResetTrigger(_PLAYERATTACK_ANIM_TRIGGER_NAME);
         isPlayerAttackingOnCooldown = false; // 쿨타임 종료
         Debug.Log("PlayerAttacking 쿨타임 종료! 이제 다시 활성화할 수 있습니다.");
@@ -442,7 +447,7 @@ public class BossMonsterAI : MonoBehaviour
 
     INode.ENodeState PressAttackCheck()
     {
-        if(anim.GetBool(_PLAYERATTACK_ANIM_TRIGGER_NAME) && !isPlayerAttackingOnCooldown)
+        if(!isPlayerAttackingOnCooldown)
         {
             CheckPlayerAttacking();
             return INode.ENodeState.ENS_Success;
@@ -468,7 +473,7 @@ public class BossMonsterAI : MonoBehaviour
     }
     INode.ENodeState DefaultMeleeAttackEnemy()
     {
-        if (!anim.GetBool(_ATTACK_ANIM_TRIGGER_NAME))
+        if (!anim.GetBool(_ATTACK_ANIM_TRIGGER_NAME) && anim.GetBool(_PLAYERATTACK_ANIM_TRIGGER_NAME))
         {
             anim.SetTrigger(_ATTACK_ANIM_TRIGGER_NAME);
             Debug.Log("보스가 근접 공격을 실행합니다.");
@@ -477,6 +482,7 @@ public class BossMonsterAI : MonoBehaviour
 
         return INode.ENodeState.ENS_Failure;
     }
+
     INode.ENodeState UpperAttackEnemy()
     {
         return INode.ENodeState.ENS_Failure;
