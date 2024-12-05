@@ -300,6 +300,34 @@ PrefabInstance:
       propertyPath: m_ConstrainProportionsScale
       value: 1
       objectReference: {fileID: 0}
+    - target: {fileID: 5838052407911521595, guid: 0907a7e1938f1504690d870c9b437a3c, type: 3}
+      propertyPath: m_Size.x
+      value: 0.2
+      objectReference: {fileID: 0}
+    - target: {fileID: 5838052407911521595, guid: 0907a7e1938f1504690d870c9b437a3c, type: 3}
+      propertyPath: m_Size.y
+      value: 0.17087744
+      objectReference: {fileID: 0}
+    - target: {fileID: 5838052407911521595, guid: 0907a7e1938f1504690d870c9b437a3c, type: 3}
+      propertyPath: m_Size.z
+      value: 0.2
+      objectReference: {fileID: 0}
+    - target: {fileID: 5838052407911521595, guid: 0907a7e1938f1504690d870c9b437a3c, type: 3}
+      propertyPath: m_Enabled
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5838052407911521595, guid: 0907a7e1938f1504690d870c9b437a3c, type: 3}
+      propertyPath: m_Center.x
+      value: -0.000000002591574
+      objectReference: {fileID: 0}
+    - target: {fileID: 5838052407911521595, guid: 0907a7e1938f1504690d870c9b437a3c, type: 3}
+      propertyPath: m_Center.y
+      value: -0.058527872
+      objectReference: {fileID: 0}
+    - target: {fileID: 5838052407911521595, guid: 0907a7e1938f1504690d870c9b437a3c, type: 3}
+      propertyPath: m_Center.z
+      value: -0.0000000058311773
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -308,6 +336,11 @@ PrefabInstance:
 --- !u!4 &607879337 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 3141946610954702631, guid: 0907a7e1938f1504690d870c9b437a3c, type: 3}
+  m_PrefabInstance: {fileID: 607879336}
+  m_PrefabAsset: {fileID: 0}
+--- !u!65 &607879338 stripped
+BoxCollider:
+  m_CorrespondingSourceObject: {fileID: 5838052407911521595, guid: 0907a7e1938f1504690d870c9b437a3c, type: 3}
   m_PrefabInstance: {fileID: 607879336}
   m_PrefabAsset: {fileID: 0}
 --- !u!1 &771369314
@@ -443,7 +476,7 @@ GameObject:
   - component: {fileID: 944383852}
   m_Layer: 6
   m_Name: Player
-  m_TagString: Untagged
+  m_TagString: Player
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -623,8 +656,11 @@ MonoBehaviour:
   level_Three_Range: 50
   walkSpeed: 6
   runSpeed: 12
+  rotationSpeed: 2
   hp: 30000
   atk: 30
+  weaponCollider: {fileID: 607879338}
+  hitCooldown: 1.5
 --- !u!65 &1735650159
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -687,7 +723,7 @@ GameObject:
   - component: {fileID: 2070875842}
   m_Layer: 6
   m_Name: Body
-  m_TagString: Untagged
+  m_TagString: Player
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -703,7 +739,7 @@ Transform:
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 1, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
-  m_ConstrainProportionsScale: 0
+  m_ConstrainProportionsScale: 1
   m_Children: []
   m_Father: {fileID: 944383851}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}

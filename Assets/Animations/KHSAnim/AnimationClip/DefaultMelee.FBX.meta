@@ -1,12 +1,5 @@
 fileFormatVersion: 2
-guid: 354e2534ebe22924aa88785ea859815a
-AssetOrigin:
-  serializedVersion: 1
-  productId: 129733
-  packageName: Frank Action RPG 2Handed (Combination)
-  packageVersion: 1.7
-  assetPath: Assets/Frank_RPG_2Handed/Assets/Animations/FBX_Animation/Root_Motion/Frank_RPG_2Hand_Combo05_All.FBX
-  uploadId: 300957
+guid: 6534fdf88911b2d4eb0ca261526aabc2
 ModelImporter:
   serializedVersion: 22200
   internalIDToNameTable:
@@ -530,22 +523,21 @@ ModelImporter:
       animation that will be discarded.\n\t'thigh_r' has translation animation that
       will be discarded.\n\t'calf_r' has translation animation that will be discarded.\n\t'foot_r'
       has translation animation that will be discarded.\n\t'ball_r' has translation
-      animation that will be discarded.\n\t'spine_02' has translation animation that
-      will be discarded.\n\t'spine_03' has translation animation that will be discarded.\n\t'upperarm_l'
-      has translation animation that will be discarded.\n\t'lowerarm_l' has translation
-      animation that will be discarded.\n\t'hand_l' has translation animation that
-      will be discarded.\n\t'index_01_l' has translation animation that will be discarded.\n\t'index_02_l'
+      animation that will be discarded.\n\t'spine_01' has translation animation that
+      will be discarded.\n\t'spine_02' has translation animation that will be discarded.\n\t'spine_03'
+      has translation animation that will be discarded.\n\t'upperarm_l' has translation
+      animation that will be discarded.\n\t'lowerarm_l' has translation animation
+      that will be discarded.\n\t'hand_l' has translation animation that will be
+      discarded.\n\t'index_01_l' has translation animation that will be discarded.\n\t'index_02_l'
       has translation animation that will be discarded.\n\t'index_03_l' has translation
-      animation that will be discarded.\n\t'middle_01_l' has translation animation
-      that will be discarded.\n\t'middle_02_l' has translation animation that will
-      be discarded.\n\t'middle_03_l' has translation animation that will be discarded.\n\t'ring_01_l'
-      has translation animation that will be discarded.\n\t'ring_02_l' has translation
-      animation that will be discarded.\n\t'ring_03_l' has translation animation
-      that will be discarded.\n\t'pinky_01_l' has translation animation that will
-      be discarded.\n\t'pinky_02_l' has translation animation that will be discarded.\n\t'upperarm_r'
-      has translation animation that will be discarded.\n\t'lowerarm_r' has translation
-      animation that will be discarded.\n\t'hand_r' has translation animation that
-      will be discarded.\n\t'head' has translation animation that will be discarded.\n"
+      animation that will be discarded.\n\t'middle_02_l' has translation animation
+      that will be discarded.\n\t'middle_03_l' has translation animation that will
+      be discarded.\n\t'ring_02_l' has translation animation that will be discarded.\n\t'ring_03_l'
+      has translation animation that will be discarded.\n\t'pinky_02_l' has translation
+      animation that will be discarded.\n\t'upperarm_r' has translation animation
+      that will be discarded.\n\t'lowerarm_r' has translation animation that will
+      be discarded.\n\t'hand_r' has translation animation that will be discarded.\n\t'head'
+      has translation animation that will be discarded.\n"
     animationRetargetingWarnings: 
     animationDoRetargetingWarnings: 0
     importAnimatedCustomProperties: 0
@@ -563,7 +555,7 @@ ModelImporter:
       takeName: Take 001
       internalID: 7400000
       firstFrame: 0
-      lastFrame: 240
+      lastFrame: 95
       wrapMode: 0
       orientationOffsetY: 0
       level: 0
@@ -582,7 +574,28 @@ ModelImporter:
       mirror: 0
       bodyMask: 01000000010000000100000001000000010000000100000001000000010000000100000001000000010000000100000001000000
       curves: []
-      events: []
+      events:
+      - time: 0.3676627
+        functionName: EnableWeaponCollider
+        data: 
+        objectReferenceParameter: {fileID: 11500000, guid: 201aef397f5431d46bf017b650584d8f, type: 3}
+        floatParameter: 0
+        intParameter: 0
+        messageOptions: 0
+      - time: 0.45680788
+        functionName: DisableWeaponCollider
+        data: 
+        objectReferenceParameter: {fileID: 11500000, guid: 201aef397f5431d46bf017b650584d8f, type: 3}
+        floatParameter: 0
+        intParameter: 0
+        messageOptions: 0
+      - time: 0.98155546
+        functionName: EndAttack
+        data: 
+        objectReferenceParameter: {fileID: 11500000, guid: 201aef397f5431d46bf017b650584d8f, type: 3}
+        floatParameter: 0
+        intParameter: 0
+        messageOptions: 0
       transformMask: []
       maskType: 3
       maskSource: {instanceID: 0}
