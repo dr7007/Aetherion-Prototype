@@ -10,7 +10,7 @@ public class PlayerMove : MonoBehaviour
     [SerializeField] private float rollCooldown = 5f; // 구르기 쿨타임
     [SerializeField] private PlayerAnim pAnim; // animation 관리하는 PlayerAnim 스크립트
     [SerializeField] private float evasionTime = 1f;
-
+    [SerializeField] private Material HDR;
 
     private CharacterController controller;
     private float startSpeed; // 처음 시작속도(걷는 속도) - 달리다가 돌아올때 필요
@@ -50,7 +50,7 @@ public class PlayerMove : MonoBehaviour
         Gravity();
 
         // 구르기 애니메이션 or 회피 진행중이라면 키입력 안받음.
-        if (pAnim.CheckAnim() == PlayerAnim.EAnim.Roll || pAnim.CheckAnim() == PlayerAnim.EAnim.Evasion) return;
+        if (pAnim.CheckAnim() == PlayerAnim.EAnim.Roll || pAnim.CheckAnim() == PlayerAnim.EAnim.Evasion || pAnim.CheckAnim() == PlayerAnim.EAnim.HitReact) return;
 
         // 공격 애니메이션 중에는 마우스 입력과, space바만 가능
         if (pAnim.CheckAnim() == PlayerAnim.EAnim.Attack && IsBattleMode)
@@ -95,7 +95,10 @@ public class PlayerMove : MonoBehaviour
     // 회피때 바꾼 태그 정상화
     private void ResetTag()
     {
-        gameObject.tag = "Default";
+        // 회피 무적 끝
+        // HDR.DisableKeyword("_EMISSION");
+
+        gameObject.tag = "Player";
     }
 
     // 3인칭 시점의 플레이어 회전
@@ -170,8 +173,11 @@ public class PlayerMove : MonoBehaviour
         if (Input.GetKeyDown(KeyCode.Space) && canRoll)
         {
             // roll 할때 -> 공격 안받는 tag로 변경
-            // gameObject.tag = "DodgeState";
-            // Invoke("ResetTag", 1.0f);
+            gameObject.tag = "Evasion";
+            Invoke("ResetTag", evasionTime);
+
+            // 임시용 코드 (회피 무적확인)
+            // HDR.EnableKeyword("_EMISSION");
 
             // roll 쿨타임 on
             // canRoll = false;

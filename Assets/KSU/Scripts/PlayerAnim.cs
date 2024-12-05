@@ -14,14 +14,15 @@ public class PlayerAnim : MonoBehaviour
         FrontEvasion = 5,
         BackEvasion = 6,
         Evasion = 7,
-        AttackVisible = 8
+        AttackVisible = 8,
+        HitReact = 9
     };
 
     [SerializeField] private float battleModeShiftSpeed = 1.5f;
 
     private Animator anim;
-    public bool[] comboOn;
-    public int comboCnt;
+    private bool[] comboOn;
+    private int comboCnt;
 
     private void Awake()
     {
@@ -128,7 +129,7 @@ public class PlayerAnim : MonoBehaviour
     }
     #endregion
 
-    // 현재 어떤 함수가 진행중인지 확인하는 함수
+    // 현재 어떤 애니메이션이 진행중인지 확인하는 함수
     public EAnim CheckAnim()
     {
         AnimatorStateInfo stateInfo = anim.GetCurrentAnimatorStateInfo(0);
@@ -146,6 +147,11 @@ public class PlayerAnim : MonoBehaviour
         if (stateInfo.IsName("EvasionBack") || stateInfo.IsName("EvasionForward") || stateInfo.IsName("EvasionRight") || stateInfo.IsName("EvasionLeft"))
         {
             return EAnim.Evasion;
+        }
+
+        if (stateInfo.IsName("HitReact"))
+        {
+            return EAnim.HitReact;
         }
 
         return EAnim.Nothing;
