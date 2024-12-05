@@ -179,7 +179,7 @@ public class BossMonsterAI : MonoBehaviour
         }
 
         // 플레이어 공격 트리거 활성화
-        anim.SetTrigger(_COUNTER_ANIM_TRIGGER_NAME); // 공격 애니메이션 트리거
+        anim.SetTrigger(_PLAYERATTACK_ANIM_TRIGGER_NAME); // 공격 애니메이션 트리거
         Debug.Log("PlayerAttacking 트리거 동작!");
 
         // 쿨타임 시작
@@ -192,6 +192,7 @@ public class BossMonsterAI : MonoBehaviour
 
         yield return new WaitForSeconds(playerAttackingCooldown);
 
+        anim.ResetTrigger(_PLAYERATTACK_ANIM_TRIGGER_NAME);
         isPlayerAttackingOnCooldown = false; // 쿨타임 종료
         Debug.Log("PlayerAttacking 쿨타임 종료! 이제 다시 활성화할 수 있습니다.");
     }
@@ -505,5 +506,15 @@ public class BossMonsterAI : MonoBehaviour
 
         Gizmos.color = Color.red;
         Gizmos.DrawWireSphere(this.transform.position, level_Three_Range);
+    }
+    
+    public void DieCall()
+    {
+        StartCoroutine(DieCoroutine());
+    }
+    private IEnumerator DieCoroutine()
+    {
+        yield return new WaitForSeconds(5.0f);
+        Destroy(gameObject);
     }
 }
