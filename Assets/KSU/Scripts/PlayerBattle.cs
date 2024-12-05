@@ -57,7 +57,9 @@ public class PlayerBattle : MonoBehaviour
 
     private void OnTriggerEnter(Collider other)
     {
-        if (other.CompareTag("MonsterAttack"))
+        Debug.Log("Trigger 발생");
+
+        if (other.CompareTag("Monster"))
         {
             // 맞는 방향을 구하고
             hitDir = new Vector3(transform.position.x - mosterPosition.x, 0f, transform.position.z - mosterPosition.z).normalized;
