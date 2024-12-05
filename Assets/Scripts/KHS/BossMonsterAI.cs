@@ -30,7 +30,7 @@ public class BossMonsterAI : MonoBehaviour
         RESIST = 1
     }
 
-    private Player player = null;
+    private PlayerMove player = null;
 
     private bool isAnimationLocked = false; // 애니메이션 도중 방향 고정 여부
     private Quaternion lockedRotation; // 고정된 회전값
@@ -60,7 +60,7 @@ public class BossMonsterAI : MonoBehaviour
         anim = GetComponent<Animator>();
         runnerBT = new BehaviorTreeRunner(SettingBT());
         originPos = transform.position;
-        player = FindAnyObjectByType<Player>();
+        player = FindAnyObjectByType<PlayerMove>();
     }
     private void Start()
     {

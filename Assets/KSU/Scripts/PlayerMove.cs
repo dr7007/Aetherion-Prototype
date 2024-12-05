@@ -19,6 +19,13 @@ public class PlayerMove : MonoBehaviour
     private float axisH;
     private float axisV;
 
+    private bool isPlayerAttacking = false;
+    public bool IsPlayerAttacking
+    {
+        get { return isPlayerAttacking; }
+        set { isPlayerAttacking = value; }
+    }
+
     private void Start()
     {
         controller = GetComponent<CharacterController>();
@@ -125,6 +132,7 @@ public class PlayerMove : MonoBehaviour
         {
             // 공격 애니메이션 실행
             pAnim.Attack();
+            isPlayerAttacking = true;
         }
     }
     // Shift -> 속도 변경 및 달리는 애니메이션
