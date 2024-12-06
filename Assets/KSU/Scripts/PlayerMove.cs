@@ -3,6 +3,8 @@ using UnityEngine;
 // 플레이어 키입력과 관련된 스크립트
 public class PlayerMove : MonoBehaviour
 {
+    public delegate void OnStaminaChangedDelegate(float curStamina, float maxStamina);
+
     [SerializeField] private Transform followCameraTr; // 따라오는 카메라 위치
     [SerializeField] private Transform orientation; // 몸의 중심에 있는 orientation (카메라 보는 각도로 돌아가있음.)
     [SerializeField] private float gravityPower = -9.81f; // 중력 설정
@@ -12,6 +14,7 @@ public class PlayerMove : MonoBehaviour
     [SerializeField] private float evasionTime = 1f;
     [SerializeField] private Material HDR;
 
+    private PlayerBattle battleInfo;
     private CharacterController controller;
     private float startSpeed; // 처음 시작속도(걷는 속도) - 달리다가 돌아올때 필요
     private bool canRoll; // 구를수 있는 상태인지 나타냄.
@@ -28,6 +31,7 @@ public class PlayerMove : MonoBehaviour
 
     private void Start()
     {
+        battleInfo = GetComponent<PlayerBattle>();
         controller = GetComponent<CharacterController>();
         canRoll = true;
         IsBattleMode = false;
@@ -36,6 +40,9 @@ public class PlayerMove : MonoBehaviour
 
     private void Update()
     {
+        // 죽었을때 입력X
+        if (pAnim.CheckAnim() == PlayerAnim.EAnim.Death) return;
+
         // 컨트롤러가 비활성화 상태일때 return
         if (controller == null) return;
 
@@ -53,15 +60,15 @@ public class PlayerMove : MonoBehaviour
         if (pAnim.CheckAnim() == PlayerAnim.EAnim.Roll || pAnim.CheckAnim() == PlayerAnim.EAnim.Evasion || pAnim.CheckAnim() == PlayerAnim.EAnim.HitReact) return;
 
         // 공격 애니메이션 중에는 마우스 입력과, space바만 가능
-        if (pAnim.CheckAnim() == PlayerAnim.EAnim.Attack && IsBattleMode)
-        {
-            // Space 눌렀을때
-            InputSpace(originInput);
+        //if (pAnim.CheckAnim() == PlayerAnim.EAnim.Attack && IsBattleMode)
+        //{
+        //    // Space 눌렀을때
+        //    InputSpace(originInput);
 
-            // 마우스 좌클릭
-            InputAttack();
-            return;
-        }
+        //    // 마우스 좌클릭
+        //    InputAttack();
+        //    return;
+        //}
 
         // 키 입력대로 3인칭 움직임
         ThirdPersonMove(axisV, axisH);

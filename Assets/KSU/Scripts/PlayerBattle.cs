@@ -28,6 +28,8 @@ public class PlayerBattle : MonoBehaviour
     private float PlayerMaxHp = 100f;
     private float PlayerCurHp;
     private float PlayerAtk = 3000f;
+    private float playerMaxStamina = 100f;
+    private float playerCurStamina;
 
     private const string _DIE_ANUM_TRIGGER_NAME = "Die";
 
@@ -44,10 +46,17 @@ public class PlayerBattle : MonoBehaviour
     [SerializeField] private AnimationCurve reactCurve;
     private float reactTimer;
 
+    public float PlayerCurStamina
+    {
+        get { return playerCurStamina; }
+        set { playerCurStamina = value; }
+    }
+
 
     private void Awake()
     {
         mosterPosition = Vector3.zero;
+        playerCurStamina = playerMaxStamina;
     }
 
     private void Start()
@@ -170,6 +179,7 @@ public class PlayerBattle : MonoBehaviour
         return false;
     }
 
+    // 맞는 애니메이션 중인지 확인
     private bool CheckHitReact()
     {
         AnimatorStateInfo stateInfo = anim.GetCurrentAnimatorStateInfo(0);
@@ -181,6 +191,7 @@ public class PlayerBattle : MonoBehaviour
         return false;
     }
 
+    // 데미지 받는 함수(콜백으로 내용 보냄)
     public void TakeDamage(float _damage)
     {
 
@@ -197,6 +208,7 @@ public class PlayerBattle : MonoBehaviour
         }
     }
 
+    // 데미지 내보내는 함수
     public float GetDamage()
     {
         return PlayerAtk;
