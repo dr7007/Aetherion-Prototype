@@ -25,9 +25,12 @@ public class PlayerAnim : MonoBehaviour
     [SerializeField] private GameObject followCam;
     [SerializeField] private GameObject DieImage;
 
+    private PlayerBattle battleInfo;
     private Animator anim;
     private bool[] comboOn;
     private int comboCnt;
+
+    private float attackStamina = 10f;
 
     private void Awake()
     {
@@ -39,6 +42,7 @@ public class PlayerAnim : MonoBehaviour
     private void Start()
     {
         anim = GetComponent<Animator>();
+        battleInfo = GetComponent<PlayerBattle>();
     }
 
     #region AnimEvent
@@ -72,6 +76,7 @@ public class PlayerAnim : MonoBehaviour
         if (!(CheckAnim() == EAnim.Attack))
         {
             anim.SetTrigger("AttackTrigger");
+            battleInfo.PlayerCurStamina -= attackStamina;
         }
 
         // 콤보때 때리면 comboTrigger 활성화, combo 비활성화 상태로 바꿈.
@@ -79,6 +84,7 @@ public class PlayerAnim : MonoBehaviour
         {
             anim.SetTrigger("ComboTrigger");
             comboOn[comboCnt] = false;
+            battleInfo.PlayerCurStamina -= attackStamina;
         }
     }
     // 움직임 여부에 따른 move 애니메이션
