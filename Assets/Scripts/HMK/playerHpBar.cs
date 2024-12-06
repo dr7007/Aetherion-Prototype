@@ -2,42 +2,22 @@ using UnityEngine;
 using UnityEngine.UI;
 
 [ExecuteAlways]
-public class HPBar : MonoBehaviour
+public class PlayerHPBar : MonoBehaviour
 {
     [Header("Boss Reference")]
-    [SerializeField] private BossMonsterAI boss; // BossMonsterAI 참조
+    [SerializeField] private PlayerBattle player; // BossMonsterAI 참조
 
     [Header("UI Settings")]
     [SerializeField] private Image hpimg; // HP 바 이미지
     [SerializeField] private float maxWidth = 1000f; // HP 바 최대 너비
 
-    [Header("bose UI trigger")]
-    [SerializeField] private Animator bossUI;
-
-    private const string _DETECT_ANIM_BOOL_NAME = "detect";
-    [SerializeField]
-    private GameObject bossHPUI = null;
     private void Start()
     {
-        boss.HpChangedCallback += UpdateHPBar;
-    }
-    private void Update()
-    {
-        bossUiOn();
+        player.HpChangedCallback += UpdateHPBar;
     }
 
-    private void bossUiOn()
-    {
-        if(bossUI.GetBool(_DETECT_ANIM_BOOL_NAME))
-        {
-            bossHPUI.SetActive(true);
-        }
-        else
-        {
-            bossHPUI.SetActive(false);
-        }
-        
-    }
+
+
     private void UpdateHPBar(float currentHP, float maxHP)
     {
         Debug.Log("보스 현재피  HPBar 에 넘어옴 :" + currentHP);
@@ -50,19 +30,3 @@ public class HPBar : MonoBehaviour
         }
     }
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
