@@ -60,15 +60,18 @@ public class PlayerMove : MonoBehaviour
         if (pAnim.CheckAnim() == PlayerAnim.EAnim.Roll || pAnim.CheckAnim() == PlayerAnim.EAnim.Evasion || pAnim.CheckAnim() == PlayerAnim.EAnim.HitReact) return;
 
         // 공격 애니메이션 중에는 마우스 입력과, space바만 가능
-        //if (pAnim.CheckAnim() == PlayerAnim.EAnim.Attack && IsBattleMode)
-        //{
-        //    // Space 눌렀을때
-        //    InputSpace(originInput);
+        if (pAnim.CheckAnim() == PlayerAnim.EAnim.Attack)
+        {
+            // Space 눌렀을때
+            InputSpace(originInput);
 
-        //    // 마우스 좌클릭
-        //    InputAttack();
-        //    return;
-        //}
+            // 마우스 좌클릭
+            InputAttack();
+
+            // 보정된 회전 구현
+            ThirdPersonAtMove(axisV, axisH);
+            return;
+        }
 
         // 키 입력대로 3인칭 움직임
         ThirdPersonMove(axisV, axisH);
@@ -132,6 +135,32 @@ public class PlayerMove : MonoBehaviour
             pAnim.Move(false);
         }
     }
+
+    // 3인칭 시점의 공격시 회전
+    private void ThirdPersonAtMove(float _axisV, float _axisH)
+    {
+        // 카메라 바라보는 방향으로 방향설정
+        Vector3 viewDir = transform.position - new Vector3(followCameraTr.position.x, transform.position.y, followCameraTr.position.z);
+        orientation.forward = viewDir.normalized;
+
+        // orientation 기준으로(카메라 바라보는 방향) 키입력 감지함.
+        Vector3 camInput = orientation.forward * _axisV + orientation.right * _axisH;
+
+        // 공격 시 회전을 약간 제한 (예: 현재 방향에서 45도 이내로만 회전)
+        float angle = Vector3.Angle(transform.forward, camInput.normalized);
+
+        float rotationSpeed = (angle < 45f) ? rotSpeed : rotSpeed * (45f / angle);
+
+        // 45도 이상 회전하지 않도록 제한
+        if (angle < 45f)
+        {
+            if (camInput != Vector3.zero)
+            {
+                transform.forward = Vector3.Slerp(transform.forward, camInput.normalized, Time.deltaTime * rotationSpeed * 0.1f);
+            }
+        }
+    }
+
 
     #region PlayerInput
     // 공격 입력시(마우스 좌클릭)

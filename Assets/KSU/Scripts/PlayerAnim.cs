@@ -120,17 +120,17 @@ public class PlayerAnim : MonoBehaviour
     // BattleMode에서 Combo중일때 Space하면 실행되는 함수 (캐릭터 기준으로 점프)
     public void BattleModeAttackSpace(Vector3 _originInput)
     {
-        if (comboOn[comboCnt])
+        // if (comboOn[comboCnt])
         {
             Debug.Log(_originInput);
             // 왼쪽 회피
-            if (_originInput.x < -0.01f) anim.SetInteger("EvasionNum", (int)EAnim.LeftEvasion);
+            if (_originInput.x < -0.1f) anim.SetInteger("EvasionNum", (int)EAnim.LeftEvasion);
             // 오른쪽 회피
-            if (_originInput.x > 0.01f) anim.SetInteger("EvasionNum", (int)EAnim.RightEvasion);
+            if (_originInput.x > 0.1f) anim.SetInteger("EvasionNum", (int)EAnim.RightEvasion);
             // 앞 회피
-            if (_originInput.z > 0.01f) anim.SetInteger("EvasionNum", (int)EAnim.FrontEvasion);
+            if (_originInput.z > 0.1f) anim.SetInteger("EvasionNum", (int)EAnim.FrontEvasion);
             // 뒤 회피
-            if (_originInput.z < -0.01f) anim.SetInteger("EvasionNum", (int)EAnim.BackEvasion);
+            if (_originInput.z < -0.1f) anim.SetInteger("EvasionNum", (int)EAnim.BackEvasion);
 
             // 콤보 
             comboOn[comboCnt] = false;
