@@ -27,6 +27,7 @@ public class PlayerBattle : MonoBehaviour
 
     private float PlayerMaxHp = 100f;
     private float PlayerCurHp;
+    private float PlayerAtk = 3000f;
 
     private const string _DIE_ANUM_TRIGGER_NAME = "Die";
 
@@ -194,6 +195,11 @@ public class PlayerBattle : MonoBehaviour
         {
             anim.SetTrigger(_DIE_ANUM_TRIGGER_NAME);
         }
+    }
+
+    public float GetDamage()
+    {
+        return PlayerAtk;
     }
 
 }
