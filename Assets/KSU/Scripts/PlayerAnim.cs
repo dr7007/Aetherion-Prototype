@@ -126,11 +126,11 @@ public class PlayerAnim : MonoBehaviour
             // 왼쪽 회피
             if (_originInput.x < -0.1f) anim.SetInteger("EvasionNum", (int)EAnim.LeftEvasion);
             // 오른쪽 회피
-            if (_originInput.x > 0.1f) anim.SetInteger("EvasionNum", (int)EAnim.RightEvasion);
+            else if (_originInput.x > 0.1f) anim.SetInteger("EvasionNum", (int)EAnim.RightEvasion);
             // 앞 회피
-            if (_originInput.z > 0.1f) anim.SetInteger("EvasionNum", (int)EAnim.FrontEvasion);
+            else if (_originInput.z > 0.1f) anim.SetInteger("EvasionNum", (int)EAnim.FrontEvasion);
             // 뒤 회피
-            if (_originInput.z < -0.1f) anim.SetInteger("EvasionNum", (int)EAnim.BackEvasion);
+            else if (_originInput.z < -0.1f) anim.SetInteger("EvasionNum", (int)EAnim.BackEvasion);
 
             // 콤보 
             comboOn[comboCnt] = false;

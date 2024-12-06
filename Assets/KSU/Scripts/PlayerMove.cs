@@ -19,8 +19,8 @@ public class PlayerMove : MonoBehaviour
     private float startSpeed; // 처음 시작속도(걷는 속도) - 달리다가 돌아올때 필요
     private bool canRoll; // 구를수 있는 상태인지 나타냄.
     private bool IsBattleMode; // 싸움모드인지 아닌지 나타냄.
-    private float axisH;
-    private float axisV;
+    public float axisH;
+    public float axisV;
 
     private bool isPlayerAttacking = false;
     public bool IsPlayerAttacking
@@ -156,7 +156,7 @@ public class PlayerMove : MonoBehaviour
         {
             if (camInput != Vector3.zero)
             {
-                transform.forward = Vector3.Slerp(transform.forward, camInput.normalized, Time.deltaTime * rotationSpeed * 0.1f);
+                transform.forward = Vector3.Slerp(transform.forward, camInput.normalized, Time.deltaTime * rotationSpeed * 0.5f);
             }
         }
     }
