@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
+using Unity.Cinemachine;
 using UnityEngine;
 using static PlayerAnim;
 
@@ -98,7 +99,7 @@ public class PlayerBattle : MonoBehaviour
     private void OnTriggerEnter(Collider other)
     {
         // 만약 피격모션 중이라면 return
-        if (CheckHitReact())
+        if (CheckHitReact() || pAnim.CheckAnim() == PlayerAnim.EAnim.Death)
         {
             Debug.Log("Heat motion중");
             return;
