@@ -300,7 +300,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   mouseInput: {fileID: 1679009097}
-  sensitive: -0.3
+  sensitive: -0.7
 --- !u!1 &583113506
 GameObject:
   m_ObjectHideFlags: 0
@@ -362,7 +362,7 @@ Camera:
     height: 1
   near clip plane: 0.3
   far clip plane: 1000
-  field of view: 70
+  field of view: 80
   orthographic: 0
   orthographic size: 5
   m_Depth: -1
@@ -388,7 +388,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 583113506}
   serializedVersion: 2
-  m_LocalRotation: {x: 0.15086426, y: -0.000000021208209, z: 0.0000000032366052, w: 0.9885545}
+  m_LocalRotation: {x: 0.15086423, y: 0.000000029461228, z: -0.0000000044961053, w: 0.9885545}
   m_LocalPosition: {x: 0, y: 2.25, z: -9}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
@@ -951,6 +951,14 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 1690495821801067573, guid: ab0471614838b9c41b27414b39081e9c, type: 3}
+      propertyPath: m_Enabled
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 4925623993111209126, guid: ab0471614838b9c41b27414b39081e9c, type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 4925623993111209126, guid: ab0471614838b9c41b27414b39081e9c, type: 3}
       propertyPath: m_TagString
       value: MonsterWeapon
@@ -1027,6 +1035,10 @@ PrefabInstance:
       propertyPath: bossHit
       value: 
       objectReference: {fileID: 2100000, guid: 1145333dc33b67147871dbe58ae0c321, type: 2}
+    - target: {fileID: 8262625660644000236, guid: ab0471614838b9c41b27414b39081e9c, type: 3}
+      propertyPath: m_Enabled
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 8262625660644000236, guid: ab0471614838b9c41b27414b39081e9c, type: 3}
       propertyPath: hitCooldown
       value: 0.2
@@ -1439,7 +1451,7 @@ MonoBehaviour:
     LookAtTarget: {fileID: 0}
     CustomLookAtTarget: 0
   Lens:
-    FieldOfView: 70
+    FieldOfView: 80
     OrthographicSize: 5
     NearClipPlane: 0.3
     FarClipPlane: 1000
@@ -1466,7 +1478,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1679009093}
   serializedVersion: 2
-  m_LocalRotation: {x: 0.15086424, y: -0.000000021208207, z: 0.0000000032366048, w: 0.98855454}
+  m_LocalRotation: {x: 0.15086421, y: 0.000000029461225, z: -0.0000000044961044, w: 0.98855454}
   m_LocalPosition: {x: 0, y: 2.25, z: -9}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
@@ -1480,7 +1492,7 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1679009093}
-  m_Enabled: 1
+  m_Enabled: 0
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: ca7de3aefa901374ba29464584a3109a, type: 3}
   m_Name: 
