@@ -1,62 +1,52 @@
-using System.Collections;
 using UnityEngine;
-using UnityEngine.UI;
 
-public class UIHPBar : MonoBehaviour
+public class HPBar : MonoBehaviour
 {
-    [SerializeField] private RectTransform yellowRectTr = null;
-    [SerializeField] private Image redImg = null;
+    [Header("HP Bar Settings")]
+    [SerializeField] private RectTransform hpBarForeground; // 포어그라운드 RectTransform
+    [SerializeField] private float maxHp = 100f; // 보스의 최대 HP
+    private float currentHp; // 현재 HP
 
-    private float maxWidth = 0f;
-    private float maxHeight = 0f;
+    private float baseWidth = 1000f; // HP 바의 고정 폭 (최대 HP에서의 폭)
 
-    private void Awake()
+    private void Start()
     {
-        maxWidth = yellowRectTr.sizeDelta.x;
-        maxHeight = yellowRectTr.sizeDelta.y;
+        // 현재 HP를 최대 HP로 초기화
+        currentHp = maxHp;
+
+        // HP바 업데이트
+        UpdateHPBar();
     }
 
-    // 체력 바를 업데이트 (외부에서 호출)
-    public void UpdateHPBar(float _maxHp, float _curHp)
+    public void TakeDamage(float damage)
     {
-        UpdateHpBar(_curHp / _maxHp);
+        currentHp -= damage;
+        currentHp = Mathf.Clamp(currentHp, 0, maxHp); // HP를 0~최대 HP로 제한
+        UpdateHPBar();
     }
 
-    // HP 비율에 따라 HP 바 갱신
-    public void UpdateHpBar(float _amount)
+    public void Heal(float healAmount)
     {
-        float prevWidth = yellowRectTr.sizeDelta.x; // 이전 너비
-        float newWidth = maxWidth * _amount;        // 새 너비
-
-        StopAllCoroutines(); // 기존 코루틴 정지
-
-        if (newWidth < prevWidth) // 데미지를 받은 경우
-        {
-            StartCoroutine(UpdateHpBarCoroutine(prevWidth, newWidth));
-            redImg.GetComponent<RectTransform>().sizeDelta = new Vector2(newWidth, maxHeight); // 빨간색 HP바 변경
-        }
-        else // 체력이 회복된 경우
-        {
-            yellowRectTr.sizeDelta = new Vector2(newWidth, maxHeight); // 노란색 HP 바 크기 변경
-        }
+        currentHp += healAmount;
+        currentHp = Mathf.Clamp(currentHp, 0, maxHp); // HP를 0~최대 HP로 제한
+        UpdateHPBar();
     }
 
-    // 코루틴: 노란색 HP 바를 서서히 줄이기
-    private IEnumerator UpdateHpBarCoroutine(float _prevWidth, float _newWidth)
+    private void UpdateHPBar()
     {
-        Vector2 size = new Vector2(_prevWidth, maxHeight);
-        yellowRectTr.sizeDelta = size;
+        // HP 비율 계산
+        float hpRatio = currentHp / maxHp;
 
-        float t = 0f;
-        while (t < 1f)
-        {
-            t += Time.deltaTime;
-            size.x = Mathf.Lerp(_prevWidth, _newWidth, t);
-            yellowRectTr.sizeDelta = size; // 갱신된 크기 적용           
-            yield return null; // 다음 프레임까지 대기
-        }
+        // 비율에 따라 HP 바의 폭 설정
+        hpBarForeground.sizeDelta = new Vector2(baseWidth * hpRatio, hpBarForeground.sizeDelta.y);
     }
 }
+
+
+
+
+
+
 
 
 
