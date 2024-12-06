@@ -7,6 +7,7 @@ TagManager:
   - PlayerAttack
   - Monster
   - MonsterWeapon
+  - Evasion
   layers:
   - Default
   - TransparentFX
