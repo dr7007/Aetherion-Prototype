@@ -25,7 +25,7 @@ public class HPBar : MonoBehaviour
     {
         bossUiOn();
     }
-
+    
     private void bossUiOn()
     {
         if(bossUI.GetBool(_DETECT_ANIM_BOOL_NAME))
@@ -48,6 +48,15 @@ public class HPBar : MonoBehaviour
             fillWidth = Mathf.Clamp(fillWidth, 0, maxWidth); // 최소/최대값 제한
             hpimg.rectTransform.sizeDelta = new Vector2(fillWidth, hpimg.rectTransform.sizeDelta.y);
         }
+        if (currentHP <= 0)
+        {
+            DisableBossUI();
+        }
+
+    }
+    private void DisableBossUI()
+    {
+        bossHPUI.SetActive(false);
     }
 }
 

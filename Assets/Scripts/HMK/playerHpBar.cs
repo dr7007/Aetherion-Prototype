@@ -15,7 +15,11 @@ public class PlayerHPBar : MonoBehaviour
     {
         player.HpChangedCallback += UpdateHPBar;
     }
+    
+    private void UIOff()
+    {
 
+    }
 
 
     private void UpdateHPBar(float currentHP, float maxHP)
