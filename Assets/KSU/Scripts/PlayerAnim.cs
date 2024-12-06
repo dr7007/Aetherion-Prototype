@@ -1,3 +1,4 @@
+using System.Collections;
 using Unity.Cinemachine;
 using UnityEngine;
 
@@ -57,7 +58,8 @@ public class PlayerAnim : MonoBehaviour
     private void PlayerDIeCall()
     {
         followCam.SetActive(false);
-        // DieImage.GetComponent<CanvasGroup>().alpha
+
+        StartCoroutine(ChangeDieMessageCoroutine());
     }
     #endregion
 
@@ -165,11 +167,44 @@ public class PlayerAnim : MonoBehaviour
             return EAnim.HitReact;
         }
 
-        if (stateInfo.IsName("PlayerDead"))
+        if (stateInfo.IsName("Die"))
         {
             return EAnim.Death;
         }
 
         return EAnim.Nothing;
+    }
+
+    private IEnumerator ChangeDieMessageCoroutine()
+    {
+        // 죽고나서 3초 있다가
+        yield return new WaitForSeconds(3f);
+
+        // 3초동안 생겼다가 사라지는것까지 1.5초 생성 -> 1.5초 사라짐
+
+        CanvasGroup canvasGroup = DieImage.GetComponent<CanvasGroup>();
+
+        // 1.5초 동안 알파 값 증가 (0 -> 1)
+        float elapsedTime = 0f;
+        while (elapsedTime < 1.5f)
+        {
+            canvasGroup.alpha = elapsedTime / 1.5f;
+            elapsedTime += Time.deltaTime;
+            yield return null;
+        }
+        canvasGroup.alpha = 1f;
+
+        yield return new WaitForSeconds(1f);
+
+        // 1.5초 동안 알파 값 감소 (1 -> 0)
+        elapsedTime = 0f;
+        while (elapsedTime < 1.5f)
+        {
+            canvasGroup.alpha = 1f - (elapsedTime / 1.5f);
+            elapsedTime += Time.deltaTime;
+            yield return null;
+        }
+        canvasGroup.alpha = 0f; // 보정
+
     }
 }

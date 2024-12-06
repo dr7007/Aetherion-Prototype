@@ -28,7 +28,7 @@ public class PlayerBattle : MonoBehaviour
     private float PlayerMaxHp = 100f;
     private float PlayerCurHp;
 
-    private const string _DIE_ANUM_TRIGGER_NAME = "playerDie";
+    private const string _DIE_ANUM_TRIGGER_NAME = "Die";
 
     public delegate void OnHpChangedDelegate(float currentHp, float maxHp);
 
@@ -194,10 +194,6 @@ public class PlayerBattle : MonoBehaviour
         {
             anim.SetTrigger(_DIE_ANUM_TRIGGER_NAME);
         }
-    }
-    public void DieCall()
-    {
-        Destroy(gameObject, 5f);
     }
 
 }
