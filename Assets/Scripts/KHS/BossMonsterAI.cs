@@ -111,7 +111,7 @@ public class BossMonsterAI : MonoBehaviour
         {
             if (!hitTargets.Contains(_collider))
             {
-                Player playerAttack = _collider.GetComponentInChildren<Player>();
+                PlayerBattle playerAttack = _collider.GetComponentInParent<PlayerBattle>();
                 // 대미지 적용
                 if (playerAttack != null && currentHp != 0)
                 {
@@ -559,5 +559,10 @@ public class BossMonsterAI : MonoBehaviour
     public void DieCall()
     {
         Destroy(gameObject, 5f);
+    }
+
+    public float GetDamage()
+    {
+        return atk;
     }
 }
