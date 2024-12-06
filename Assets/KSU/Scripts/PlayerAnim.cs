@@ -1,4 +1,3 @@
-using Unity.Cinemachine;
 using UnityEngine;
 
 // 플레이어 애니메이션 관련된 스크립트
@@ -16,13 +15,10 @@ public class PlayerAnim : MonoBehaviour
         BackEvasion = 6,
         Evasion = 7,
         AttackVisible = 8,
-        HitReact = 9,
-        Death = 10
+        HitReact = 9
     };
 
     [SerializeField] private float battleModeShiftSpeed = 1.5f;
-    [SerializeField] private GameObject followCam;
-    [SerializeField] private GameObject DieImage;
 
     private Animator anim;
     private bool[] comboOn;
@@ -51,13 +47,6 @@ public class PlayerAnim : MonoBehaviour
     private void ComboOff(int _comboNum)
     {
         comboOn[_comboNum] = false;
-    }
-
-    // 플레이어 죽었을때 호출되는 함수
-    private void PlayerDIeCall()
-    {
-        followCam.SetActive(false);
-        // DieImage.GetComponent<CanvasGroup>().alpha
     }
     #endregion
 
@@ -163,11 +152,6 @@ public class PlayerAnim : MonoBehaviour
         if (stateInfo.IsName("HitReact"))
         {
             return EAnim.HitReact;
-        }
-
-        if (stateInfo.IsName("PlayerDead"))
-        {
-            return EAnim.Death;
         }
 
         return EAnim.Nothing;

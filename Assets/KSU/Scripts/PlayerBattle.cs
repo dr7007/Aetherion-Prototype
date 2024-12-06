@@ -1,5 +1,4 @@
 using System.Collections;
-using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
 using static PlayerAnim;
@@ -16,8 +15,6 @@ public class PlayerBattle : MonoBehaviour
     [SerializeField] private LayerMask monsterLayer;
     [SerializeField] private Material HDR;
 
-    private HashSet<Collider> hitTargets = new HashSet<Collider>(); // 대미지 중복 적용 내부쿨 관리용
-
     public Collider[] colliders;
     public Vector3 mosterPosition;
     private PlayerAnim pAnim;
@@ -25,20 +22,7 @@ public class PlayerBattle : MonoBehaviour
     private Vector3 hitDir;
     private CharacterController controller;
 
-    private float PlayerMaxHp = 100f;
-    private float PlayerCurHp;
-
-    private const string _DIE_ANUM_TRIGGER_NAME = "playerDie";
-
-    public delegate void OnHpChangedDelegate(float currentHp, float maxHp);
-
-    // UI 업데이트를 위한 콜백 이벤트
-    private OnHpChangedDelegate hpChangedCallback = null;
-    public OnHpChangedDelegate HpChangedCallback
-    {
-        get { return hpChangedCallback; }
-        set { hpChangedCallback = value; }
-    }
+    private float PlayerHp = 30f;
 
     [SerializeField] private AnimationCurve reactCurve;
     private float reactTimer;
@@ -51,7 +35,6 @@ public class PlayerBattle : MonoBehaviour
 
     private void Start()
     {
-        PlayerCurHp = PlayerMaxHp;
         anim = GetComponent<Animator>();
         pAnim = GetComponent<PlayerAnim>();
         controller = GetComponent<CharacterController>();
@@ -97,13 +80,9 @@ public class PlayerBattle : MonoBehaviour
         // 무기에 맞았을때 리액션
         if (other.CompareTag("MonsterWeapon") && transform.gameObject.tag == "Player")
         {
-            BossMonsterAI bossAttack = other.GetComponentInParent<BossMonsterAI>();
-            // 대미지 적용
-            if (bossAttack != null && PlayerCurHp != 0)
-            {
-                float damage = bossAttack.GetDamage(); // 보스의 공격력 가져오기
-                TakeDamage(damage); // 플레이어에게 대미지 적용
-            }
+            //플레이어 hp 하락
+            PlayerHp--;
+            Debug.Log("PlayerHp : " + PlayerHp);
 
             // 맞는 방향을 구하고
             hitDir = new Vector3(transform.position.x - mosterPosition.x, 0f, transform.position.z - mosterPosition.z).normalized;
@@ -120,7 +99,6 @@ public class PlayerBattle : MonoBehaviour
             anim.CrossFade("HitReact", 0.05f);
 
         }
-        
     }
 
     // 애니메이션 시간동안 캐릭터를 움직여줄 예정
@@ -178,26 +156,6 @@ public class PlayerBattle : MonoBehaviour
             return true;
         }
         return false;
-    }
-
-    public void TakeDamage(float _damage)
-    {
-
-        PlayerCurHp -= _damage;
-        PlayerCurHp = Mathf.Max(0, PlayerCurHp); // 체력이 0 이하로 내려가지 않도록 처리
-
-        // UI 업데이트를 위해 콜백 호출
-        HpChangedCallback?.Invoke(PlayerCurHp, PlayerMaxHp);
-
-        // 플레이어 사망 처리
-        if (PlayerCurHp <= 0)
-        {
-            anim.SetTrigger(_DIE_ANUM_TRIGGER_NAME);
-        }
-    }
-    public void DieCall()
-    {
-        Destroy(gameObject, 5f);
     }
 
 }

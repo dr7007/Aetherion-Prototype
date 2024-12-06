@@ -11,7 +11,6 @@ public class PlayerMove : MonoBehaviour
     [SerializeField] private PlayerAnim pAnim; // animation 관리하는 PlayerAnim 스크립트
     [SerializeField] private float evasionTime = 1f;
     [SerializeField] private Material HDR;
-    [SerializeField] private float playerStamina = 100f; 
 
     private CharacterController controller;
     private float startSpeed; // 처음 시작속도(걷는 속도) - 달리다가 돌아올때 필요
@@ -37,8 +36,6 @@ public class PlayerMove : MonoBehaviour
 
     private void Update()
     {
-        if (pAnim.CheckAnim() == PlayerAnim.EAnim.Death) return;
-
         // 컨트롤러가 비활성화 상태일때 return
         if (controller == null) return;
 
@@ -146,9 +143,6 @@ public class PlayerMove : MonoBehaviour
     {
         if (Input.GetKey(KeyCode.LeftShift))
         {
-            // 스태미나 감소
-
-
             // 배틀모드일때 shift
             if (IsBattleMode)
             {
@@ -178,8 +172,6 @@ public class PlayerMove : MonoBehaviour
     {
         if (Input.GetKeyDown(KeyCode.Space) && canRoll)
         {
-            // 스태미나 감소
-
             // roll 할때 -> 공격 안받는 tag로 변경
             gameObject.tag = "Evasion";
             Invoke("ResetTag", evasionTime);
