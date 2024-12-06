@@ -105,12 +105,18 @@ public class BossMonsterAI : MonoBehaviour
 
     private void OnTriggerEnter(Collider _collider)
     {
-        if (_collider.CompareTag("Player")) // 충돌한 오브젝트가 플레이어일 경우
+        if (_collider.CompareTag("PlayerAttack")) // 플레이어 무기에 의해 공격받은 경우
         {
             if (!hitTargets.Contains(_collider))
             {
+                Player playerAttack = _collider.GetComponentInChildren<Player>();
                 // 대미지 적용
-                ApplyDamageToPlayer(_collider);
+                if (playerAttack != null)
+                {
+                    float damage = playerAttack.GetDamage(); // 플레이어의 공격력 가져오기
+                    Debug.Log("플레이어에 의해 대미지!" + damage);
+                    TakeDamage(damage); // 보스에게 대미지 적용
+                }
 
                 // 충돌한 대상을 HitTracker에 추가
                 hitTargets.Add(_collider);
@@ -120,21 +126,9 @@ public class BossMonsterAI : MonoBehaviour
             }
             else
             {
-                Debug.Log("대상은 이미 대미지를 받았으므로 무시합니다.");
+                Debug.Log("피격 판정 겹침현상 예방 내부 쿨 동작 중");
             }
         }
-
-        if (_collider.CompareTag("PlayerAttack")) // 플레이어 무기에 의해 공격받은 경우
-        {
-            Player playerAttack = _collider.GetComponentInChildren<Player>();
-            if (playerAttack != null)
-            {
-                float damage = playerAttack.GetDamage(); // 플레이어의 공격력 가져오기
-                Debug.Log("플레이어에 의해 대미지!" +  damage);
-                TakeDamage(damage); // 보스에게 대미지 적용
-            }
-        }
-        Debug.Log("태그 무관");
     }
     private void ApplyDamageToPlayer(Collider _collider)
     {
@@ -147,7 +141,7 @@ public class BossMonsterAI : MonoBehaviour
         if (hitTargets.Contains(_target))
         {
             hitTargets.Remove(_target);
-            Debug.Log("쿨다운 종료: 다시 대미지를 줄 수 있습니다.");
+            Debug.Log("보스 내부 피격 판정 쿨다운 종료");
         }
     }
 
