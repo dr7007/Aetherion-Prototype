@@ -175,6 +175,7 @@ GameObject:
   m_Component:
   - component: {fileID: 373764936}
   - component: {fileID: 373764937}
+  - component: {fileID: 373764938}
   m_Layer: 0
   m_Name: AttackCollider
   m_TagString: PlayerAttack
@@ -218,6 +219,18 @@ BoxCollider:
   serializedVersion: 3
   m_Size: {x: 0.15, y: 0.13, z: 1.15}
   m_Center: {x: 0, y: 0, z: 0.31}
+--- !u!114 &373764938
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 373764935}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f871f7bd2e2a7d64b88656722d01de93, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &583113506
 GameObject:
   m_ObjectHideFlags: 0
@@ -775,6 +788,14 @@ PrefabInstance:
     - target: {fileID: 5747281073882717103, guid: ab0471614838b9c41b27414b39081e9c, type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8262625660644000236, guid: ab0471614838b9c41b27414b39081e9c, type: 3}
+      propertyPath: bossHit
+      value: 
+      objectReference: {fileID: 2100000, guid: 1145333dc33b67147871dbe58ae0c321, type: 2}
+    - target: {fileID: 8262625660644000236, guid: ab0471614838b9c41b27414b39081e9c, type: 3}
+      propertyPath: hitCooldown
+      value: 0.2
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []

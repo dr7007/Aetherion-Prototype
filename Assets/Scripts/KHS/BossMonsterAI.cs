@@ -5,6 +5,8 @@ using UnityEngine;
 [RequireComponent(typeof(Animator))]
 public class BossMonsterAI : MonoBehaviour
 {
+    public Material bossHit;
+
     [Header("Range")]
     [SerializeField] private float level_One_Range = 10f;
     [SerializeField] private float level_Two_Range = 25f;
@@ -22,7 +24,7 @@ public class BossMonsterAI : MonoBehaviour
 
     [Header("Collider")]
     [SerializeField] private Collider weaponCollider;
-    [SerializeField] private float hitCooldown = 1.5f; // 쿨다운 시간
+    [SerializeField] private float hitCooldown = 0.2f; // 쿨다운 시간
 
     private enum EPartDemege
     {
@@ -111,7 +113,7 @@ public class BossMonsterAI : MonoBehaviour
             {
                 Player playerAttack = _collider.GetComponentInChildren<Player>();
                 // 대미지 적용
-                if (playerAttack != null)
+                if (playerAttack != null && currentHp != 0)
                 {
                     float damage = playerAttack.GetDamage(); // 플레이어의 공격력 가져오기
                     Debug.Log("플레이어에 의해 대미지!" + damage);
@@ -136,7 +138,11 @@ public class BossMonsterAI : MonoBehaviour
     }
     private IEnumerator RemoveFromHitTrackerAfterCooldown(Collider _target)
     {
+        bossHit.EnableKeyword("_EMISSION");
+
         yield return new WaitForSeconds(hitCooldown);
+
+        bossHit.DisableKeyword("_EMISSION");
 
         if (hitTargets.Contains(_target))
         {
@@ -408,7 +414,7 @@ public class BossMonsterAI : MonoBehaviour
     {
         if (anim.GetBool(_FIRSTDETECT_ANIM_BOOL_NAME) && anim.GetBool(_DETECT_ANIM_BOOL_NAME))
         {
-            Debug.Log("FirstDetect!");
+            //Debug.Log("FirstDetect!");
             return INode.ENodeState.ENS_Success;
         }
 
@@ -419,7 +425,7 @@ public class BossMonsterAI : MonoBehaviour
     {
         if (anim.GetBool(_DETECT_ANIM_BOOL_NAME) && !anim.GetBool(_FIRSTDETECT_ANIM_BOOL_NAME))
         {
-            Debug.Log("Detected!");
+            //Debug.Log("Detected!");
             return INode.ENodeState.ENS_Success;
         }
 
@@ -430,7 +436,7 @@ public class BossMonsterAI : MonoBehaviour
     {
         if(!anim.GetBool(_DETECT_ANIM_BOOL_NAME))
         {
-            Debug.Log("Non_Detect");
+            //Debug.Log("Non_Detect");
             anim.ResetTrigger(_ATTACK_ANIM_TRIGGER_NAME);
             return INode.ENodeState.ENS_Success;
         }
@@ -535,6 +541,7 @@ public class BossMonsterAI : MonoBehaviour
     }
     public void TakeDamage(float _damage)
     {
+
         currentHp -= _damage;
         currentHp = Mathf.Max(0, currentHp); // 체력이 0 이하로 내려가지 않도록 처리
 
