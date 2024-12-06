@@ -495,6 +495,15 @@ public class BossMonsterAI : MonoBehaviour
     #region Attack Node
     INode.ENodeState OnGuard()
     {
+        if(tmpTime >= 10f)
+        {
+            tmpTime = 0;
+            anim.SetTrigger(_COUNTER_ANIM_TRIGGER_NAME);
+            return INode.ENodeState.ENS_Success;
+        }
+
+        tmpTime += Time.deltaTime;
+
         return INode.ENodeState.ENS_Failure;
     }
     INode.ENodeState DefaultMeleeAttackEnemy()
