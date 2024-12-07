@@ -19,8 +19,8 @@ public class PlayerMove : MonoBehaviour
     private float startSpeed; // 처음 시작속도(걷는 속도) - 달리다가 돌아올때 필요
     private bool canRoll; // 구를수 있는 상태인지 나타냄.
     private bool IsBattleMode; // 싸움모드인지 아닌지 나타냄.
-    public float axisH;
-    public float axisV;
+    private float axisH;
+    private float axisV;
 
     private bool isPlayerAttacking = false;
     public bool IsPlayerAttacking
@@ -45,6 +45,17 @@ public class PlayerMove : MonoBehaviour
 
         // 컨트롤러가 비활성화 상태일때 return
         if (controller == null) return;
+
+        // 회피 애니메이션 실행시
+        if(pAnim.evasion)
+        {
+            // 회피 On
+            gameObject.tag = "Evasion";
+            Invoke("ResetTag", evasionTime);
+            // 임시용 코드 (회피 무적확인)
+            HDR.EnableKeyword("_EMISSION");
+            pAnim.evasion = false; 
+        }
 
         // 키입력 감지
         axisH = Input.GetAxis("Horizontal");
@@ -106,7 +117,7 @@ public class PlayerMove : MonoBehaviour
     private void ResetTag()
     {
         // 회피 무적 끝
-        // HDR.DisableKeyword("_EMISSION");
+        HDR.DisableKeyword("_EMISSION");
 
         gameObject.tag = "Player";
     }
@@ -208,13 +219,6 @@ public class PlayerMove : MonoBehaviour
     {
         if (Input.GetKeyDown(KeyCode.Space) && canRoll)
         {
-            // roll 할때 -> 공격 안받는 tag로 변경
-            gameObject.tag = "Evasion";
-            Invoke("ResetTag", evasionTime);
-
-            // 임시용 코드 (회피 무적확인)
-            // HDR.EnableKeyword("_EMISSION");
-
             // roll 쿨타임 on
             // canRoll = false;
             // Invoke("CanRoll", rollCooldown);
