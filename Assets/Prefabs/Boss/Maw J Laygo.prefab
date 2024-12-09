@@ -93,7 +93,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: 3566bad897c419744a77ff160603e2e7, type: 3}
       propertyPath: m_LocalPosition.x
-      value: 0
+      value: -177
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: 3566bad897c419744a77ff160603e2e7, type: 3}
       propertyPath: m_LocalPosition.y
@@ -198,6 +198,9 @@ PrefabInstance:
     - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: 3566bad897c419744a77ff160603e2e7, type: 3}
       insertIndex: -1
       addedObject: {fileID: 3752383931948110405}
+    - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: 3566bad897c419744a77ff160603e2e7, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 2286467732143008541}
   m_SourcePrefab: {fileID: 100100000, guid: 3566bad897c419744a77ff160603e2e7, type: 3}
 --- !u!1 &4938655501378027797 stripped
 GameObject:
@@ -216,16 +219,18 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 201aef397f5431d46bf017b650584d8f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  bossHit: {fileID: 2100000, guid: 1145333dc33b67147871dbe58ae0c321, type: 2}
   level_One_Range: 10
   level_Two_Range: 25
   level_Three_Range: 50
   walkSpeed: 6
   runSpeed: 12
   rotationSpeed: 2
-  hp: 30000
-  atk: 30
+  maxHp: 3000000
+  currentHp: 0
+  atk: 0
   weaponCollider: {fileID: 8825215123261246034}
-  hitCooldown: 1.5
+  hitCooldown: 0.2
 --- !u!65 &1690495821801067573
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -296,6 +301,21 @@ Animator:
   m_AllowConstantClipSamplingOptimization: 1
   m_KeepAnimatorStateOnDisable: 0
   m_WriteDefaultValuesOnDisable: 0
+--- !u!114 &2286467732143008541
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4938655501378027797}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e9c973c2b11ff8041b28643b167eee42, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  hitParticle: {fileID: 0}
+  playerAttackTag: PlayerAttack
+  screenHitEffect: {fileID: 0}
 --- !u!4 &5907988342683485068 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 1852576806548013000, guid: 3566bad897c419744a77ff160603e2e7, type: 3}
