@@ -737,7 +737,7 @@ PrefabInstance:
     - target: {fileID: 415287891258781815, guid: bf4ce0538e635c940b1e228928d05a15, type: 3}
       propertyPath: 'm_Materials.Array.data[0]'
       value: 
-      objectReference: {fileID: 2100000, guid: 35191f1218fd03b4787c4ddc331ebac8, type: 2}
+      objectReference: {fileID: 2100000, guid: 9f430427915280c4bb892911b5bb5561, type: 2}
     - target: {fileID: 919132149155446097, guid: bf4ce0538e635c940b1e228928d05a15, type: 3}
       propertyPath: m_Name
       value: Paladin WProp J Nordstrom
@@ -765,7 +765,7 @@ PrefabInstance:
     - target: {fileID: 3099756089343826349, guid: bf4ce0538e635c940b1e228928d05a15, type: 3}
       propertyPath: 'm_Materials.Array.data[0]'
       value: 
-      objectReference: {fileID: 2100000, guid: 35191f1218fd03b4787c4ddc331ebac8, type: 2}
+      objectReference: {fileID: 2100000, guid: 9f430427915280c4bb892911b5bb5561, type: 2}
     - target: {fileID: 5866666021909216657, guid: bf4ce0538e635c940b1e228928d05a15, type: 3}
       propertyPath: m_Controller
       value: 
@@ -864,7 +864,7 @@ MonoBehaviour:
   rotSpeed: 7
   rollCooldown: 5
   pAnim: {fileID: 9204204868587267876}
-  evasionTime: 0
+  evasionTime: 1
   HDR: {fileID: 2100000, guid: 9f430427915280c4bb892911b5bb5561, type: 2}
 --- !u!114 &9204204868587267876
 MonoBehaviour:
