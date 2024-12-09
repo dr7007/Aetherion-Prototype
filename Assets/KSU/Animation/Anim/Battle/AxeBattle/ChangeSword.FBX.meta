@@ -1,5 +1,5 @@
 fileFormatVersion: 2
-guid: 76c5b10e654a5a2429f0f6a6078f95d4
+guid: e6931a7cdb014ef4aaecc63282a3fe02
 ModelImporter:
   serializedVersion: 22200
   internalIDToNameTable:
@@ -317,9 +317,15 @@ ModelImporter:
     second: RPG-Character-Mesh
   - first:
       1: 100208
-    second: Spear
+    second: Shield
   - first:
       1: 100210
+    second: WeaponL
+  - first:
+      1: 100212
+    second: WeaponR
+  - first:
+      1: 100214
     second: Exporter
   - first:
       4: 400000
@@ -635,9 +641,15 @@ ModelImporter:
     second: RPG-Character-Mesh
   - first:
       4: 400208
-    second: Spear
+    second: Shield
   - first:
       4: 400210
+    second: WeaponL
+  - first:
+      4: 400212
+    second: WeaponR
+  - first:
+      4: 400214
     second: Exporter
   - first:
       23: 2300000
@@ -656,7 +668,13 @@ ModelImporter:
     second: USP
   - first:
       23: 2300010
-    second: Spear
+    second: Shield
+  - first:
+      23: 2300012
+    second: WeaponL
+  - first:
+      23: 2300014
+    second: WeaponR
   - first:
       33: 3300000
     second: Mesh_Soldier_A
@@ -674,7 +692,13 @@ ModelImporter:
     second: USP
   - first:
       33: 3300010
-    second: Spear
+    second: Shield
+  - first:
+      33: 3300012
+    second: WeaponL
+  - first:
+      33: 3300014
+    second: WeaponR
   - first:
       43: 4300000
     second: Mesh_Soldier_A
@@ -698,10 +722,16 @@ ModelImporter:
     second: RPG-Character-Mesh
   - first:
       43: 4300014
-    second: Spear
+    second: Shield
+  - first:
+      43: 4300016
+    second: WeaponR
+  - first:
+      43: 4300018
+    second: WeaponL
   - first:
       74: 7400000
-    second: ComboC1
+    second: ChangeSword
   - first:
       95: 9500000
     second: //RootNode
@@ -732,13 +762,10 @@ ModelImporter:
     motionNodeName: Motion
     animationImportErrors: 
     animationImportWarnings: "\nClip 'Take 001' has import animation warnings that
-      might lower retargeting quality:\n\t'B_Spine2' has translation animation that
-      will be discarded.\n\t'B_Spine2' is inbetween humanoid transforms and has rotation
-      animation that will be discarded.\n"
-    animationRetargetingWarnings: "\nRetargeting quality report for clip 'Take 001':\n\tRightHand
-      average position error 0.6 mm and maximum position error 2.8 mm at time 0:22
-      (61.1%) Frame 22\n"
-    animationDoRetargetingWarnings: 1
+      might lower retargeting quality:\n\t'B_Spine2' is inbetween humanoid transforms
+      and has rotation animation that will be discarded.\n"
+    animationRetargetingWarnings: 
+    animationDoRetargetingWarnings: 0
     importAnimatedCustomProperties: 0
     importConstraints: 0
     animationCompression: 0
@@ -750,11 +777,11 @@ ModelImporter:
     extraUserProperties: []
     clipAnimations:
     - serializedVersion: 16
-      name: ComboC1
+      name: ChangeSword
       takeName: Take 001
       internalID: 0
       firstFrame: 0
-      lastFrame: 11
+      lastFrame: 30
       wrapMode: 0
       orientationOffsetY: 0
       level: 0
@@ -765,7 +792,7 @@ ModelImporter:
       loopBlend: 0
       loopBlendOrientation: 1
       loopBlendPositionY: 1
-      loopBlendPositionXZ: 0
+      loopBlendPositionXZ: 1
       keepOriginalOrientation: 1
       keepOriginalPositionY: 1
       keepOriginalPositionXZ: 1
@@ -773,14 +800,7 @@ ModelImporter:
       mirror: 0
       bodyMask: 01000000010000000100000001000000010000000100000001000000010000000100000001000000010000000100000001000000
       curves: []
-      events:
-      - time: 0.038554218
-        functionName: ChangeSpear
-        data: 
-        objectReferenceParameter: {fileID: 11500000, guid: f97300a2c74f9144bb0d72d7365d583d, type: 3}
-        floatParameter: 0
-        intParameter: 0
-        messageOptions: 0
+      events: []
       transformMask: []
       maskType: 3
       maskSource: {fileID: 101100000, guid: 4ebc95c8618479f4d8251c7dafa10029, type: 2}

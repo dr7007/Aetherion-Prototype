@@ -763,13 +763,6 @@ ModelImporter:
         floatParameter: 0
         intParameter: 0
         messageOptions: 0
-      - time: 0.5981308
-        functionName: ChangeAxe
-        data: 
-        objectReferenceParameter: {fileID: 11500000, guid: f97300a2c74f9144bb0d72d7365d583d, type: 3}
-        floatParameter: 0
-        intParameter: 0
-        messageOptions: 0
       transformMask: []
       maskType: 3
       maskSource: {fileID: 101100000, guid: 3e4e408fdcc93ee468a1275b69104d63, type: 2}

@@ -31,8 +31,10 @@ public class PlayerAnim : MonoBehaviour
     public bool comboOn;
     public bool combo2On;
     public bool evasion = false;
+    private PlayerWeaponChange pWeaponChange;
 
     private float attackStamina = 10f;
+    private int curWeaponNum;
 
     private void Awake()
     {
@@ -45,6 +47,7 @@ public class PlayerAnim : MonoBehaviour
         anim = GetComponent<Animator>();
         battleInfo = GetComponent<PlayerBattle>();
         moveInfo = GetComponent<PlayerMove>();
+        pWeaponChange = GetComponent<PlayerWeaponChange>();
     }
 
     #region AnimEvent
@@ -61,13 +64,11 @@ public class PlayerAnim : MonoBehaviour
 
     private void Combo2On()
     {
-        Debug.Log("combo2 호출됨" + Time.time);
         combo2On = true;
     }
 
     private void Combo2Off()
     {
-        Debug.Log("combo2Off :" + Time.time);
         combo2On = false;
     }
 
@@ -90,8 +91,9 @@ public class PlayerAnim : MonoBehaviour
     // 공격과 콤보어택
     public void Attack(int _mouseNum)
     {
+        curWeaponNum = pWeaponChange.curWeaponNum;
         // 때리면 attackTrigger 활성화 (이미 공격중이라면 트리거 발생X)
-        if (!(CheckAnim() == EAnim.Attack))
+        if (!(CheckAnim(curWeaponNum) == EAnim.Attack))
         {
             anim.SetTrigger("AttackTrigger");
             // battleInfo.PlayerCurStamina -= attackStamina;
@@ -101,7 +103,7 @@ public class PlayerAnim : MonoBehaviour
         if (comboOn && _mouseNum == 0)
         {
             anim.SetTrigger("ComboTrigger");
-            comboOn = false;
+            // comboOn = false;
             // battleInfo.PlayerCurStamina -= attackStamina;
         }
 
@@ -154,6 +156,7 @@ public class PlayerAnim : MonoBehaviour
 
         // 콤보 
         comboOn = false;
+        combo2On = false;
 
     }
 
@@ -170,16 +173,16 @@ public class PlayerAnim : MonoBehaviour
     #endregion
 
     // 현재 어떤 애니메이션이 진행중인지 확인하는 함수
-    public EAnim CheckAnim()
+    public EAnim CheckAnim(int _num)
     {
-        AnimatorStateInfo stateInfo = anim.GetCurrentAnimatorStateInfo(0);
+        AnimatorStateInfo stateInfo = anim.GetCurrentAnimatorStateInfo(_num);
 
         if (stateInfo.IsName("Roll"))
         {
             return EAnim.Roll;
         }
 
-        if (stateInfo.IsName("ComboAttack.Combo1") || stateInfo.IsName("ComboAttack.Combo2") || stateInfo.IsName("ComboAttack.Combo3"))
+        if (stateInfo.IsName("Combo1") || stateInfo.IsName("Combo2") || stateInfo.IsName("Combo3") || stateInfo.IsName("ComboB1") || stateInfo.IsName("ComboB2") || stateInfo.IsName("ComboB3") || stateInfo.IsName("ComboC1") || stateInfo.IsName("ComboC2"))
         {
             return EAnim.Attack;
         }
@@ -201,6 +204,7 @@ public class PlayerAnim : MonoBehaviour
 
         return EAnim.Nothing;
     }
+
 
     private IEnumerator ChangeDieMessageCoroutine()
     {
