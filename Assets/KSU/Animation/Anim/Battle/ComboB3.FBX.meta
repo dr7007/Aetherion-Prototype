@@ -584,8 +584,8 @@ ModelImporter:
       bodyMask: 01000000010000000100000001000000010000000100000001000000010000000100000001000000010000000100000001000000
       curves: []
       events:
-      - time: 0.7601246
-        functionName: ResetState
+      - time: 1
+        functionName: EndChange
         data: 
         objectReferenceParameter: {fileID: 11500000, guid: f97300a2c74f9144bb0d72d7365d583d, type: 3}
         floatParameter: 0
