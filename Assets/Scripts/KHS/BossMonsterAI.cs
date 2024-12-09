@@ -5,77 +5,100 @@ using UnityEngine;
 [RequireComponent(typeof(Animator))]
 public class BossMonsterAI : MonoBehaviour
 {
-    public Material bossHit;
+    #region Inspector Controll Region
+
+    public Material bossHit;                                        // Boss Hit시 직관적 피드백을 위한 Material 호출.   (Inspector 설정)
 
     [Header("Range")]
-    [SerializeField] private float level_One_Range = 10f;
-    [SerializeField] private float level_Two_Range = 25f;
-    [SerializeField] private float level_Three_Range = 50f;
+    [SerializeField] private float level_One_Range = 10f;           // 1번째 보스인식 범위 (가까운 인식 영역)
+    [SerializeField] private float level_Two_Range = 25f;           // 2번째 보스인식 범위 (중간 인식 영역)
+    [SerializeField] private float level_Three_Range = 50f;         // 3번째 보스인식 범위 (먼 인식 영역)
 
     [Header("Movement")]
-    [SerializeField] private float walkSpeed = 6f;
-    [SerializeField] private float runSpeed = 12f;
-    [SerializeField] private float rotationSpeed = 2f; // 회전 속도
+    [SerializeField] private float walkSpeed = 6f;                  // 보스의 걷는 속도
+    [SerializeField] private float runSpeed = 12f;                  // 보스의 뛰는 속도
+    [SerializeField] private float rotationSpeed = 2f;              // 플레이어를 LookAt할 때의 회전 속도
 
     [Header("BossStats")]
-    [SerializeField] private float maxHp = 30000f;
-    [SerializeField] private float currentHp;
-    [SerializeField] private float atk = 30f;
+    [SerializeField] private float maxHp = 30000f;                  // 보스의 최대 체력
+    [SerializeField] private float currentHp;                       // 보스의 현제 체력
+    [SerializeField] private float atk = 30f;                       // 보스의 공격력
 
     [Header("Collider")]
-    [SerializeField] private Collider weaponCollider;
-    [SerializeField] private float hitCooldown = 0.2f; // 쿨다운 시간
+    [SerializeField] private Collider weaponCollider;               // 보스 무기의 콜라이더 (공격시 On/Off를 위함)
+    [SerializeField] private float hitCooldown = 0.2f;              // 공격 판정 시 중복 판정을 제거하기 위한 내부 쿨타임.
 
-    private enum EPartDemege
-    {
-        CRIT = 4,
-        NORMAL = 2,
-        RESIST = 1
-    }
+    #endregion
 
-    private PlayerMove player = null;
+    #region Delegate Region
+    
+    public delegate void OnHpChangedDelegate(float currentHp, float maxHp);     // Boss HP 변화값을 UI에 전달하기 위한 Delegate
 
-    private bool isAnimationLocked = false; // 애니메이션 도중 방향 고정 여부
-    private Quaternion lockedRotation; // 고정된 회전값
-    private HashSet<Collider> hitTargets = new HashSet<Collider>(); // 이미 맞은 대상 추적
-    private bool isPlayerAttackingOnCooldown = false; // 쿨타임 상태 추적
-    private float playerAttackingCooldown = 10f;
+    #endregion
 
-    private Vector3 originPos = Vector3.zero;
-    private Vector3 firstdetPos = Vector3.zero;
-    private BehaviorTreeRunner runnerBT = null;
-    private Transform detectedPlayerTr = null;
-    private Animator anim = null;
-    private float tmpTime = 0f;
-    private float offset = 5f;
+    #region Callback Region
 
-    public delegate void OnHpChangedDelegate(float currentHp, float maxHp);
+    private OnHpChangedDelegate hpChangedCallback = null;                       // Boss HP 변화값을 UI에 전달하기 위한 Callback
 
-    // UI 업데이트를 위한 콜백 이벤트
-    private OnHpChangedDelegate hpChangedCallback = null;
+
     public OnHpChangedDelegate HpChangedCallback
     {
         get {  return hpChangedCallback; }
         set { hpChangedCallback = value; }
     }
 
-    private const string _ATTACK_ANIM_STATE_NAME = "Attack";
-    private const string _ATTACK_ANIM_TRIGGER_NAME = "attack";
-    private const string _FIRSTDETECT_ANIM_BOOL_NAME = "first_detect";
-    private const string _DETECT_ANIM_BOOL_NAME = "detect";
+    #endregion
 
-    private const string _COUNTER_ANIM_TRIGGER_NAME = "counter";
-    private const string _RANGE_ANIM_INT_NAME = "range_level";
-    private const string _PLAYERATTACK_ANIM_TRIGGER_NAME = "playerattacking";
-    private const string _DIE_ANUM_TRIGGER_NAME = "die";
+    #region Buffer Region
 
+    private BehaviorTreeRunner runnerBT = null;                     // Boss에 대한 Behavior Tree Runner 버퍼
+    private PlayerMove player = null;                               // 플레이어의 정보 (위치, 공격력, 공격 입력 여부 등)을 받아오기 위한 버퍼
+    private Quaternion lockedRotation;                              // 애니메이션 시작 시 고정된 로테이션 값 버퍼
+    private Vector3 firstdetPos = Vector3.zero;                     // 플레이어를 FirstDetect한 첫 지점 좌표 버퍼
+    private Animator anim = null;                                   // Boss의 Animator 버퍼
+    private HashSet<Collider> hitTargets = new HashSet<Collider>(); // 공격 중복 판정 무시 처리를 위한 hitTargets 관리 버퍼
+    private Transform detectedPlayerTr = null;                      // Boss가 Detect상태일때의 실시간 플레이어 Transfrom 정보 버퍼. 
+
+    #endregion
+
+    #region CoolDown Region
+
+    private float playerAttackingCooldown = 10f;                    // 플레이어 공격 상태 추격 쿨타임.
+    private float tmpTime = 0f;                                     // Boss의 특정 행동 쿨타임.
+
+    #endregion
+
+    #region Judge Bool Region
+
+    private bool isAnimationLocked = false;                         // 애니메이션 도중 진행 방향 고정 트리거.         (Animator Parameter로 변경 예정)
+    private bool isPlayerAttackingOnCooldown = false;               // 플레이어 공격 상태 추격 트리거.               (Animator Parameter로 변경 예정)
+
+    #endregion
+
+    #region Functional values
+
+    private float offset = 5f;                                      // Boss의 FirstDetect Attack을 위한 offset 값.
+
+    #endregion
+
+    #region Animator Parameters
+
+    private const string _ATTACK_ANIM_TRIGGER_NAME = "attack";                  // Boss의 Attack관련 행동 체크 트리거 (공격 시작/공격 중 On, 공격 끝/공격 외 Off)
+    private const string _FIRSTDETECT_ANIM_BOOL_NAME = "first_detect";          // Boss의 시작연출 관리를 위한 First Detect 체크 트리거 (게임 시작 후 첫 Detect 이전까지 On, 첫 Detect 이후 Off)
+    private const string _DETECT_ANIM_BOOL_NAME = "detect";                     // Boss의 실시간 Player Detect 체크 트리거 (범위 내 Player가 존재 시 On, 미존재 시 Off)
+    private const string _DEFAULTATK_ANIM_TRIGGER_NAME = "defaultatk";          // Boss의 특정 패턴 동작의 시작 트리거 (조건 만족시 On, 특정 패턴 동작 애니메이션 트랜지션 이후 Off)
+    private const string _RANGE_ANIM_INT_NAME = "range_level";                  // Boss의 기준으로 Player가 Detect되는 영역 레벨 값 (Range Level = 1, 2 ,3)
+    private const string _PLAYERATTACK_ANIM_TRIGGER_NAME = "playerattacking";   // Player가 현재 attack행동을 시전했는지를 판단하는 트리거 (CheckPlayerAttacking에서 여부를 검사하여 On,특정 행동 이후 Off 후 쿨다운 동안 On 동작 무시 후 Off 초기화)
+    private const string _DIE_ANIM_TRIGGER_NAME = "die";                        // Boss의 HP가 0이 될 시 그 즉시 die 트리거 활성화 (Hp = 0일 때 On, Off조건 없음 -> 단방향)
+    private const string _PHASE2_ANIM_TRIGGER_NAME = "2ndPhase";                // Boss의 2페이즈 판단. (HP <= 10% 일때 On)
+
+    #endregion
 
     private void Awake()
     {
         currentHp = maxHp;
         anim = GetComponent<Animator>();
         runnerBT = new BehaviorTreeRunner(SettingBT());
-        originPos = transform.position;
         player = FindAnyObjectByType<PlayerMove>();
     }
     private void Start()
@@ -98,6 +121,7 @@ public class BossMonsterAI : MonoBehaviour
             // 애니메이션이 끝난 경우 플레이어 쪽으로 천천히 회전
             LookAtPlayer();
         }
+        
     }
 
     private void FixedUpdate()
@@ -498,7 +522,7 @@ public class BossMonsterAI : MonoBehaviour
         if(tmpTime >= 10f)
         {
             tmpTime = 0;
-            anim.SetTrigger(_COUNTER_ANIM_TRIGGER_NAME);
+            anim.SetTrigger(_DEFAULTATK_ANIM_TRIGGER_NAME);
             return INode.ENodeState.ENS_Success;
         }
 
@@ -562,7 +586,7 @@ public class BossMonsterAI : MonoBehaviour
         // 보스 사망 처리
         if (currentHp <= 0)
         {
-            anim.SetTrigger(_DIE_ANUM_TRIGGER_NAME);
+            anim.SetTrigger(_DIE_ANIM_TRIGGER_NAME);
         }
     }
     public void DieCall()
