@@ -28,17 +28,16 @@ public class PlayerAnim : MonoBehaviour
     private PlayerMove moveInfo;
     private PlayerBattle battleInfo;
     private Animator anim;
-    private bool[] comboOn;
-    private int comboCnt;
+    public bool comboOn;
+    public bool combo2On;
     public bool evasion = false;
 
     private float attackStamina = 10f;
 
     private void Awake()
     {
-        comboOn = new bool[4];
-        comboOn[0] = false;
-        comboCnt = 0;
+        comboOn = false;
+        combo2On = false;
     }
 
     private void Start()
@@ -52,13 +51,24 @@ public class PlayerAnim : MonoBehaviour
     // 콤보 활성화가 되면 애니메이션에서 해당함수 호출
     private void ComboOn(int _comboNum)
     {
-        comboOn[_comboNum] = true;
-        comboCnt = _comboNum;
+        comboOn = true;
     }
     // 콤보 비활성화가 되면 애니메이션에서 해당함수 호출
     private void ComboOff(int _comboNum)
     {
-        comboOn[_comboNum] = false;
+        comboOn = false;
+    }
+
+    private void Combo2On()
+    {
+        Debug.Log("combo2 호출됨" + Time.time);
+        combo2On = true;
+    }
+
+    private void Combo2Off()
+    {
+        Debug.Log("combo2Off :" + Time.time);
+        combo2On = false;
     }
 
     // 플레이어 죽었을때 호출되는 함수
@@ -78,21 +88,26 @@ public class PlayerAnim : MonoBehaviour
 
     #region PlayerInput
     // 공격과 콤보어택
-    public void Attack()
+    public void Attack(int _mouseNum)
     {
         // 때리면 attackTrigger 활성화 (이미 공격중이라면 트리거 발생X)
         if (!(CheckAnim() == EAnim.Attack))
         {
             anim.SetTrigger("AttackTrigger");
-            battleInfo.PlayerCurStamina -= attackStamina;
+            // battleInfo.PlayerCurStamina -= attackStamina;
         }
 
         // 콤보때 때리면 comboTrigger 활성화, combo 비활성화 상태로 바꿈.
-        if (comboOn[comboCnt])
+        if (comboOn && _mouseNum == 0)
         {
             anim.SetTrigger("ComboTrigger");
-            comboOn[comboCnt] = false;
-            battleInfo.PlayerCurStamina -= attackStamina;
+            comboOn = false;
+            // battleInfo.PlayerCurStamina -= attackStamina;
+        }
+
+        if (combo2On && _mouseNum == 1)
+        {
+            anim.SetTrigger("Combo2Trigger");
         }
     }
     // 움직임 여부에 따른 move 애니메이션
@@ -139,7 +154,7 @@ public class PlayerAnim : MonoBehaviour
         else if (_originInput.z < -0.1f) anim.SetInteger("EvasionNum", (int)EAnim.BackEvasion);
 
         // 콤보 
-        comboOn[comboCnt] = false;
+        comboOn = false;
 
     }
 

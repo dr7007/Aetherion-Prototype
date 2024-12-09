@@ -177,11 +177,16 @@ public class PlayerMove : MonoBehaviour
     // 공격 입력시(마우스 좌클릭)
     private void InputAttack()
     {
-        // 배틀모드일때 마우스 좌클릭시
+        // 배틀모드일때 마우스 좌클릭시 or 마우스 우클릭시
         if (Input.GetMouseButtonDown(0) && IsBattleMode)
         {
             // 공격 애니메이션 실행
-            pAnim.Attack();
+            pAnim.Attack(0);
+            isPlayerAttacking = true;
+        }
+        else if (Input.GetMouseButtonDown(1) && IsBattleMode)
+        {
+            pAnim.Attack(1);
             isPlayerAttacking = true;
         }
     }
