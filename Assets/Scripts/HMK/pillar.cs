@@ -40,11 +40,16 @@ public class CirclePillarSpawner : MonoBehaviour
             float midZ = Mathf.Sin(midAngle) * radius;
             Vector3 blockPosition = new Vector3(midX, 0, midZ) + center;
 
-            // 블록 생성
-            Instantiate(blockPrefab, blockPosition, Quaternion.identity);
+            // 블록 회전 계산 (중심 방향을 향함)
+            Vector3 direction = pillarPosition - blockPosition; // 기둥 쪽으로 향하는 방향
+            Quaternion blockRotation = Quaternion.LookRotation(direction);
+
+            // 블록 생성 (회전 값 적용)
+            Instantiate(blockPrefab, blockPosition, blockRotation);
         }
     }
 }
+
 
 
 
