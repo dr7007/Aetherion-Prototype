@@ -16,15 +16,22 @@ public class PlayerWeaponChange : MonoBehaviour
         anim = GetComponent<Animator>();
     }
 
-    void Start()
+    private void Start()
     {
-        // Base Layer의 Weight를 0으로 설정 (무시)
-        anim.SetLayerWeight(0, 0);
-
-        // 다른 레이어의 Weight를 1로 설정 (활성화)
-        anim.SetLayerWeight(1, 1);
+        anim.SetLayerWeight(0, 1);
+        anim.SetLayerWeight(1, 0);
+        anim.Play("Nothing", 1);
     }
 
+    // 검으로 바꾸는 이벤트 콜백
+    private void ChangeSword()
+    {
+        sword.SetActive(true);
+        shield.SetActive(true);
+        axe.SetActive(false);
+
+        SetWeapon(1);
+    }
 
     // 도끼로 바꾸는 이벤트 콜백
     private void ChangeAxe()
@@ -39,15 +46,36 @@ public class PlayerWeaponChange : MonoBehaviour
     {
         sword.SetActive(false);
         shield.SetActive(false);
+        axe.SetActive(false);
+
         spear.SetActive(true);
     }
 
-    // 상태를 되돌리는 이벤트 콜백
-    private void ResetState()
+    // 바꾸는 애니메이션이 끝났을때, 무기를 도끼모드로 바꿈.
+    private void EndChange()
     {
-        sword.SetActive(true);
-        shield.SetActive(true);
-        axe.SetActive(false);
-        spear.SetActive(false);
+        SetWeapon(2);
+    }
+
+    // 무기 레이어 설정하는 함수
+    private void SetWeapon(int _num)
+    {
+        // 검방패 모드
+        if (_num == 1)
+        {
+            anim.SetLayerWeight(0, 1);
+            anim.SetLayerWeight(1, 0);
+            anim.CrossFade("Idle2", 0f, 0);
+            anim.Play("Nothing", 1);
+        }
+
+        // 도끼모드
+        else if (_num == 2)
+        {
+            anim.SetLayerWeight(0, 0);
+            anim.SetLayerWeight(1, 1);
+            anim.CrossFade("Idle2", 0f ,1);
+            anim.Play("Nothing", 0);
+        }
     }
 }

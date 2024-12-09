@@ -774,14 +774,14 @@ ModelImporter:
       bodyMask: 01000000010000000100000001000000010000000100000001000000010000000100000001000000010000000100000001000000
       curves: []
       events:
-      - time: 0
+      - time: 0.038554218
         functionName: ChangeSpear
         data: 
         objectReferenceParameter: {fileID: 11500000, guid: f97300a2c74f9144bb0d72d7365d583d, type: 3}
         floatParameter: 0
         intParameter: 0
         messageOptions: 0
-      - time: 0.7258567
+      - time: 0.96385545
         functionName: ResetState
         data: 
         objectReferenceParameter: {fileID: 11500000, guid: f97300a2c74f9144bb0d72d7365d583d, type: 3}

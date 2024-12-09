@@ -1,12 +1,5 @@
 fileFormatVersion: 2
-guid: 015c5abb201df5e4c8674f0006b9e1b0
-AssetOrigin:
-  serializedVersion: 1
-  productId: 129733
-  packageName: Frank Action RPG 2Handed (Combination)
-  packageVersion: 1.7
-  assetPath: Assets/Frank_RPG_2Handed/Assets/Animations/FBX_Animation/Root_Motion/Frank_RPG_2Hand_Combo01_3.FBX
-  uploadId: 300957
+guid: 37446886e5fa65d4387cb8ac9ef7ee2f
 ModelImporter:
   serializedVersion: 22200
   internalIDToNameTable:
@@ -504,7 +497,7 @@ ModelImporter:
     second: root
   - first:
       74: 7400000
-    second: ComboB3
+    second: Take 001
   - first:
       95: 9500000
     second: //RootNode
@@ -531,22 +524,20 @@ ModelImporter:
       will be discarded.\n\t'calf_r' has translation animation that will be discarded.\n\t'foot_r'
       has translation animation that will be discarded.\n\t'ball_r' has translation
       animation that will be discarded.\n\t'spine_01' has translation animation that
-      will be discarded.\n\t'spine_02' has translation animation that will be discarded.\n\t'spine_03'
-      has translation animation that will be discarded.\n\t'upperarm_l' has translation
-      animation that will be discarded.\n\t'lowerarm_l' has translation animation
-      that will be discarded.\n\t'hand_l' has translation animation that will be
-      discarded.\n\t'index_01_l' has translation animation that will be discarded.\n\t'index_02_l'
-      has translation animation that will be discarded.\n\t'index_03_l' has translation
-      animation that will be discarded.\n\t'middle_01_l' has translation animation
-      that will be discarded.\n\t'middle_02_l' has translation animation that will
-      be discarded.\n\t'middle_03_l' has translation animation that will be discarded.\n\t'ring_01_l'
-      has translation animation that will be discarded.\n\t'ring_02_l' has translation
-      animation that will be discarded.\n\t'ring_03_l' has translation animation
-      that will be discarded.\n\t'pinky_01_l' has translation animation that will
-      be discarded.\n\t'pinky_02_l' has translation animation that will be discarded.\n\t'upperarm_r'
-      has translation animation that will be discarded.\n\t'lowerarm_r' has translation
-      animation that will be discarded.\n\t'hand_r' has translation animation that
-      will be discarded.\n\t'head' has translation animation that will be discarded.\n"
+      will be discarded.\n\t'upperarm_l' has translation animation that will be discarded.\n\t'lowerarm_l'
+      has translation animation that will be discarded.\n\t'hand_l' has translation
+      animation that will be discarded.\n\t'index_01_l' has translation animation
+      that will be discarded.\n\t'index_02_l' has translation animation that will
+      be discarded.\n\t'index_03_l' has translation animation that will be discarded.\n\t'middle_01_l'
+      has translation animation that will be discarded.\n\t'middle_02_l' has translation
+      animation that will be discarded.\n\t'middle_03_l' has translation animation
+      that will be discarded.\n\t'ring_01_l' has translation animation that will
+      be discarded.\n\t'ring_02_l' has translation animation that will be discarded.\n\t'ring_03_l'
+      has translation animation that will be discarded.\n\t'pinky_02_l' has translation
+      animation that will be discarded.\n\t'upperarm_r' has translation animation
+      that will be discarded.\n\t'lowerarm_r' has translation animation that will
+      be discarded.\n\t'hand_r' has translation animation that will be discarded.\n\t'head'
+      has translation animation that will be discarded.\n"
     animationRetargetingWarnings: 
     animationDoRetargetingWarnings: 0
     importAnimatedCustomProperties: 0
@@ -560,11 +551,11 @@ ModelImporter:
     extraUserProperties: []
     clipAnimations:
     - serializedVersion: 16
-      name: ComboB3
+      name: Take 001
       takeName: Take 001
       internalID: 7400000
       firstFrame: 0
-      lastFrame: 100
+      lastFrame: 70
       wrapMode: 0
       orientationOffsetY: 0
       level: 0
@@ -580,14 +571,14 @@ ModelImporter:
       keepOriginalPositionY: 0
       keepOriginalPositionXZ: 0
       heightFromFeet: 1
-      mirror: 1
+      mirror: 0
       bodyMask: 01000000010000000100000001000000010000000100000001000000010000000100000001000000010000000100000001000000
       curves: []
       events:
-      - time: 1
-        functionName: EndChange
+      - time: 0.05490196
+        functionName: NewEvent
         data: 
-        objectReferenceParameter: {fileID: 11500000, guid: f97300a2c74f9144bb0d72d7365d583d, type: 3}
+        objectReferenceParameter: {instanceID: 0}
         floatParameter: 0
         intParameter: 0
         messageOptions: 0
