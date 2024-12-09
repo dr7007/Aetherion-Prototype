@@ -122,6 +122,8 @@ public class PlayerBattle : MonoBehaviour
             // 히트 리액션 보정을 위한 움직임 코루틴
             StartCoroutine("HitReactCoroutine", hitDir);
 
+            anim.SetInteger("EvasionNum", 0);
+
             // 방향을 플레이어 방향에 맞춰서 한번 바꾸고
             hitDir = transform.InverseTransformDirection(hitDir);
 
