@@ -69,7 +69,21 @@ ModelImporter:
         floatParameter: 0
         intParameter: 2
         messageOptions: 0
-      - time: 0.9988829
+      - time: 0.040498443
+        functionName: Combo2On
+        data: 
+        objectReferenceParameter: {fileID: 11500000, guid: da5000581862c7549bc64049df2c9d41, type: 3}
+        floatParameter: 0
+        intParameter: 2
+        messageOptions: 0
+      - time: 0.9470405
+        functionName: Combo2Off
+        data: 
+        objectReferenceParameter: {fileID: 11500000, guid: da5000581862c7549bc64049df2c9d41, type: 3}
+        floatParameter: 0
+        intParameter: 2
+        messageOptions: 0
+      - time: 1
         functionName: ComboOff
         data: 
         objectReferenceParameter: {fileID: 11500000, guid: da5000581862c7549bc64049df2c9d41, type: 3}
