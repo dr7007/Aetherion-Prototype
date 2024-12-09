@@ -164,19 +164,19 @@ public class PlayerBattle : MonoBehaviour
         }
     }
 
-    // 어택시 60퍼 정도만 콜라이더 켜둠
+    // 어택시 콜라이더 켜둠
     private bool CheckAttackVisible()
     {
         AnimatorStateInfo stateInfo = anim.GetCurrentAnimatorStateInfo(0);
 
-        if ((stateInfo.IsName("ComboAttack.Combo1") && stateInfo.normalizedTime < 0.5f) ||
-        (stateInfo.IsName("ComboAttack.Combo2") && stateInfo.normalizedTime < 0.4f) ||
-        (stateInfo.IsName("ComboAttack.Combo3") && stateInfo.normalizedTime < 0.40f))
+        if ((stateInfo.IsName("ComboAttack.Combo1") && stateInfo.normalizedTime < 0.8f) ||
+        (stateInfo.IsName("ComboAttack.Combo2") && stateInfo.normalizedTime < 0.8f) ||
+        (stateInfo.IsName("ComboAttack.Combo3") && stateInfo.normalizedTime < 0.8f))
         {
-            HDR.EnableKeyword("_EMISSION");
+            // HDR.EnableKeyword("_EMISSION");
             return true;
         }
-        HDR.DisableKeyword("_EMISSION");
+        // HDR.DisableKeyword("_EMISSION");
         return false;
     }
 

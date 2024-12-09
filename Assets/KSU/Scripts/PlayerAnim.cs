@@ -25,10 +25,12 @@ public class PlayerAnim : MonoBehaviour
     [SerializeField] private GameObject followCam;
     [SerializeField] private GameObject DieImage;
 
+    private PlayerMove moveInfo;
     private PlayerBattle battleInfo;
     private Animator anim;
     private bool[] comboOn;
     private int comboCnt;
+    public bool evasion = false;
 
     private float attackStamina = 10f;
 
@@ -43,6 +45,7 @@ public class PlayerAnim : MonoBehaviour
     {
         anim = GetComponent<Animator>();
         battleInfo = GetComponent<PlayerBattle>();
+        moveInfo = GetComponent<PlayerMove>();
     }
 
     #region AnimEvent
@@ -64,6 +67,11 @@ public class PlayerAnim : MonoBehaviour
         followCam.SetActive(false);
 
         StartCoroutine(ChangeDieMessageCoroutine());
+    }
+
+    private void EvasionOn()
+    {
+        evasion = true;
     }
     #endregion
 
@@ -120,22 +128,21 @@ public class PlayerAnim : MonoBehaviour
     // BattleMode에서 Combo중일때 Space하면 실행되는 함수 (캐릭터 기준으로 점프)
     public void BattleModeAttackSpace(Vector3 _originInput)
     {
-        if (comboOn[comboCnt])
-        {
-            Debug.Log(_originInput);
-            // 왼쪽 회피
-            if (_originInput.x < -0.01f) anim.SetInteger("EvasionNum", (int)EAnim.LeftEvasion);
-            // 오른쪽 회피
-            if (_originInput.x > 0.01f) anim.SetInteger("EvasionNum", (int)EAnim.RightEvasion);
-            // 앞 회피
-            if (_originInput.z > 0.01f) anim.SetInteger("EvasionNum", (int)EAnim.FrontEvasion);
-            // 뒤 회피
-            if (_originInput.z < -0.01f) anim.SetInteger("EvasionNum", (int)EAnim.BackEvasion);
+        Debug.Log(_originInput);
+        // 왼쪽 회피
+        if (_originInput.x < -0.1f) anim.SetInteger("EvasionNum", (int)EAnim.LeftEvasion);
+        // 오른쪽 회피
+        else if (_originInput.x > 0.1f) anim.SetInteger("EvasionNum", (int)EAnim.RightEvasion);
+        // 앞 회피
+        else if (_originInput.z > 0.1f) anim.SetInteger("EvasionNum", (int)EAnim.FrontEvasion);
+        // 뒤 회피
+        else if (_originInput.z < -0.1f) anim.SetInteger("EvasionNum", (int)EAnim.BackEvasion);
 
-            // 콤보 
-            comboOn[comboCnt] = false;
-        }
+        // 콤보 
+        comboOn[comboCnt] = false;
+
     }
+
     // 회피후 회피 num값 초기화
     public void ResetEvasionNum()
     {

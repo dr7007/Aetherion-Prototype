@@ -41,8 +41,8 @@ ModelImporter:
       name: Combo3
       takeName: OneHand_Up_Attack_3
       internalID: -3891449819406770849
-      firstFrame: 0
-      lastFrame: 60
+      firstFrame: 4
+      lastFrame: 33
       wrapMode: 0
       orientationOffsetY: 0
       level: 0
@@ -62,7 +62,7 @@ ModelImporter:
       bodyMask: 01000000010000000100000001000000010000000100000001000000010000000100000001000000010000000100000001000000
       curves: []
       events:
-      - time: 0.1968504
+      - time: 0.016522536
         functionName: ComboOn
         data: 
         objectReferenceParameter: {fileID: 11500000, guid: da5000581862c7549bc64049df2c9d41, type: 3}
