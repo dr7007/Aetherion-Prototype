@@ -248,6 +248,7 @@ public class BossMonsterAI : MonoBehaviour
             {
                 float damage = playerAttack.GetDamage(); // 플레이어의 공격력 가져오기
                 TakeDamage(damage + extraDamage); // 보스에게 대미지 적용
+                Debug.Log("스턴 추뎀 확인용" + damage + extraDamage);
             }
 
             // 충돌한 대상을 HitTracker에 추가
@@ -424,7 +425,6 @@ public class BossMonsterAI : MonoBehaviour
 
     public void StunEnd()
     {
-        Debug.Log("파라미터 꺼야해");
         anim.ResetTrigger(_CRITICAL_ANIM_TRIGGER_NAME);
         anim.ResetTrigger(_STUNNED_ANIM_TRIGGER_NAME);
         extraDamage = 0f;
@@ -456,11 +456,11 @@ public class BossMonsterAI : MonoBehaviour
                                 new List<INode>()
                                 {
                                     new ActionNode(CheckRangeLevelOne),
-                                    new SelectorNode
+                                    new SequenceNode
                                     (
                                         new List<INode>()
                                         {
-                                            new SequenceNode
+                                            new SelectorNode
                                             (
                                                 new List<INode>()
                                                 {
@@ -602,8 +602,9 @@ public class BossMonsterAI : MonoBehaviour
 
     INode.ENodeState PressAttackCheck()
     {
-        if(!isrespAtkOnCooldown)
+        if (!isrespAtkOnCooldown)
         {
+            Debug.Log("프레스 어택체크 동작중");
             CheckPlayerAttacking();
             return INode.ENodeState.ENS_Success;
         }
@@ -647,8 +648,9 @@ public class BossMonsterAI : MonoBehaviour
     }
     INode.ENodeState NoReactAttack()
     {
-        if(tmpTime >= NOREACT_ATTACK_INTERVAL)
+        if (tmpTime >= NOREACT_ATTACK_INTERVAL)
         {
+            
             tmpTime = 0;
             anim.SetTrigger(_DEFAULTATK_ANIM_TRIGGER_NAME);
             return INode.ENodeState.ENS_Success;
@@ -658,25 +660,12 @@ public class BossMonsterAI : MonoBehaviour
     }
     INode.ENodeState StunnedEnemy()
     {
-        // 현재 애니메이션 상태 정보를 가져옴
-        AnimatorStateInfo stateInfo = anim.GetCurrentAnimatorStateInfo(0);
-
-        // FirstDetectAttack 애니메이션이 실행 중인지 확인
-        if (stateInfo.IsName(_STUNED_ANIM_STATE_NAME))
+        if(anim.GetBool(_CRITICAL_ANIM_TRIGGER_NAME) && anim.GetBool(_STUNNED_ANIM_TRIGGER_NAME))
         {
-            if (stateInfo.normalizedTime < 1.0f)
-            {
-                extraDamage = 20f;
-                // 애니메이션이 실행 중일 때 Running 반환
-                return INode.ENodeState.ENS_Running;
-            }
-            else
-            {
-                // 애니메이션이 종료된 경우 Failure 반환
-                return INode.ENodeState.ENS_Failure;
-            }
+            Debug.Log("스턴드 애너미!");
+            extraDamage = 2000f;
+            return INode.ENodeState.ENS_Success;
         }
-        // 애니메이션 상태가 맞지 않을 경우 Failure 반환
         return INode.ENodeState.ENS_Failure;
     }
 
