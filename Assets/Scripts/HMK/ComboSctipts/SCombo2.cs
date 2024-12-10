@@ -6,15 +6,18 @@ public class SCombo2 : MonoBehaviour
     [SerializeField] private Animator animator; // Animator 컴포넌트
     [SerializeField] private GameObject[] combo1img; // 콤보 이미지 배열
     [SerializeField] private float timeout = 0.6f; // 다음 콤보로 넘어가는 제한 시간
+    [SerializeField] private PlayerWeaponChange weaponChange;
 
     private float comboTimer = 0f; // 현재 상태에서 경과 시간
     private int currentComboIndex = 0; // 현재 활성화된 콤보 인덱스
+    private int curWeaponNum; // 현재 무기 상태
 
     public string[] targetAnimationStates = { "Combo1", "ComboB2", "ComboB3" };
 
     private void Update()
     {
-        AnimatorStateInfo stateInfo = animator.GetCurrentAnimatorStateInfo(0);
+        curWeaponNum = weaponChange.curWeaponNum;
+        AnimatorStateInfo stateInfo = animator.GetCurrentAnimatorStateInfo(curWeaponNum);
 
         // 현재 활성화된 애니메이션 상태 확인
         for (int i = 0; i < targetAnimationStates.Length; i++)

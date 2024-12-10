@@ -176,13 +176,21 @@ public class PlayerAnim : MonoBehaviour
         if (_state)
         {
             blocking = true;
-            gameObject.tag = "blocking";
+            gameObject.tag = "Blocking";
         }
         else
         {
             blocking = false;
+            gameObject.tag = "Player";
         }
+        anim.SetBool("IsBlocking", blocking);
+    }
 
+    public void ShieldHit()
+    {
+        anim.SetTrigger("ShieldHit");
+        blocking = false;
+        gameObject.tag = "Player";  
         anim.SetBool("IsBlocking", blocking);
     }
     #endregion

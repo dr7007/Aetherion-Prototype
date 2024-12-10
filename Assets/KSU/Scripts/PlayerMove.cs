@@ -12,7 +12,8 @@ public class PlayerMove : MonoBehaviour
     [SerializeField] private float rollCooldown = 5f; // 구르기 쿨타임
     [SerializeField] private PlayerAnim pAnim; // animation 관리하는 PlayerAnim 스크립트
     [SerializeField] private float evasionTime = 1f;
-    [SerializeField] private Material HDR;
+
+    public Material HDR;
 
     private int curWeaponNum;
     private PlayerBattle battleInfo;
@@ -63,7 +64,10 @@ public class PlayerMove : MonoBehaviour
         }
 
         // 방어키 입력
-        InputShift();
+        InputShield();
+
+        // 방어중일땐 다른 키입력X
+        if (gameObject.tag == "Blocking") return;
 
         // 키입력 감지
         axisH = Input.GetAxis("Horizontal");
@@ -255,13 +259,11 @@ public class PlayerMove : MonoBehaviour
         if (Input.GetMouseButtonDown(2))
         {
             pAnim.Shield(true);
-            return;
         }
 
         if (Input.GetMouseButtonUp(2))
         {
             pAnim.Shield(false);
-            return;
         }
     }
     #endregion

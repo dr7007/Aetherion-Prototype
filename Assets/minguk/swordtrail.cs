@@ -8,11 +8,13 @@ public class SwordTrail : MonoBehaviour
     [SerializeField] private TrailRenderer combo2Trail;
     [SerializeField] private TrailRenderer combo3Trail;
     [SerializeField] private GameObject ComboC1Trail;
+    [SerializeField] private GameObject ComboC2Trail;
 
-    public string[] targetAnimationStates = { "Combo1", "Combo2", "Combo3", "ComboC1" };
+    public string[] targetAnimationStates = { "Combo1", "Combo2", "Combo3", "ComboC1", "ComboC2" };
 
     // 애니메이션 종료 조기 시점 (0.9는 90% 진행 시 종료)
     private float trailEndOffset = 0.8f;
+    private float trailnomaloffset = 1f;
 
     void Start()
     {
@@ -62,13 +64,24 @@ public class SwordTrail : MonoBehaviour
         }
         else if (stateInfo.IsName("ComboC1"))
         {
-            if (stateInfo.normalizedTime < trailEndOffset)
+            if (stateInfo.normalizedTime < trailnomaloffset)
             {
                 EnableParticleGameObject(ComboC1Trail); // GameObject와 파티클 활성화 및 실행
             }
             else
             {
                 DisableParticleGameObject(ComboC1Trail); // GameObject와 파티클 비활성화
+            }
+        }
+        else if (stateInfo.IsName("ComboC2"))
+        {
+            if (stateInfo.normalizedTime < trailnomaloffset)
+            {
+                EnableParticleGameObject(ComboC2Trail); // GameObject와 파티클 활성화 및 실행
+            }
+            else
+            {
+                DisableParticleGameObject(ComboC2Trail); // GameObject와 파티클 비활성화
             }
         }
 
@@ -107,29 +120,25 @@ public class SwordTrail : MonoBehaviour
     }
     private void EnableParticleGameObject(GameObject obj)
     {
-        if (obj != null && !obj.activeSelf)
-        {
             obj.SetActive(true); // GameObject 활성화
             ParticleSystem particle = obj.GetComponent<ParticleSystem>();
             if (particle != null && !particle.isPlaying)
             {
                 particle.Play(); // 파티클 실행
             }
-        }
+        
     }
 
     // GameObject와 ParticleSystem 비활성화
     private void DisableParticleGameObject(GameObject obj)
     {
-        if (obj != null && obj.activeSelf)
-        {
             ParticleSystem particle = obj.GetComponent<ParticleSystem>();
             if (particle != null && particle.isPlaying)
             {
                 particle.Stop(); // 파티클 중지
             }
             obj.SetActive(false); // GameObject 비활성화
-        }
+        
     }
 }
 

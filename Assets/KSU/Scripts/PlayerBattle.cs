@@ -12,17 +12,18 @@ public class PlayerBattle : MonoBehaviour
     [SerializeField] private float detectRange = 50f;
     [SerializeField] private BoxCollider attackCollider;
     [SerializeField] private LayerMask monsterLayer;
-    [SerializeField] private Material HDR;
+    [SerializeField] private float shieldTime;
 
     private HashSet<Collider> hitTargets = new HashSet<Collider>(); // 대미지 중복 적용 내부쿨 관리용
 
-    public Collider[] colliders;
-    public Vector3 mosterPosition;
+    private Collider[] colliders;
+    private Vector3 mosterPosition;
     private PlayerAnim pAnim;
     private Animator anim;
     private Vector3 hitDir;
     private CharacterController controller;
     private PlayerWeaponChange weaponChange;
+    private PlayerMove moveInfo;
 
     private float PlayerMaxHp = 100f;
     private float PlayerCurHp;
@@ -30,6 +31,7 @@ public class PlayerBattle : MonoBehaviour
     private float playerMaxStamina = 100f;
     private float playerCurStamina;
     private int curWeaponNum;
+    private bool IsShieldHit = false;
 
     private const string _DIE_ANUM_TRIGGER_NAME = "Die";
 
@@ -66,6 +68,7 @@ public class PlayerBattle : MonoBehaviour
         pAnim = GetComponent<PlayerAnim>();
         controller = GetComponent<CharacterController>();
         weaponChange = GetComponent<PlayerWeaponChange>();
+        moveInfo = GetComponent<PlayerMove>();
 
         Keyframe reactCurve_lastFrame = reactCurve[reactCurve.length - 1];
         reactTimer = reactCurve_lastFrame.time;
@@ -100,16 +103,40 @@ public class PlayerBattle : MonoBehaviour
     {
         curWeaponNum = weaponChange.CurWeaponNum;
 
+        // 실드 무적쿨동안 피해안받음.
+        if (IsShieldHit) return;
+
+        // 방어중에 맞았을때
+        if (other.CompareTag("MonsterWeapon") && gameObject.tag == "Blocking")
+        {
+            // 맞는 방향구하고
+            hitDir = new Vector3(-(transform.position.x - mosterPosition.x), 0f, -(transform.position.z - mosterPosition.z)).normalized;
+
+            // 맞는 방향 바라보도록
+            transform.forward = hitDir;
+
+            // 실드에서 맞는 애니메이션 실행
+            pAnim.ShieldHit();
+
+            // 몇초간 무적상태로 만듦.
+            StartCoroutine(ShieldReactTime());
+
+            // 쿨타임을 넣고싶다면 넣으면 되긴 함. 코드(쿨타임 코루틴)와 조건으로.
+
+            return;
+        }
+
         // 만약 피격모션 중이라면 return
         if (CheckHitReact() || pAnim.CheckAnim(curWeaponNum) == PlayerAnim.EAnim.Death)
         {
-            Debug.Log("Heat motion중");
             return;
         }
 
         // 무기에 맞았을때 리액션
         if (other.CompareTag("MonsterWeapon") && transform.gameObject.tag == "Player")
         {
+            Debug.Log("으악 맞았어요!!");
+
             BossMonsterAI bossAttack = other.GetComponentInParent<BossMonsterAI>();
             // 대미지 적용
             if (bossAttack != null && PlayerCurHp != 0)
@@ -124,16 +151,27 @@ public class PlayerBattle : MonoBehaviour
             // 히트 리액션 보정을 위한 움직임 코루틴
             StartCoroutine("HitReactCoroutine", hitDir);
 
-            anim.SetInteger("EvasionNum", 0);
-
             // 방향을 플레이어 방향에 맞춰서 한번 바꾸고
             hitDir = transform.InverseTransformDirection(hitDir);
 
             // 애니메이션 실행시킴.
             anim.SetFloat("HitDirX", hitDir.x);
             anim.SetFloat("HitDirZ", hitDir.z);
-            anim.CrossFade("HitReact", 0.05f);
+            anim.CrossFade("HitReact", 0.05f, curWeaponNum);
+            
 
+            // 맞았다면 무기도 상태에 맞게 초기화
+            if (curWeaponNum == 0)
+            {
+                weaponChange.ChangeSword();
+            }
+            else
+            {
+                weaponChange.ChangeAxe();
+            }
+
+            // 회피 상태도 초기화
+            anim.SetInteger("EvasionNum", 0);
         }
         
     }
@@ -179,10 +217,8 @@ public class PlayerBattle : MonoBehaviour
         (stateInfo.IsName("Combo2") && stateInfo.normalizedTime < 0.8f) ||
         (stateInfo.IsName("Combo3") && stateInfo.normalizedTime < 0.8f))
         {
-            // HDR.EnableKeyword("_EMISSION");
             return true;
         }
-        // HDR.DisableKeyword("_EMISSION");
         return false;
     }
 
@@ -199,6 +235,7 @@ public class PlayerBattle : MonoBehaviour
         }
         return false;
     }
+
 
     // 데미지 받는 함수(콜백으로 내용 보냄)
     public void TakeDamage(float _damage)
@@ -221,6 +258,18 @@ public class PlayerBattle : MonoBehaviour
     public float GetDamage()
     {
         return PlayerAtk;
+    }
+
+    // 실드 후 몇초간 무적
+    private IEnumerator ShieldReactTime()
+    {
+        IsShieldHit = true;
+        moveInfo.HDR.EnableKeyword("_EMISSION");
+
+        yield return new WaitForSeconds(shieldTime);
+
+        IsShieldHit = false;
+        moveInfo.HDR.DisableKeyword("_EMISSION");
     }
 
 }
