@@ -300,7 +300,13 @@ public class BossMonsterAI : MonoBehaviour
     {
         bossHit.EnableKeyword("_EMISSION");
 
-        yield return new WaitForSeconds(hitCooldown);
+        PlayerAnim playerHit = _target.GetComponentInParent<PlayerAnim>();
+
+        while(true)
+        {
+            if (playerHit.hitCombo == false) break;
+            yield return null;
+        }
 
         bossHit.DisableKeyword("_EMISSION");
 
