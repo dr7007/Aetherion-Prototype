@@ -83,16 +83,23 @@ public class BossMonsterAI : MonoBehaviour
 
     #region Animator Parameters
 
+    // 애니메이션 상태 이름
     private const string _FIRSTDETECT_ANIM_STATE_NAME = "FirstDetectAttack";
-    private const string _FIRSTATTACK_ANIM_TRIGGER_NAME = "FirstAttack";
 
-    private const string _ATTACK_ANIM_TRIGGER_NAME = "attack";                  // Boss의 Attack관련 행동 체크 트리거 (공격 시작/공격 중 On, 공격 끝/공격 외 Off)
-    private const string _FIRSTDETECT_ANIM_BOOL_NAME = "first_detect";          // Boss의 시작연출 관리를 위한 First Detect 체크 트리거 (게임 시작 후 첫 Detect 이전까지 On, 첫 Detect 이후 Off)
-    private const string _DETECT_ANIM_BOOL_NAME = "detect";                     // Boss의 실시간 Player Detect 체크 트리거 (범위 내 Player가 존재 시 On, 미존재 시 Off)
-    private const string _DEFAULTATK_ANIM_TRIGGER_NAME = "defaultatk";          // Boss의 특정 패턴 동작의 시작 트리거 (조건 만족시 On, 특정 패턴 동작 애니메이션 트랜지션 이후 Off)
-    private const string _RANGE_ANIM_INT_NAME = "range_level";                  // Boss의 기준으로 Player가 Detect되는 영역 레벨 값 (Range Level = 1, 2 ,3)
-    private const string _PLAYERATTACK_ANIM_TRIGGER_NAME = "playerattacking";   // Player가 현재 attack행동을 시전했는지를 판단하는 트리거 (CheckPlayerAttacking에서 여부를 검사하여 On,특정 행동 이후 Off 후 쿨다운 동안 On 동작 무시 후 Off 초기화)
-    private const string _DIE_ANIM_TRIGGER_NAME = "die";                        // Boss의 HP가 0이 될 시 그 즉시 die 트리거 활성화 (Hp = 0일 때 On, Off조건 없음 -> 단방향)
+    // 애니메이터 Bool Parameter
+    private const string _FIRSTDETECT_ANIM_BOOL_NAME = "FirstDetect";          // Boss의 시작연출 관리를 위한 First Detect 체크 트리거 (게임 시작 후 첫 Detect 이전까지 On, 첫 Detect 이후 Off)
+    private const string _DETECT_ANIM_BOOL_NAME = "Detect";                     // Boss의 실시간 Player Detect 체크 트리거 (범위 내 Player가 존재 시 On, 미존재 시 Off)
+    
+    // 애니메이터 Int Parameter
+    private const string _RANGE_ANIM_INT_NAME = "RangeLevel";                  // Boss의 기준으로 Player가 Detect되는 영역 레벨 값 (Range Level = 1, 2 ,3)
+
+    // 패턴별 공격 발동 트리거
+    private const string _TPJUMPATTACK_ANIM_TRIGGER_NAME = "TpJumpAtk";      // Boss의 점프 공격 패턴 발동 트리거
+    private const string _DEFAULTATK_ANIM_TRIGGER_NAME = "DefaultAtk";          // Boss의 1페이즈 기본 공격 동작의 발동 트리거
+    private const string _PLAYERATTACK_ANIM_TRIGGER_NAME = "RespAtk";   // Boss의 1페이즈 반응형 공격 동작의 발동 트리거
+
+    // 단방향 트리거
+    private const string _DIE_ANIM_TRIGGER_NAME = "Die";                        // Boss의 HP가 0이 될 시 그 즉시 die 트리거 활성화 (Hp = 0일 때 On)
     private const string _PHASE2_ANIM_TRIGGER_NAME = "2ndPhase";                // Boss의 2페이즈 판단. (HP <= 10% 일때 On)
 
     #endregion
@@ -108,7 +115,6 @@ public class BossMonsterAI : MonoBehaviour
     {
         anim.SetBool(_FIRSTDETECT_ANIM_BOOL_NAME, true);
         anim.SetBool(_DETECT_ANIM_BOOL_NAME, false);
-        anim.ResetTrigger(_ATTACK_ANIM_TRIGGER_NAME);
         anim.SetInteger(_RANGE_ANIM_INT_NAME, 0);
     }
     private void Update()
@@ -136,124 +142,39 @@ public class BossMonsterAI : MonoBehaviour
     {
         if (_collider.CompareTag("PlayerAttack")) // 플레이어 무기에 의해 공격받은 경우
         {
-            if (!hitTargets.Contains(_collider))
-            {
-                PlayerBattle playerAttack = _collider.GetComponentInParent<PlayerBattle>();
-                // 대미지 적용
-                if (playerAttack != null && currentHp != 0)
-                {
-                    float damage = playerAttack.GetDamage(); // 플레이어의 공격력 가져오기
-                    Debug.Log("플레이어에 의해 대미지!" + damage);
-                    TakeDamage(damage); // 보스에게 대미지 적용
-                }
-
-                // 충돌한 대상을 HitTracker에 추가
-                hitTargets.Add(_collider);
-
-                // 쿨다운 후 대상 제거
-                StartCoroutine(RemoveFromHitTrackerAfterCooldown(_collider));
-            }
-            else
-            {
-                Debug.Log("피격 판정 겹침현상 예방 내부 쿨 동작 중");
-            }
+            HitJudge(_collider);
         }
     }
-    private void ApplyDamageToPlayer(Collider _collider)
+
+    #region Public Functions
+
+    public void TakeDamage(float _damage)
     {
-        Debug.Log(_collider.gameObject.name + "플레이어에게 대미지 적용: " + atk);
-    }
-    private IEnumerator RemoveFromHitTrackerAfterCooldown(Collider _target)
-    {
-        bossHit.EnableKeyword("_EMISSION");
 
-        yield return new WaitForSeconds(hitCooldown);
+        currentHp -= _damage;
+        currentHp = Mathf.Max(0, currentHp); // 체력이 0 이하로 내려가지 않도록 처리
 
-        bossHit.DisableKeyword("_EMISSION");
+        Debug.Log($"Boss took damage: {_damage}, Current HP: {currentHp}");
 
-        if (hitTargets.Contains(_target))
+        // UI 업데이트를 위해 콜백 호출
+        HpChangedCallback?.Invoke(currentHp, maxHp);
+
+        // 보스 사망 처리
+        if (currentHp <= 0)
         {
-            hitTargets.Remove(_target);
-            Debug.Log("보스 내부 피격 판정 쿨다운 종료");
+            anim.SetTrigger(_DIE_ANIM_TRIGGER_NAME);
         }
     }
 
-    public void EnableWeaponCollider()
+    public float GetDamage()
     {
-        if (weaponCollider != null)
-        {
-            weaponCollider.enabled = true; // 콜라이더 활성화
-        }
+        return atk;
     }
 
-    public void DisableWeaponCollider()
-    {
-        if (weaponCollider != null)
-        {
-            weaponCollider.enabled = false; // 콜라이더 비활성화
-        }
-    }
-    public void EndAttack()
-    {
-        Debug.Log("EndAttack!");
-        anim.ResetTrigger(_ATTACK_ANIM_TRIGGER_NAME);
-    }
+    #endregion
 
-    public void LockDirection()
-    {
-        // 현재 회전값을 저장하고 방향 고정 활성화
-        lockedRotation = transform.rotation;
-        isAnimationLocked = true;
-    }
+    #region Private Functions
 
-    public void UnlockDirection()
-    {
-        // 방향 고정 해제
-        isAnimationLocked = false;
-    }
-
-    private void LookAtPlayer()
-    {
-        if (detectedPlayerTr == null) return;
-
-        Vector3 direction = (detectedPlayerTr.position - transform.position).normalized;
-        direction.y = 0; // 수평 방향만 회전
-
-        Quaternion targetRotation = Quaternion.LookRotation(direction);
-
-        transform.rotation = Quaternion.Slerp(transform.rotation, targetRotation, Time.deltaTime * rotationSpeed);
-    }
-
-    private void CheckPlayerAttacking()
-    {
-        if (isPlayerAttackingOnCooldown)
-        {
-            Debug.Log("PlayerAttacking 트리거가 쿨타임 중입니다.");
-            return; // 쿨타임 중일 경우 아무 작업도 하지 않음
-        }
-
-        // 플레이어 공격 트리거 활성화
-        if (player.IsPlayerAttacking)
-        {
-            anim.SetTrigger(_PLAYERATTACK_ANIM_TRIGGER_NAME); // 공격 애니메이션 트리거
-            Debug.Log("PlayerAttacking 트리거 동작!");
-
-            // 쿨타임 시작
-            StartCoroutine(StartPlayerAttackingCooldown());
-        }
-    }
-    private IEnumerator StartPlayerAttackingCooldown()
-    {
-        isPlayerAttackingOnCooldown = true; // 쿨타임 시작
-        Debug.Log("PlayerAttacking 쿨타임 시작!");
-
-        yield return new WaitForSeconds(playerAttackingCooldown);
-
-        player.IsPlayerAttacking = false;
-        anim.ResetTrigger(_PLAYERATTACK_ANIM_TRIGGER_NAME);
-        isPlayerAttackingOnCooldown = false; // 쿨타임 종료
-        Debug.Log("PlayerAttacking 쿨타임 종료! 이제 다시 활성화할 수 있습니다.");
-    }
     private void DetectPlayer()
     {
         Collider[] overlapColliders = Physics.OverlapSphere(transform.position, level_Three_Range, LayerMask.GetMask("Player"));
@@ -287,11 +208,105 @@ public class BossMonsterAI : MonoBehaviour
         }
     }
 
-    public void FirstAttackTeleport()
+    private void LookAtPlayer()
     {
-        StartCoroutine(FirstAttackTeleportCoroutine());
+        if (detectedPlayerTr == null) return;
+
+        Vector3 direction = (detectedPlayerTr.position - transform.position).normalized;
+        direction.y = 0; // 수평 방향만 회전
+
+        Quaternion targetRotation = Quaternion.LookRotation(direction);
+
+        transform.rotation = Quaternion.Slerp(transform.rotation, targetRotation, Time.deltaTime * rotationSpeed);
     }
-    
+
+    private void HitJudge(Collider _collider)
+    {
+        if (!hitTargets.Contains(_collider))
+        {
+            PlayerBattle playerAttack = _collider.GetComponentInParent<PlayerBattle>();
+            // 대미지 적용
+            if (playerAttack != null && currentHp != 0)
+            {
+                float damage = playerAttack.GetDamage(); // 플레이어의 공격력 가져오기
+                TakeDamage(damage); // 보스에게 대미지 적용
+            }
+
+            // 충돌한 대상을 HitTracker에 추가
+            hitTargets.Add(_collider);
+
+            // 쿨다운 후 대상 제거
+            StartCoroutine(RemoveFromHitTrackerAfterCooldown(_collider));
+        }
+        else
+        {
+            Debug.Log("피격 판정 겹침현상 예방 내부 쿨 동작 중");
+        }
+    }
+
+    private void CheckPlayerAttacking()
+    {
+        if (isPlayerAttackingOnCooldown)
+        {
+            Debug.Log("PlayerAttacking 트리거가 쿨타임 중입니다.");
+            return; // 쿨타임 중일 경우 아무 작업도 하지 않음
+        }
+
+        // 플레이어 공격 트리거 활성화
+        if (player.IsPlayerAttacking)
+        {
+            anim.SetTrigger(_PLAYERATTACK_ANIM_TRIGGER_NAME); // 공격 애니메이션 트리거
+            Debug.Log("PlayerAttacking 트리거 동작!");
+
+            // 쿨타임 시작
+            StartCoroutine(StartPlayerAttackingCooldown());
+        }
+    }
+
+    // Unity 작업 중 보스 인식 범위 Gizmos 확인
+    private void OnDrawGizmos()
+    {
+        Gizmos.color = Color.green;
+        Gizmos.DrawWireSphere(this.transform.position, level_One_Range);
+
+        Gizmos.color = Color.blue;
+        Gizmos.DrawWireSphere(this.transform.position, level_Two_Range);
+
+        Gizmos.color = Color.red;
+        Gizmos.DrawWireSphere(this.transform.position, level_Three_Range);
+    }
+
+    #endregion
+
+    #region Coroutine Region
+
+    private IEnumerator StartPlayerAttackingCooldown()
+    {
+        isPlayerAttackingOnCooldown = true; // 쿨타임 시작
+        Debug.Log("PlayerAttacking 쿨타임 시작!");
+
+        yield return new WaitForSeconds(playerAttackingCooldown);
+
+        player.IsPlayerAttacking = false;
+        anim.ResetTrigger(_PLAYERATTACK_ANIM_TRIGGER_NAME);
+        isPlayerAttackingOnCooldown = false; // 쿨타임 종료
+        Debug.Log("PlayerAttacking 쿨타임 종료! 이제 다시 활성화할 수 있습니다.");
+    }
+
+    private IEnumerator RemoveFromHitTrackerAfterCooldown(Collider _target)
+    {
+        bossHit.EnableKeyword("_EMISSION");
+
+        yield return new WaitForSeconds(hitCooldown);
+
+        bossHit.DisableKeyword("_EMISSION");
+
+        if (hitTargets.Contains(_target))
+        {
+            hitTargets.Remove(_target);
+            Debug.Log("보스 내부 피격 판정 쿨다운 종료");
+        }
+    }
 
     private IEnumerator FirstAttackTeleportCoroutine()
     {
@@ -319,6 +334,58 @@ public class BossMonsterAI : MonoBehaviour
         // 애니메이션 이어서 실행
         anim.speed = 1f;
     }
+
+    #endregion
+
+    #region Animation-Event Essentials
+
+    // 보스 무기 콜라이더 활성화
+    public void EnableWeaponCollider()
+    {
+        if (weaponCollider != null)
+        {
+            weaponCollider.enabled = true; 
+        }
+    }
+
+    // 보스 무기 콜라이더 비활성화
+    public void DisableWeaponCollider()
+    {
+        if (weaponCollider != null)
+        {
+            weaponCollider.enabled = false;
+        }
+    }
+
+    public void LockDirection()
+    {
+        // 현재 회전값을 저장하고 방향 고정 활성화
+        lockedRotation = transform.rotation;
+        isAnimationLocked = true;
+    }
+
+    public void UnlockDirection()
+    {
+        // 방향 고정 해제
+        isAnimationLocked = false;
+    }
+
+    #endregion
+
+    #region Animation-Event Custom
+
+    public void FirstAttackTeleport()
+    {
+        StartCoroutine(FirstAttackTeleportCoroutine());
+    }
+
+    public void DieCall()
+    {
+        Destroy(gameObject, 5f);
+    }
+
+    #endregion
+
 
     INode CreateAttackBehavior()
     {
@@ -426,7 +493,7 @@ public class BossMonsterAI : MonoBehaviour
     {
         if (anim.GetBool(_FIRSTDETECT_ANIM_BOOL_NAME) && anim.GetBool(_DETECT_ANIM_BOOL_NAME))
         {
-            anim.SetTrigger(_FIRSTATTACK_ANIM_TRIGGER_NAME);
+            anim.SetTrigger(_TPJUMPATTACK_ANIM_TRIGGER_NAME);
             firstdetPos = detectedPlayerTr.position;
             anim.SetBool(_FIRSTDETECT_ANIM_BOOL_NAME,false);
             return INode.ENodeState.ENS_Success;
@@ -440,7 +507,6 @@ public class BossMonsterAI : MonoBehaviour
         if(!anim.GetBool(_DETECT_ANIM_BOOL_NAME))
         {
             //Debug.Log("Non_Detect");
-            anim.ResetTrigger(_ATTACK_ANIM_TRIGGER_NAME);
             return INode.ENodeState.ENS_Success;
         }
         return INode.ENodeState.ENS_Failure;
@@ -534,9 +600,8 @@ public class BossMonsterAI : MonoBehaviour
     }
     INode.ENodeState DefaultMeleeAttackEnemy()
     {
-        if (!anim.GetBool(_ATTACK_ANIM_TRIGGER_NAME) && anim.GetBool(_PLAYERATTACK_ANIM_TRIGGER_NAME))
+        if (anim.GetBool(_PLAYERATTACK_ANIM_TRIGGER_NAME))
         {
-            anim.SetTrigger(_ATTACK_ANIM_TRIGGER_NAME);
             Debug.Log("보스가 근접 공격을 실행합니다.");
             return INode.ENodeState.ENS_Success;
         }
@@ -563,41 +628,4 @@ public class BossMonsterAI : MonoBehaviour
 
     #endregion
 
-    private void OnDrawGizmos()
-    {
-        Gizmos.color = Color.green;
-        Gizmos.DrawWireSphere(this.transform.position, level_One_Range);
-
-        Gizmos.color = Color.blue;
-        Gizmos.DrawWireSphere(this.transform.position, level_Two_Range);
-
-        Gizmos.color = Color.red;
-        Gizmos.DrawWireSphere(this.transform.position, level_Three_Range);
-    }
-    public void TakeDamage(float _damage)
-    {
-
-        currentHp -= _damage;
-        currentHp = Mathf.Max(0, currentHp); // 체력이 0 이하로 내려가지 않도록 처리
-
-        Debug.Log($"Boss took damage: {_damage}, Current HP: {currentHp}");
-
-        // UI 업데이트를 위해 콜백 호출
-        HpChangedCallback?.Invoke(currentHp, maxHp);
-
-        // 보스 사망 처리
-        if (currentHp <= 0)
-        {
-            anim.SetTrigger(_DIE_ANIM_TRIGGER_NAME);
-        }
-    }
-    public void DieCall()
-    {
-        Destroy(gameObject, 5f);
-    }
-
-    public float GetDamage()
-    {
-        return atk;
-    }
 }

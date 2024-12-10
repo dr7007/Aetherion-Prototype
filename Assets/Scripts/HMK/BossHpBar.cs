@@ -14,7 +14,7 @@ public class HPBar : MonoBehaviour
     [Header("bose UI trigger")]
     [SerializeField] private Animator bossUI;
 
-    private const string _DETECT_ANIM_BOOL_NAME = "detect";
+    private const string _DETECT_ANIM_BOOL_NAME = "Detect";
     [SerializeField]
     private GameObject bossHPUI = null;
     private void Start()

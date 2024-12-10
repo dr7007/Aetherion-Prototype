@@ -1,5 +1,5 @@
 fileFormatVersion: 2
-guid: 668693125e0b2c940aa38740f253a619
+guid: 45ca22129ba86b24f984475b28cdce9b
 ModelImporter:
   serializedVersion: 22200
   internalIDToNameTable:
@@ -317,6 +317,9 @@ ModelImporter:
     second: RPG-Character-Mesh
   - first:
       1: 100208
+    second: 2Hand-Axe
+  - first:
+      1: 100210
     second: Exporter
   - first:
       4: 400000
@@ -632,6 +635,9 @@ ModelImporter:
     second: RPG-Character-Mesh
   - first:
       4: 400208
+    second: 2Hand-Axe
+  - first:
+      4: 400210
     second: Exporter
   - first:
       23: 2300000
@@ -649,6 +655,9 @@ ModelImporter:
       23: 2300008
     second: USP
   - first:
+      23: 2300010
+    second: 2Hand-Axe
+  - first:
       33: 3300000
     second: Mesh_Soldier_A
   - first:
@@ -663,6 +672,9 @@ ModelImporter:
   - first:
       33: 3300008
     second: USP
+  - first:
+      33: 3300010
+    second: 2Hand-Axe
   - first:
       43: 4300000
     second: Mesh_Soldier_A
@@ -685,8 +697,11 @@ ModelImporter:
       43: 4300012
     second: RPG-Character-Mesh
   - first:
+      43: 4300014
+    second: 2Hand-Axe
+  - first:
       74: 7400000
-    second: Unarmed-Strafe-Right
+    second: 2Hand-Axe-Strafe-Forward-Left
   - first:
       95: 9500000
     second: //RootNode
@@ -714,7 +729,7 @@ ModelImporter:
     resampleCurves: 1
     optimizeGameObjects: 0
     removeConstantScaleCurves: 0
-    motionNodeName: Motion
+    motionNodeName: 
     animationImportErrors: 
     animationImportWarnings: "\nClip 'Take 001' has import animation warnings that
       might lower retargeting quality:\n\t'B_Spine2' is inbetween humanoid transforms
@@ -733,7 +748,7 @@ ModelImporter:
     extraUserProperties: []
     clipAnimations:
     - serializedVersion: 16
-      name: Unarmed-Strafe-Right
+      name: 2Hand-Axe-Strafe-Forward-Left
       takeName: Take 001
       internalID: 0
       firstFrame: 0
@@ -741,11 +756,11 @@ ModelImporter:
       wrapMode: 0
       orientationOffsetY: 0
       level: 0
-      cycleOffset: 0
+      cycleOffset: 3
       loop: 0
       hasAdditiveReferencePose: 0
-      loopTime: 1
-      loopBlend: 1
+      loopTime: 0
+      loopBlend: 0
       loopBlendOrientation: 1
       loopBlendPositionY: 1
       loopBlendPositionXZ: 0
@@ -759,7 +774,7 @@ ModelImporter:
       events: []
       transformMask: []
       maskType: 3
-      maskSource: {fileID: 101100000, guid: 3e4e408fdcc93ee468a1275b69104d63, type: 2}
+      maskSource: {fileID: 101100000, guid: 4ebc95c8618479f4d8251c7dafa10029, type: 2}
       additiveReferencePoseFrame: 0
     isReadable: 1
   meshes:
