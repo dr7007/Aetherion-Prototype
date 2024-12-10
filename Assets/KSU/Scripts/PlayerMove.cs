@@ -1,6 +1,6 @@
 using UnityEngine;
 
-// 플레이어 키입력과 관련된 스크립트
+// 플레이어 키입력과 움직임 관련된 스크립트
 public class PlayerMove : MonoBehaviour
 {
     public delegate void OnStaminaChangedDelegate(float curStamina, float maxStamina);
@@ -61,6 +61,9 @@ public class PlayerMove : MonoBehaviour
             HDR.EnableKeyword("_EMISSION");
             pAnim.evasion = false; 
         }
+
+        // 방어키 입력
+        InputShift();
 
         // 키입력 감지
         axisH = Input.GetAxis("Horizontal");
@@ -244,6 +247,21 @@ public class PlayerMove : MonoBehaviour
             IsBattleMode = !IsBattleMode;
 
             pAnim.BattleMode(IsBattleMode);
+        }
+    }
+
+    private void InputShield()
+    {
+        if (Input.GetMouseButtonDown(2))
+        {
+            pAnim.Shield(true);
+            return;
+        }
+
+        if (Input.GetMouseButtonUp(2))
+        {
+            pAnim.Shield(false);
+            return;
         }
     }
     #endregion
