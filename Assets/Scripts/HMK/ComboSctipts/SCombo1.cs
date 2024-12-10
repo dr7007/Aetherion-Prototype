@@ -1,7 +1,7 @@
 using UnityEngine;
 using UnityEngine.UI;
 
-public class NewMonoBehaviourScript : MonoBehaviour
+public class SCombo1 : MonoBehaviour
 {
     [SerializeField] private Animator animator; // Animator 컴포넌트
     [SerializeField] private GameObject[] combo1img; // 콤보 이미지 배열
