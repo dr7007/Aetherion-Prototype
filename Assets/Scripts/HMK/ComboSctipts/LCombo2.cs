@@ -8,6 +8,7 @@ public class LCombo2 : MonoBehaviour
     [SerializeField] private TrailRenderer comboB2Trail;
     [SerializeField] private TrailRenderer comboB3Trail;
     [SerializeField] private GameObject Combo3Parti;
+    
 
     public string[] targetAnimationStates = { "Combo1", "ComboB1", "ComboB2" };
 
