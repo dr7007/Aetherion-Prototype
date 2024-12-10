@@ -9,6 +9,7 @@ public class SwordTrail : MonoBehaviour
     [SerializeField] private TrailRenderer combo3Trail;
     [SerializeField] private GameObject ComboC1Trail;
     [SerializeField] private GameObject ComboC2Trail;
+    [SerializeField] private GameObject guard;
 
     public string[] targetAnimationStates = { "Combo1", "Combo2", "Combo3", "ComboC1", "ComboC2" };
 
@@ -82,6 +83,17 @@ public class SwordTrail : MonoBehaviour
             else
             {
                 DisableParticleGameObject(ComboC2Trail); // GameObject와 파티클 비활성화
+            }
+        }
+        else if (stateInfo.IsName("Block"))
+        {
+            if (stateInfo.normalizedTime < trailnomaloffset)
+            {
+                EnableParticleGameObject(guard); // GameObject와 파티클 활성화 및 실행
+            }
+            else
+            {
+                DisableParticleGameObject(guard); // GameObject와 파티클 비활성화
             }
         }
 

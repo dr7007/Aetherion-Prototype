@@ -1,5 +1,4 @@
 using UnityEngine;
-using UnityEngine.InputSystem.XR.Haptics;
 
 // 플레이어 키입력과 움직임 관련된 스크립트
 public class PlayerMove : MonoBehaviour
