@@ -101,8 +101,9 @@ public class BossMonsterAI : MonoBehaviour
     private const string _DEFAULTATK_ANIM_TRIGGER_NAME = "DefaultAtk";          // Boss의 1페이즈 기본 공격 동작의 발동 트리거
     private const string _RESPATK_ANIM_TRIGGER_NAME = "RespAtk";                // Boss의 1페이즈 반응형 공격 동작의 발동 트리거
     
-    // 크리티컬 히트 상태 트리거
+    // 보스 상태 유발 트리거
     private const string _CRITICAL_ANIM_TRIGGER_NAME = "Critical";              // 반응형 공격 도중 Critical 상태 체크용 트리거
+    private const string _STUNNED_ANIM_TRIGGER_NAME = "IsStun";
 
     // 단방향 트리거
     private const string _DIE_ANIM_TRIGGER_NAME = "Die";                        // Boss의 HP가 0이 될 시 그 즉시 die 트리거 활성화 (Hp = 0일 때 On)
@@ -148,7 +149,12 @@ public class BossMonsterAI : MonoBehaviour
     {
         if (_collider.CompareTag("PlayerAttack")) // 플레이어 무기에 의해 공격받은 경우
         {
+            
             // 만약 플레이어의 공격이 크리티컬이 동작하는 공격이고, boss가 Critical 상태일시 스턴
+            if(anim.GetBool(_CRITICAL_ANIM_TRIGGER_NAME))
+            {
+                HitCritical(_collider);
+            }
             HitJudge(_collider);
         }
         
@@ -251,6 +257,18 @@ public class BossMonsterAI : MonoBehaviour
         else
         {
             Debug.Log("피격 판정 겹침현상 예방 내부 쿨 동작 중");
+        }
+    }
+    private void HitCritical(Collider _collider)
+    {
+        if (!hitTargets.Contains(_collider))
+        {
+            PlayerAnim criticalAttack = _collider.GetComponentInParent<PlayerAnim>();
+            
+            if (criticalAttack.critical)
+            {
+                anim.SetTrigger(_STUNNED_ANIM_TRIGGER_NAME);
+            }
         }
     }
 
