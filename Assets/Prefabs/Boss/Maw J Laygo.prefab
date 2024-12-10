@@ -242,6 +242,10 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 91.098
       objectReference: {fileID: 0}
+    - target: {fileID: 5838052407911521595, guid: c7341ed93d697864fadc4ab0a683e448, type: 3}
+      propertyPath: m_Enabled
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 8009316804994446287, guid: c7341ed93d697864fadc4ab0a683e448, type: 3}
       propertyPath: m_TagString
       value: MonsterWeapon
@@ -418,7 +422,7 @@ MonoBehaviour:
   level_Three_Range: 50
   walkSpeed: 6
   runSpeed: 12
-  rotationSpeed: 2
+  rotationSpeed: 20
   maxHp: 3000000
   currentHp: 0
   atk: 0
@@ -482,7 +486,7 @@ Animator:
   m_GameObject: {fileID: 4938655501378027797}
   m_Enabled: 1
   m_Avatar: {fileID: 9000000, guid: 3566bad897c419744a77ff160603e2e7, type: 3}
-  m_Controller: {fileID: 9100000, guid: 08424621c4e97df489a66f8bd490cfe7, type: 2}
+  m_Controller: {fileID: 9100000, guid: 979fec62b48f9a04ba19135a0f6aa1c5, type: 2}
   m_CullingMode: 0
   m_UpdateMode: 0
   m_ApplyRootMotion: 1
