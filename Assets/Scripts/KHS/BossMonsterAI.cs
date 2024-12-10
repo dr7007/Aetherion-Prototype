@@ -78,6 +78,7 @@ public class BossMonsterAI : MonoBehaviour
     #region Functional values
 
     private float offset = 5f;                                      // Boss의 FirstDetect Attack을 위한 offset 값.
+    private int rangeLv = 0;
 
     #endregion
 
@@ -188,18 +189,20 @@ public class BossMonsterAI : MonoBehaviour
             float distance = Vector3.Distance(transform.position, detectedPlayerTr.position);
             if (distance <= level_One_Range)
             {
-                anim.SetInteger(_RANGE_ANIM_INT_NAME, 1);
+                rangeLv = 1;
             }
             else if (distance <= level_Two_Range)
             {
-                anim.SetInteger(_RANGE_ANIM_INT_NAME, 2);
+                rangeLv = 2;
             }
             else if (distance <= level_Three_Range)
             {
-                anim.SetInteger(_RANGE_ANIM_INT_NAME, 3);
+                rangeLv = 3;
             }
             else
-                anim.SetInteger(_RANGE_ANIM_INT_NAME, 0);
+            {
+                rangeLv = 0;
+            }
         }
         else
         {
@@ -389,84 +392,78 @@ public class BossMonsterAI : MonoBehaviour
 
     INode CreateAttackBehavior()
     {
-        return new SequenceNode
-                (
-                    new List<INode>()
-                    {
-                        new SelectorNode
-                        (
-                            new List<INode>()
-                            {
-                                new SequenceNode
-                                (
-                                    new List<INode>()
-                                    {
-                                        new ActionNode(CheckRangeLevelOne),
-                                        new SelectorNode
-                                        (
-                                            new List<INode>()
-                                            {
-                                                new SequenceNode
-                                                (
-                                                    new List<INode>()
-                                                    {
-                                                        new ActionNode(PressAttackCheck),
-                                                        new ActionNode(DefaultMeleeAttackEnemy),
-                                                    }
-                                                ),
-                                                new ActionNode(OnGuard),
-                                            }
-                                        ),
-                                    }
-                                ),
-                                new SequenceNode
-                                (
-                                    new List<INode>()
-                                    {
-                                        new ActionNode(CheckRangeLevelTwo),
-                                        new SelectorNode
-                                        (
-                                            new List<INode>()
-                                            {
-                                                new SequenceNode
-                                                (
-                                                    new List<INode>()
-                                                    {
-                                                        new ActionNode(IsApproachCheck),
-                                                        new ActionNode(UpperAttackEnemy),
-                                                    }
-                                                ),
-                                                new ActionNode(JumpAttackEnemy),
-                                            }
-                                        ),
-                                    }
-                                ),
-                                new SequenceNode
-                                (
-                                    new List<INode>()
-                                    {
-                                        new ActionNode(CheckRangeLevelThree),
-                                        new SelectorNode
-                                        (
-                                            new List<INode>()
-                                            {
-                                                new SequenceNode
-                                                (
-                                                    new List<INode>()
-                                                    {
-                                                        new ActionNode(RandomDecisionCheck),
-                                                        new ActionNode(LongRangeAttackEnemy),
-                                                    }
-                                                ),
-                                                new ActionNode(RushEnemy),
-                                            }
-                                        ),
-                                    }
-                                ),
-                            }
-                        ),
-                    }
-                );
+        return new SelectorNode
+                    (
+                        new List<INode>()
+                        {
+                            new SequenceNode
+                            (
+                                new List<INode>()
+                                {
+                                    new ActionNode(CheckRangeLevelOne),
+                                    new SelectorNode
+                                    (
+                                        new List<INode>()
+                                        {
+                                            new SequenceNode
+                                            (
+                                                new List<INode>()
+                                                {
+                                                    new ActionNode(PressAttackCheck),
+                                                    new ActionNode(DefaultMeleeAttackEnemy),
+                                                }
+                                            ),
+                                            new ActionNode(OnGuard),
+                                        }
+                                    ),
+                                }
+                            ),
+                            new SequenceNode
+                            (
+                                new List<INode>()
+                                {
+                                    new ActionNode(CheckRangeLevelTwo),
+                                    new SelectorNode
+                                    (
+                                        new List<INode>()
+                                        {
+                                            new SequenceNode
+                                            (
+                                                new List<INode>()
+                                                {
+                                                    new ActionNode(IsApproachCheck),
+                                                    new ActionNode(UpperAttackEnemy),
+                                                }
+                                            ),
+                                            new ActionNode(JumpAttackEnemy),
+                                        }
+                                    ),
+                                }
+                            ),
+                            new SequenceNode
+                            (
+                                new List<INode>()
+                                {
+                                    new ActionNode(CheckRangeLevelThree),
+                                    new SelectorNode
+                                    (
+                                        new List<INode>()
+                                        {
+                                            new SequenceNode
+                                            (
+                                                new List<INode>()
+                                                {
+                                                    new ActionNode(RandomDecisionCheck),
+                                                    new ActionNode(LongRangeAttackEnemy),
+                                                }
+                                            ),
+                                            new ActionNode(RushEnemy),
+                                        }
+                                    ),
+                                }
+                            ),
+                        }
+                    );
     }
 
     INode SettingBT()
@@ -506,7 +503,7 @@ public class BossMonsterAI : MonoBehaviour
     {
         if(!anim.GetBool(_DETECT_ANIM_BOOL_NAME))
         {
-            //Debug.Log("Non_Detect");
+            anim.SetInteger(_RANGE_ANIM_INT_NAME, 0);
             return INode.ENodeState.ENS_Success;
         }
         return INode.ENodeState.ENS_Failure;
@@ -517,24 +514,27 @@ public class BossMonsterAI : MonoBehaviour
     #region Check Node
     INode.ENodeState CheckRangeLevelOne()
     {
-        if (anim.GetInteger(_RANGE_ANIM_INT_NAME) == 1)
+        if (rangeLv == 1)
         {
+            anim.SetInteger(_RANGE_ANIM_INT_NAME, 1);
             return INode.ENodeState.ENS_Success;
         }
         return INode.ENodeState.ENS_Failure;
     }
     INode.ENodeState CheckRangeLevelTwo()
     {
-        if (anim.GetInteger(_RANGE_ANIM_INT_NAME) == 2)
+        if (rangeLv == 2)
         {
+            anim.SetInteger(_RANGE_ANIM_INT_NAME, 2);
             return INode.ENodeState.ENS_Success;
         }
         return INode.ENodeState.ENS_Failure;
     }
     INode.ENodeState CheckRangeLevelThree()
     {
-        if (anim.GetInteger(_RANGE_ANIM_INT_NAME) == 3)
+        if (rangeLv == 3)
         {
+            anim.SetInteger(_RANGE_ANIM_INT_NAME, 3);
             return INode.ENodeState.ENS_Success;
         }
         return INode.ENodeState.ENS_Failure;
