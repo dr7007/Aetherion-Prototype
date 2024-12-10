@@ -7,9 +7,6 @@ using static PlayerAnim;
 
 
 // 플레이어 전투 판정 관련된 스크립트
-
-// 추가할 기능
-// 플레이어가 공격 입력 -> animation이 실행될꺼임 -> animation이벤트 호출 -> 해당 호출을 받아서 공격 콜라이더 키고 끄고..?
 public class PlayerBattle : MonoBehaviour
 {
     [SerializeField] private float detectRange = 50f;

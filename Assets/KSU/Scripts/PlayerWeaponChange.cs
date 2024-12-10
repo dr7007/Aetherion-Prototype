@@ -1,7 +1,6 @@
-using System.Collections;
 using UnityEngine;
-using static UnityEngine.Rendering.DebugUI;
 
+// 플레이어 무기 레이어 관리하는 스크립트
 public class PlayerWeaponChange : MonoBehaviour
 {
     [SerializeField] private GameObject sword;
@@ -32,10 +31,10 @@ public class PlayerWeaponChange : MonoBehaviour
 
     private void Update()
     {
-        if (Input.GetKeyDown(KeyCode.Q) && curWeaponNum == 1)
+        if (Input.GetKeyDown(KeyCode.Q))
         {
             anim.SetBool("IsChange", true);
-            Invoke("SetSwordWeapon", 1f);
+            Invoke("SetWeaponChange", 1f);
         }
     }
 
@@ -73,6 +72,7 @@ public class PlayerWeaponChange : MonoBehaviour
         SetWeapon(_num);
     }
 
+    // 창이 끝나면 호출 -> 도끼나 방패모드로 바꿈
     private void EndSpear()
     {
         if (curWeaponNum == 0)
@@ -85,7 +85,7 @@ public class PlayerWeaponChange : MonoBehaviour
         }
     }
 
-    // 무기 레이어 설정하는 함수
+    // 무기 애니메이션 레이어 설정하는 함수
     private void SetWeapon(int _num)
     {
         curWeaponNum = _num;
@@ -107,10 +107,20 @@ public class PlayerWeaponChange : MonoBehaviour
         }
     }
 
-    private void SetSwordWeapon()
+    // 무기 바꾸는 함수
+    private void SetWeaponChange()
     {
-        SetWeapon(0);
-        ChangeSword();
+        if (curWeaponNum == 1)
+        {
+            SetWeapon(0);
+            ChangeSword();
+        }
+        else
+        {
+            SetWeapon(1);
+            ChangeAxe();
+        }
+
         anim.SetBool("IsChange", false);
     }
 }
