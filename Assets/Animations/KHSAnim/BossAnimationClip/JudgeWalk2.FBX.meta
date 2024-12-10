@@ -729,7 +729,7 @@ ModelImporter:
     resampleCurves: 1
     optimizeGameObjects: 0
     removeConstantScaleCurves: 0
-    motionNodeName: Motion
+    motionNodeName: 
     animationImportErrors: 
     animationImportWarnings: "\nClip 'Take 001' has import animation warnings that
       might lower retargeting quality:\n\t'B_Spine2' is inbetween humanoid transforms
@@ -771,7 +771,21 @@ ModelImporter:
       mirror: 0
       bodyMask: 01000000010000000100000001000000010000000100000001000000010000000100000001000000010000000100000001000000
       curves: []
-      events: []
+      events:
+      - time: 0.017066691
+        functionName: LockDirection
+        data: 
+        objectReferenceParameter: {fileID: 11500000, guid: 201aef397f5431d46bf017b650584d8f, type: 3}
+        floatParameter: 0
+        intParameter: 0
+        messageOptions: 0
+      - time: 0.9191557
+        functionName: UnlockDirection
+        data: 
+        objectReferenceParameter: {fileID: 11500000, guid: 201aef397f5431d46bf017b650584d8f, type: 3}
+        floatParameter: 0
+        intParameter: 0
+        messageOptions: 0
       transformMask: []
       maskType: 3
       maskSource: {fileID: 101100000, guid: 4ebc95c8618479f4d8251c7dafa10029, type: 2}
