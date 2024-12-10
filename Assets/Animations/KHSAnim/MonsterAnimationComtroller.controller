@@ -9,7 +9,7 @@ AnimatorStateTransition:
   m_Name: 
   m_Conditions:
   - m_ConditionMode: 2
-    m_ConditionEvent: detect
+    m_ConditionEvent: Detect
     m_EventTreshold: 0
   m_DstStateMachine: {fileID: 0}
   m_DstState: {fileID: -4436597736572748978}
@@ -34,10 +34,10 @@ AnimatorStateTransition:
   m_Name: 
   m_Conditions:
   - m_ConditionMode: 1
-    m_ConditionEvent: detect
+    m_ConditionEvent: Detect
     m_EventTreshold: 0
   - m_ConditionMode: 3
-    m_ConditionEvent: range_level
+    m_ConditionEvent: RangeLevel
     m_EventTreshold: 1
   m_DstStateMachine: {fileID: 0}
   m_DstState: {fileID: -6896355487482620625}
@@ -76,7 +76,7 @@ AnimatorState:
   m_MirrorParameterActive: 0
   m_CycleOffsetParameterActive: 0
   m_TimeParameterActive: 0
-  m_Motion: {fileID: 7400000, guid: 668693125e0b2c940aa38740f253a619, type: 3}
+  m_Motion: {fileID: 7400000, guid: 053ec18f067de0a4c9650802e1995cb6, type: 3}
   m_Tag: 
   m_SpeedParameter: 
   m_MirrorParameter: 
@@ -121,10 +121,10 @@ AnimatorStateTransition:
   m_Name: 
   m_Conditions:
   - m_ConditionMode: 1
-    m_ConditionEvent: playerattacking
+    m_ConditionEvent: RespAtk
     m_EventTreshold: 0
   - m_ConditionMode: 6
-    m_ConditionEvent: range_level
+    m_ConditionEvent: RangeLevel
     m_EventTreshold: 1
   m_DstStateMachine: {fileID: 0}
   m_DstState: {fileID: -4766514429777869572}
@@ -251,10 +251,10 @@ AnimatorStateTransition:
   m_Name: 
   m_Conditions:
   - m_ConditionMode: 1
-    m_ConditionEvent: detect
+    m_ConditionEvent: Detect
     m_EventTreshold: 0
   - m_ConditionMode: 1
-    m_ConditionEvent: FirstAttack
+    m_ConditionEvent: TpJumpAtk
     m_EventTreshold: 0
   m_DstStateMachine: {fileID: 0}
   m_DstState: {fileID: 6846346591934500402}
@@ -359,7 +359,7 @@ AnimatorStateTransition:
   m_Name: 
   m_Conditions:
   - m_ConditionMode: 2
-    m_ConditionEvent: detect
+    m_ConditionEvent: Detect
     m_EventTreshold: 0
   m_DstStateMachine: {fileID: 0}
   m_DstState: {fileID: -4436597736572748978}
@@ -434,7 +434,7 @@ AnimatorStateTransition:
   m_Name: 
   m_Conditions:
   - m_ConditionMode: 1
-    m_ConditionEvent: detect
+    m_ConditionEvent: Detect
     m_EventTreshold: 0
   m_DstStateMachine: {fileID: 0}
   m_DstState: {fileID: -8211879088744656579}
@@ -459,31 +459,31 @@ AnimatorController:
   m_Name: MonsterAnimationComtroller
   serializedVersion: 5
   m_AnimatorParameters:
-  - m_Name: first_detect
+  - m_Name: FirstDetect
     m_Type: 4
     m_DefaultFloat: 0
     m_DefaultInt: 0
     m_DefaultBool: 1
     m_Controller: {fileID: 9100000}
-  - m_Name: detect
+  - m_Name: Detect
     m_Type: 4
     m_DefaultFloat: 0
     m_DefaultInt: 0
     m_DefaultBool: 0
     m_Controller: {fileID: 9100000}
-  - m_Name: defaultatk
+  - m_Name: DefaultAtk
     m_Type: 9
     m_DefaultFloat: 0
     m_DefaultInt: 0
     m_DefaultBool: 0
     m_Controller: {fileID: 9100000}
-  - m_Name: range_level
+  - m_Name: RangeLevel
     m_Type: 3
     m_DefaultFloat: 0
     m_DefaultInt: 0
     m_DefaultBool: 0
     m_Controller: {fileID: 9100000}
-  - m_Name: playerattacking
+  - m_Name: RespAtk
     m_Type: 9
     m_DefaultFloat: 0
     m_DefaultInt: 0
@@ -513,7 +513,7 @@ AnimatorController:
     m_DefaultInt: 0
     m_DefaultBool: 0
     m_Controller: {fileID: 9100000}
-  - m_Name: FirstAttack
+  - m_Name: TpJumpAtk
     m_Type: 9
     m_DefaultFloat: 0
     m_DefaultInt: 0
@@ -568,13 +568,13 @@ AnimatorStateTransition:
   m_Name: 
   m_Conditions:
   - m_ConditionMode: 1
-    m_ConditionEvent: detect
+    m_ConditionEvent: Detect
     m_EventTreshold: 0
   - m_ConditionMode: 6
-    m_ConditionEvent: range_level
+    m_ConditionEvent: RangeLevel
     m_EventTreshold: 1
   - m_ConditionMode: 1
-    m_ConditionEvent: defaultatk
+    m_ConditionEvent: DefaultAtk
     m_EventTreshold: 0
   m_DstStateMachine: {fileID: 0}
   m_DstState: {fileID: 4375067756011309234}
@@ -717,7 +717,7 @@ AnimatorStateTransition:
   m_Name: 
   m_Conditions:
   - m_ConditionMode: 2
-    m_ConditionEvent: detect
+    m_ConditionEvent: Detect
     m_EventTreshold: 0
   m_DstStateMachine: {fileID: 0}
   m_DstState: {fileID: -4436597736572748978}
@@ -795,10 +795,10 @@ AnimatorStateTransition:
   m_Name: 
   m_Conditions:
   - m_ConditionMode: 1
-    m_ConditionEvent: detect
+    m_ConditionEvent: Detect
     m_EventTreshold: 0
   - m_ConditionMode: 6
-    m_ConditionEvent: range_level
+    m_ConditionEvent: RangeLevel
     m_EventTreshold: 1
   m_DstStateMachine: {fileID: 0}
   m_DstState: {fileID: -7862418330771659689}
