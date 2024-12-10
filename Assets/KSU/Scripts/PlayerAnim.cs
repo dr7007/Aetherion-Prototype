@@ -32,6 +32,7 @@ public class PlayerAnim : MonoBehaviour
     public bool evasion = false;
     public bool blocking = false;
     public bool hitCombo = false;
+    public bool critical = false;
     private PlayerWeaponChange pWeaponChange;
 
     private float attackStamina = 10f;
@@ -87,14 +88,22 @@ public class PlayerAnim : MonoBehaviour
     }
     private void HitOn()
     {
-        Debug.Log("HitOn »£√‚µ ");
         hitCombo = true;
     }
 
     private void HitOff()
     {
-        Debug.Log("HitOn off»£√‚µ ");
         hitCombo = false;
+    }
+
+    private void CriticalOn()
+    {
+        critical = true;
+    }
+
+    private void CriticalOff()
+    {
+        critical = false;
     }
     #endregion
 

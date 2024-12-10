@@ -63,7 +63,7 @@ public class BossMonsterAI : MonoBehaviour
 
     #region CoolDown Region
 
-    private float playerAttackingCooldown = 10f;                    // 플레이어 공격 상태 추격 쿨타임.
+    private float respAtkCooldown = 10f;                    // 플레이어 공격 상태 추격 쿨타임.
     private float tmpTime = 0f;                                     // Boss의 특정 행동 쿨타임.
 
     #endregion
@@ -71,7 +71,7 @@ public class BossMonsterAI : MonoBehaviour
     #region Judge Bool Region
 
     private bool isAnimationLocked = false;                         // 애니메이션 도중 진행 방향 고정 트리거.         (Animator Parameter로 변경 예정)
-    private bool isPlayerAttackingOnCooldown = false;               // 플레이어 공격 상태 추격 트리거.               (Animator Parameter로 변경 예정)
+    private bool isrespAtkOnCooldown = false;               // 플레이어 공격 상태 추격 트리거.               (Animator Parameter로 변경 예정)
 
     #endregion
 
@@ -86,18 +86,23 @@ public class BossMonsterAI : MonoBehaviour
 
     // 애니메이션 상태 이름
     private const string _FIRSTDETECT_ANIM_STATE_NAME = "FirstDetectAttack";
+    private const string _RESPATK_ANIM_STATE_NAME = "ResponsiveAttack";
 
     // 애니메이터 Bool Parameter
-    private const string _FIRSTDETECT_ANIM_BOOL_NAME = "FirstDetect";          // Boss의 시작연출 관리를 위한 First Detect 체크 트리거 (게임 시작 후 첫 Detect 이전까지 On, 첫 Detect 이후 Off)
+    private const string _FIRSTDETECT_ANIM_BOOL_NAME = "FirstDetect";           // Boss의 시작연출 관리를 위한 First Detect 체크 트리거 (게임 시작 후 첫 Detect 이전까지 On, 첫 Detect 이후 Off)
     private const string _DETECT_ANIM_BOOL_NAME = "Detect";                     // Boss의 실시간 Player Detect 체크 트리거 (범위 내 Player가 존재 시 On, 미존재 시 Off)
-    
+    private const string _JUDGE_ANIM_BOOL_NAME = "Judge";
+
     // 애니메이터 Int Parameter
-    private const string _RANGE_ANIM_INT_NAME = "RangeLevel";                  // Boss의 기준으로 Player가 Detect되는 영역 레벨 값 (Range Level = 1, 2 ,3)
+    private const string _RANGE_ANIM_INT_NAME = "RangeLevel";                   // Boss의 기준으로 Player가 Detect되는 영역 레벨 값 (Range Level = 1, 2 ,3)
 
     // 패턴별 공격 발동 트리거
-    private const string _TPJUMPATTACK_ANIM_TRIGGER_NAME = "TpJumpAtk";      // Boss의 점프 공격 패턴 발동 트리거
+    private const string _TPJUMPATTACK_ANIM_TRIGGER_NAME = "TpJumpAtk";         // Boss의 점프 공격 패턴 발동 트리거
     private const string _DEFAULTATK_ANIM_TRIGGER_NAME = "DefaultAtk";          // Boss의 1페이즈 기본 공격 동작의 발동 트리거
-    private const string _PLAYERATTACK_ANIM_TRIGGER_NAME = "RespAtk";   // Boss의 1페이즈 반응형 공격 동작의 발동 트리거
+    private const string _RESPATK_ANIM_TRIGGER_NAME = "RespAtk";                // Boss의 1페이즈 반응형 공격 동작의 발동 트리거
+    
+    // 크리티컬 히트 상태 트리거
+    private const string _CRITICAL_ANIM_TRIGGER_NAME = "Critical";              // 반응형 공격 도중 Critical 상태 체크용 트리거
 
     // 단방향 트리거
     private const string _DIE_ANIM_TRIGGER_NAME = "Die";                        // Boss의 HP가 0이 될 시 그 즉시 die 트리거 활성화 (Hp = 0일 때 On)
@@ -143,8 +148,10 @@ public class BossMonsterAI : MonoBehaviour
     {
         if (_collider.CompareTag("PlayerAttack")) // 플레이어 무기에 의해 공격받은 경우
         {
+            // 만약 플레이어의 공격이 크리티컬이 동작하는 공격이고, boss가 Critical 상태일시 스턴
             HitJudge(_collider);
         }
+        
     }
 
     #region Public Functions
@@ -249,20 +256,23 @@ public class BossMonsterAI : MonoBehaviour
 
     private void CheckPlayerAttacking()
     {
-        if (isPlayerAttackingOnCooldown)
+        if (isrespAtkOnCooldown)
         {
-            Debug.Log("PlayerAttacking 트리거가 쿨타임 중입니다.");
-            return; // 쿨타임 중일 경우 아무 작업도 하지 않음
+            // 쿨타임 동안 아무런 작업도 하지 않음
+            Debug.Log("RespAtk 트리거가 쿨타임 중입니다.");
+            return; 
         }
 
-        // 플레이어 공격 트리거 활성화
+        // 플레이어 공격 입력 탐지
         if (player.IsPlayerAttacking)
         {
-            anim.SetTrigger(_PLAYERATTACK_ANIM_TRIGGER_NAME); // 공격 애니메이션 트리거
-            Debug.Log("PlayerAttacking 트리거 동작!");
+            // 반응형 공격 애니메이션 트리거
+            anim.SetTrigger(_RESPATK_ANIM_TRIGGER_NAME);
+            anim.SetTrigger(_CRITICAL_ANIM_TRIGGER_NAME);
+            Debug.Log("공격탐지");
 
-            // 쿨타임 시작
-            StartCoroutine(StartPlayerAttackingCooldown());
+            // 반응형 공격 내부 쿨타임 시작
+            StartCoroutine(RespAtkCooldown()); 
         }
     }
 
@@ -283,17 +293,16 @@ public class BossMonsterAI : MonoBehaviour
 
     #region Coroutine Region
 
-    private IEnumerator StartPlayerAttackingCooldown()
+    private IEnumerator RespAtkCooldown()
     {
-        isPlayerAttackingOnCooldown = true; // 쿨타임 시작
-        Debug.Log("PlayerAttacking 쿨타임 시작!");
+        isrespAtkOnCooldown = true; // 쿨타임 시작
 
-        yield return new WaitForSeconds(playerAttackingCooldown);
+        yield return new WaitForSeconds(respAtkCooldown);
 
         player.IsPlayerAttacking = false;
-        anim.ResetTrigger(_PLAYERATTACK_ANIM_TRIGGER_NAME);
-        isPlayerAttackingOnCooldown = false; // 쿨타임 종료
-        Debug.Log("PlayerAttacking 쿨타임 종료! 이제 다시 활성화할 수 있습니다.");
+        anim.ResetTrigger(_RESPATK_ANIM_TRIGGER_NAME);
+        isrespAtkOnCooldown = false; // 쿨타임 종료
+        Debug.Log("RespAtk쿨종료");
     }
 
     private IEnumerator RemoveFromHitTrackerAfterCooldown(Collider _target)
@@ -386,6 +395,11 @@ public class BossMonsterAI : MonoBehaviour
     public void FirstAttackTeleport()
     {
         StartCoroutine(FirstAttackTeleportCoroutine());
+    }
+
+    public void CriticalEnd()
+    {
+        anim.ResetTrigger(_CRITICAL_ANIM_TRIGGER_NAME);
     }
 
     public void DieCall()
@@ -548,7 +562,7 @@ public class BossMonsterAI : MonoBehaviour
 
     INode.ENodeState PressAttackCheck()
     {
-        if(!isPlayerAttackingOnCooldown)
+        if(!isrespAtkOnCooldown)
         {
             CheckPlayerAttacking();
             return INode.ENodeState.ENS_Success;
@@ -606,12 +620,24 @@ public class BossMonsterAI : MonoBehaviour
     }
     INode.ENodeState DefaultMeleeAttackEnemy()
     {
-        if (anim.GetBool(_PLAYERATTACK_ANIM_TRIGGER_NAME))
-        {
-            Debug.Log("보스가 근접 공격을 실행합니다.");
-            return INode.ENodeState.ENS_Success;
-        }
+        // 현재 애니메이션 상태 정보를 가져옴
+        AnimatorStateInfo stateInfo = anim.GetCurrentAnimatorStateInfo(0);
 
+        // FirstDetectAttack 애니메이션이 실행 중인지 확인
+        if (stateInfo.IsName(_RESPATK_ANIM_STATE_NAME))
+        {
+            if (stateInfo.normalizedTime < 1.0f)
+            {
+                // 애니메이션이 실행 중일 때 Running 반환
+                return INode.ENodeState.ENS_Running;
+            }
+            else
+            {
+                // 애니메이션이 종료된 경우 Failure 반환
+                return INode.ENodeState.ENS_Failure;
+            }
+        }
+        // 애니메이션 상태가 맞지 않을 경우 Failure 반환
         return INode.ENodeState.ENS_Failure;
     }
 
