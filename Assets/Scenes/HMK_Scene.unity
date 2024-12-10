@@ -3304,6 +3304,17 @@ Animator:
   m_CorrespondingSourceObject: {fileID: 4529505484467906719, guid: f078953f0e8d60441bf9467f9f90f809, type: 3}
   m_PrefabInstance: {fileID: 964377558}
   m_PrefabAsset: {fileID: 0}
+--- !u!114 &1820452395 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 3951507933367987367, guid: f078953f0e8d60441bf9467f9f90f809, type: 3}
+  m_PrefabInstance: {fileID: 964377558}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f97300a2c74f9144bb0d72d7365d583d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &1823545681
 GameObject:
   m_ObjectHideFlags: 0
@@ -4122,6 +4133,10 @@ PrefabInstance:
       propertyPath: animator
       value: 
       objectReference: {fileID: 1820452394}
+    - target: {fileID: 133921889808090101, guid: a94ab316b69287247aec9061c9fa608e, type: 3}
+      propertyPath: weaponChange
+      value: 
+      objectReference: {fileID: 1820452395}
     - target: {fileID: 903726955505816241, guid: a94ab316b69287247aec9061c9fa608e, type: 3}
       propertyPath: m_Name
       value: ComboUI
@@ -4210,10 +4225,26 @@ PrefabInstance:
       propertyPath: animator
       value: 
       objectReference: {fileID: 1820452394}
+    - target: {fileID: 6758098653805539328, guid: a94ab316b69287247aec9061c9fa608e, type: 3}
+      propertyPath: weaponChange
+      value: 
+      objectReference: {fileID: 1820452395}
+    - target: {fileID: 6758098653805539328, guid: a94ab316b69287247aec9061c9fa608e, type: 3}
+      propertyPath: 'targetAnimationStates.Array.data[1]'
+      value: ComboB1
+      objectReference: {fileID: 0}
+    - target: {fileID: 6758098653805539328, guid: a94ab316b69287247aec9061c9fa608e, type: 3}
+      propertyPath: 'targetAnimationStates.Array.data[2]'
+      value: ComboB2
+      objectReference: {fileID: 0}
     - target: {fileID: 7901685749541696154, guid: a94ab316b69287247aec9061c9fa608e, type: 3}
       propertyPath: animator
       value: 
       objectReference: {fileID: 1820452394}
+    - target: {fileID: 7901685749541696154, guid: a94ab316b69287247aec9061c9fa608e, type: 3}
+      propertyPath: weaponChange
+      value: 
+      objectReference: {fileID: 1820452395}
     - target: {fileID: 7901685749541696154, guid: a94ab316b69287247aec9061c9fa608e, type: 3}
       propertyPath: 'targetAnimationStates.Array.data[2]'
       value: ComboC1
