@@ -1,5 +1,5 @@
 fileFormatVersion: 2
-guid: 5ab7b55b7e7757741978fb9d7142eaa6
+guid: b394add48ed4c7444b12422ed3f5a62c
 ModelImporter:
   serializedVersion: 22200
   internalIDToNameTable:
@@ -497,7 +497,7 @@ ModelImporter:
     second: root
   - first:
       74: 7400000
-    second: AxeComboA3
+    second: AxeComboB2
   - first:
       95: 9500000
     second: //RootNode
@@ -528,17 +528,20 @@ ModelImporter:
       has translation animation that will be discarded.\n\t'upperarm_l' has translation
       animation that will be discarded.\n\t'lowerarm_l' has translation animation
       that will be discarded.\n\t'hand_l' has translation animation that will be
-      discarded.\n\t'index_01_l' has translation animation that will be discarded.\n\t'index_02_l'
-      has translation animation that will be discarded.\n\t'index_03_l' has translation
-      animation that will be discarded.\n\t'middle_01_l' has translation animation
-      that will be discarded.\n\t'middle_02_l' has translation animation that will
-      be discarded.\n\t'middle_03_l' has translation animation that will be discarded.\n\t'ring_02_l'
-      has translation animation that will be discarded.\n\t'ring_03_l' has translation
-      animation that will be discarded.\n\t'pinky_02_l' has translation animation
-      that will be discarded.\n\t'upperarm_r' has translation animation that will
-      be discarded.\n\t'lowerarm_r' has translation animation that will be discarded.\n\t'hand_r'
-      has translation animation that will be discarded.\n\t'head' has translation
-      animation that will be discarded.\n"
+      discarded.\n\t'thumb_03_l' has translation animation that will be discarded.\n\t'index_01_l'
+      has translation animation that will be discarded.\n\t'index_02_l' has translation
+      animation that will be discarded.\n\t'index_03_l' has translation animation
+      that will be discarded.\n\t'middle_01_l' has translation animation that will
+      be discarded.\n\t'middle_02_l' has translation animation that will be discarded.\n\t'middle_03_l'
+      has translation animation that will be discarded.\n\t'ring_01_l' has translation
+      animation that will be discarded.\n\t'ring_02_l' has translation animation
+      that will be discarded.\n\t'ring_03_l' has translation animation that will
+      be discarded.\n\t'pinky_01_l' has translation animation that will be discarded.\n\t'pinky_02_l'
+      has translation animation that will be discarded.\n\t'pinky_03_l' has translation
+      animation that will be discarded.\n\t'upperarm_r' has translation animation
+      that will be discarded.\n\t'lowerarm_r' has translation animation that will
+      be discarded.\n\t'hand_r' has translation animation that will be discarded.\n\t'head'
+      has translation animation that will be discarded.\n"
     animationRetargetingWarnings: 
     animationDoRetargetingWarnings: 0
     importAnimatedCustomProperties: 0
@@ -552,11 +555,11 @@ ModelImporter:
     extraUserProperties: []
     clipAnimations:
     - serializedVersion: 16
-      name: AxeComboA3
+      name: AxeComboB2
       takeName: Take 001
       internalID: 7400000
       firstFrame: 0
-      lastFrame: 80
+      lastFrame: 162
       wrapMode: 0
       orientationOffsetY: 0
       level: 0
@@ -576,29 +579,15 @@ ModelImporter:
       bodyMask: 01000000010000000100000001000000010000000100000001000000010000000100000001000000010000000100000001000000
       curves: []
       events:
-      - time: 0.07058824
-        functionName: ComboOn
-        data: 
-        objectReferenceParameter: {fileID: 11500000, guid: da5000581862c7549bc64049df2c9d41, type: 3}
-        floatParameter: 0
-        intParameter: 0
-        messageOptions: 0
-      - time: 0.1184573
+      - time: 0.0648855
         functionName: Combo2On
         data: 
         objectReferenceParameter: {fileID: 11500000, guid: da5000581862c7549bc64049df2c9d41, type: 3}
         floatParameter: 0
         intParameter: 0
         messageOptions: 0
-      - time: 0.8705234
-        functionName: Combo2Off
-        data: 
-        objectReferenceParameter: {fileID: 11500000, guid: da5000581862c7549bc64049df2c9d41, type: 3}
-        floatParameter: 0
-        intParameter: 0
-        messageOptions: 0
       - time: 1
-        functionName: ComboOff
+        functionName: Combo2Off
         data: 
         objectReferenceParameter: {fileID: 11500000, guid: da5000581862c7549bc64049df2c9d41, type: 3}
         floatParameter: 0

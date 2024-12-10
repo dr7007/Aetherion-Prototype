@@ -25,12 +25,14 @@ public class PlayerBattle : MonoBehaviour
     private Animator anim;
     private Vector3 hitDir;
     private CharacterController controller;
+    private PlayerWeaponChange weaponChange;
 
     private float PlayerMaxHp = 100f;
     private float PlayerCurHp;
     private float PlayerAtk = 3000f;
     private float playerMaxStamina = 100f;
     private float playerCurStamina;
+    private int curWeaponNum;
 
     private const string _DIE_ANUM_TRIGGER_NAME = "Die";
 
@@ -66,6 +68,7 @@ public class PlayerBattle : MonoBehaviour
         anim = GetComponent<Animator>();
         pAnim = GetComponent<PlayerAnim>();
         controller = GetComponent<CharacterController>();
+        weaponChange = GetComponent<PlayerWeaponChange>();
 
         Keyframe reactCurve_lastFrame = reactCurve[reactCurve.length - 1];
         reactTimer = reactCurve_lastFrame.time;
@@ -98,8 +101,10 @@ public class PlayerBattle : MonoBehaviour
 
     private void OnTriggerEnter(Collider other)
     {
+        curWeaponNum = weaponChange.CurWeaponNum;
+
         // 만약 피격모션 중이라면 return
-        if (CheckHitReact() || pAnim.CheckAnim() == PlayerAnim.EAnim.Death)
+        if (CheckHitReact() || pAnim.CheckAnim(curWeaponNum) == PlayerAnim.EAnim.Death)
         {
             Debug.Log("Heat motion중");
             return;
@@ -169,11 +174,13 @@ public class PlayerBattle : MonoBehaviour
     // 어택시 콜라이더 켜둠
     private bool CheckAttackVisible()
     {
-        AnimatorStateInfo stateInfo = anim.GetCurrentAnimatorStateInfo(0);
+        curWeaponNum = weaponChange.CurWeaponNum;
 
-        if ((stateInfo.IsName("ComboAttack.Combo1") && stateInfo.normalizedTime < 0.8f) ||
-        (stateInfo.IsName("ComboAttack.Combo2") && stateInfo.normalizedTime < 0.8f) ||
-        (stateInfo.IsName("ComboAttack.Combo3") && stateInfo.normalizedTime < 0.8f))
+        AnimatorStateInfo stateInfo = anim.GetCurrentAnimatorStateInfo(curWeaponNum);
+
+        if ((stateInfo.IsName("Combo1") && stateInfo.normalizedTime < 0.8f) ||
+        (stateInfo.IsName("Combo2") && stateInfo.normalizedTime < 0.8f) ||
+        (stateInfo.IsName("Combo3") && stateInfo.normalizedTime < 0.8f))
         {
             // HDR.EnableKeyword("_EMISSION");
             return true;
@@ -185,7 +192,9 @@ public class PlayerBattle : MonoBehaviour
     // 맞는 애니메이션 중인지 확인
     private bool CheckHitReact()
     {
-        AnimatorStateInfo stateInfo = anim.GetCurrentAnimatorStateInfo(0);
+        curWeaponNum = weaponChange.CurWeaponNum;
+
+        AnimatorStateInfo stateInfo = anim.GetCurrentAnimatorStateInfo(curWeaponNum);
 
         if (stateInfo.IsName("HitReact"))
         {

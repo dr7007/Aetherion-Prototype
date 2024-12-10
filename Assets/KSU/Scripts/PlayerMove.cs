@@ -14,8 +14,10 @@ public class PlayerMove : MonoBehaviour
     [SerializeField] private float evasionTime = 1f;
     [SerializeField] private Material HDR;
 
+    private int curWeaponNum;
     private PlayerBattle battleInfo;
     private CharacterController controller;
+    private PlayerWeaponChange weaponChange;
     private float startSpeed; // 처음 시작속도(걷는 속도) - 달리다가 돌아올때 필요
     private bool canRoll; // 구를수 있는 상태인지 나타냄.
     private bool IsBattleMode; // 싸움모드인지 아닌지 나타냄.
@@ -35,13 +37,16 @@ public class PlayerMove : MonoBehaviour
         controller = GetComponent<CharacterController>();
         canRoll = true;
         IsBattleMode = false;
+        weaponChange = GetComponent<PlayerWeaponChange>();
     }
 
 
     private void Update()
     {
+        curWeaponNum = weaponChange.CurWeaponNum;
+
         // 죽었을때 입력X
-        if (pAnim.CheckAnim() == PlayerAnim.EAnim.Death) return;
+        if (pAnim.CheckAnim(curWeaponNum) == PlayerAnim.EAnim.Death) return;
 
         // 컨트롤러가 비활성화 상태일때 return
         if (controller == null) return;
@@ -68,10 +73,10 @@ public class PlayerMove : MonoBehaviour
         Gravity();
 
         // 구르기 애니메이션 or 회피 진행중이라면 키입력 안받음.
-        if (pAnim.CheckAnim() == PlayerAnim.EAnim.Roll || pAnim.CheckAnim() == PlayerAnim.EAnim.Evasion || pAnim.CheckAnim() == PlayerAnim.EAnim.HitReact) return;
+        if (pAnim.CheckAnim(curWeaponNum) == PlayerAnim.EAnim.Roll || pAnim.CheckAnim(curWeaponNum) == PlayerAnim.EAnim.Evasion || pAnim.CheckAnim(curWeaponNum) == PlayerAnim.EAnim.HitReact) return;
 
         // 공격 애니메이션 중에는 마우스 입력과, space바만 가능
-        if (pAnim.CheckAnim() == PlayerAnim.EAnim.Attack)
+        if (pAnim.CheckAnim(curWeaponNum) == PlayerAnim.EAnim.Attack)
         {
             // Space 눌렀을때
             InputSpace(originInput);
@@ -157,19 +162,12 @@ public class PlayerMove : MonoBehaviour
         // orientation 기준으로(카메라 바라보는 방향) 키입력 감지함.
         Vector3 camInput = orientation.forward * _axisV + orientation.right * _axisH;
 
-        // 공격 시 회전을 약간 제한 (예: 현재 방향에서 45도 이내로만 회전)
-        float angle = Vector3.Angle(transform.forward, camInput.normalized);
 
-        float rotationSpeed = (angle < 45f) ? rotSpeed : rotSpeed * (45f / angle);
-
-        // 45도 이상 회전하지 않도록 제한
-        if (angle < 45f)
+        if (camInput != Vector3.zero)
         {
-            if (camInput != Vector3.zero)
-            {
-                transform.forward = Vector3.Slerp(transform.forward, camInput.normalized, Time.deltaTime * rotationSpeed * 0.5f);
-            }
+            transform.forward = Vector3.Slerp(transform.forward, camInput.normalized, Time.deltaTime * rotSpeed * 0.1f);
         }
+
     }
 
 
