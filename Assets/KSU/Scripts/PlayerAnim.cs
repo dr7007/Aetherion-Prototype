@@ -1,5 +1,6 @@
 using System.Collections;
 using UnityEngine;
+using UnityEngine.UI;
 
 // 플레이어 애니메이션 관련된 스크립트
 public class PlayerAnim : MonoBehaviour
@@ -23,6 +24,8 @@ public class PlayerAnim : MonoBehaviour
     [SerializeField] private float battleModeShiftSpeed = 1.5f;
     [SerializeField] private GameObject followCam;
     [SerializeField] private GameObject DieImage;
+    [SerializeField] private Image fadeOut;
+    [SerializeField] private GameObject loading;
 
     private PlayerMove moveInfo;
     private PlayerBattle battleInfo;
@@ -281,6 +284,39 @@ public class PlayerAnim : MonoBehaviour
         }
         canvasGroup.alpha = 0f; // 보정
 
+        // 페이드 아웃
+        elapsedTime = 0f;
+        while (elapsedTime < 1.5f)
+        {
+            Color color = fadeOut.color;
+            color.a = elapsedTime / 1.5f;
+            fadeOut.color = color;
+
+            elapsedTime += Time.deltaTime;
+            yield return null;
+        }
+
+        // 로딩 씬 On
+        loading.SetActive(true);
+
+        // 플레이어 초기화
+        // 보스 초기화
+
+        // 페이드 인
+        elapsedTime = 0f;
+        while (elapsedTime < 1.5f)
+        {
+            Color color = fadeOut.color;
+            color.a = 1f - (elapsedTime / 1.5f);
+            fadeOut.color = color;
+
+            elapsedTime += Time.deltaTime;
+            yield return null;
+        }
+
+        yield return new WaitForSeconds(1f);
+
+        loading.SetActive(false);
     }
 
 }
