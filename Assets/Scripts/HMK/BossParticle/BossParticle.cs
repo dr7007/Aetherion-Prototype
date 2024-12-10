@@ -5,6 +5,8 @@ public class BossParticle : MonoBehaviour
     private Animator animator;
     [SerializeField] private TrailRenderer noattack;
     [SerializeField] private GameObject StartAttack;
+    [SerializeField] private ParticleSystem teleportParticleSystem;
+    [SerializeField] private ParticleSystem teleportParticleSystem2;
     public string[] targetAnimationStates = { "NoReactAttack", "FirstDetect" };
 
     private float trailEndOffset = 0.8f;
@@ -48,7 +50,17 @@ public class BossParticle : MonoBehaviour
         }
 
     }
-
+    public void FirstAttackParticle()
+    {
+            teleportParticleSystem.Play(); // 파티클 실행
+            Debug.Log("FirstAttackParticle 이벤트 실행됨: 파티클 실행");
+        
+    }
+    public void FirstAttackTeleport()
+    {
+        teleportParticleSystem2.Play();
+        Debug.Log("텔포 후");
+    }
     public void EnableParticleObject()
     {
         if (StartAttack != null)
