@@ -39,7 +39,7 @@ public class PlayerWeaponChange : MonoBehaviour
     }
 
     // 검으로 바꾸는 이벤트 콜백
-    private void ChangeSword()
+    public void ChangeSword()
     {
         sword.SetActive(true);
         shield.SetActive(true);
@@ -48,7 +48,7 @@ public class PlayerWeaponChange : MonoBehaviour
     }
 
     // 도끼로 바꾸는 이벤트 콜백
-    private void ChangeAxe()
+    public void ChangeAxe()
     {
         sword.SetActive(false);
         shield.SetActive(false);
