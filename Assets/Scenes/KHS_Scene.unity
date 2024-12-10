@@ -599,7 +599,7 @@ PrefabInstance:
     - target: {fileID: 3752383931948110405, guid: ab0471614838b9c41b27414b39081e9c, type: 3}
       propertyPath: m_Controller
       value: 
-      objectReference: {fileID: 9100000, guid: 08424621c4e97df489a66f8bd490cfe7, type: 2}
+      objectReference: {fileID: 9100000, guid: 979fec62b48f9a04ba19135a0f6aa1c5, type: 2}
     - target: {fileID: 4938655501378027797, guid: ab0471614838b9c41b27414b39081e9c, type: 3}
       propertyPath: m_Name
       value: Maw J Laygo
@@ -650,7 +650,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 8262625660644000236, guid: ab0471614838b9c41b27414b39081e9c, type: 3}
       propertyPath: rotationSpeed
-      value: 50
+      value: 20
+      objectReference: {fileID: 0}
+    - target: {fileID: 8825215123261246034, guid: ab0471614838b9c41b27414b39081e9c, type: 3}
+      propertyPath: m_Enabled
+      value: 0
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
