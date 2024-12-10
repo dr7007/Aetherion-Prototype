@@ -1,9 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
-using Unity.Cinemachine;
 using UnityEngine;
-using static PlayerAnim;
 
 
 // 플레이어 전투 판정 관련된 스크립트
