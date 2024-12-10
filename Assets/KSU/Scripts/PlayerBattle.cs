@@ -135,6 +135,8 @@ public class PlayerBattle : MonoBehaviour
         // 무기에 맞았을때 리액션
         if (other.CompareTag("MonsterWeapon") && transform.gameObject.tag == "Player")
         {
+            Debug.Log("으악 맞았어요!!");
+
             BossMonsterAI bossAttack = other.GetComponentInParent<BossMonsterAI>();
             // 대미지 적용
             if (bossAttack != null && PlayerCurHp != 0)
@@ -149,19 +151,16 @@ public class PlayerBattle : MonoBehaviour
             // 히트 리액션 보정을 위한 움직임 코루틴
             StartCoroutine("HitReactCoroutine", hitDir);
 
-            anim.SetInteger("EvasionNum", 0);
-
             // 방향을 플레이어 방향에 맞춰서 한번 바꾸고
             hitDir = transform.InverseTransformDirection(hitDir);
 
             // 애니메이션 실행시킴.
             anim.SetFloat("HitDirX", hitDir.x);
             anim.SetFloat("HitDirZ", hitDir.z);
-            anim.CrossFade("HitReact", 0.05f);
+            anim.CrossFade("HitReact", 0.05f, curWeaponNum);
+            
 
             // 맞았다면 무기도 상태에 맞게 초기화
-            curWeaponNum = weaponChange.CurWeaponNum;
-
             if (curWeaponNum == 0)
             {
                 weaponChange.ChangeSword();
@@ -170,6 +169,9 @@ public class PlayerBattle : MonoBehaviour
             {
                 weaponChange.ChangeAxe();
             }
+
+            // 회피 상태도 초기화
+            anim.SetInteger("EvasionNum", 0);
         }
         
     }
