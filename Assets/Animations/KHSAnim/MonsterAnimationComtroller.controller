@@ -121,9 +121,6 @@ AnimatorStateTransition:
   m_Name: 
   m_Conditions:
   - m_ConditionMode: 1
-    m_ConditionEvent: attack
-    m_EventTreshold: 0
-  - m_ConditionMode: 1
     m_ConditionEvent: playerattacking
     m_EventTreshold: 0
   - m_ConditionMode: 6
@@ -398,7 +395,7 @@ AnimatorStateMachine:
     m_Position: {x: 310, y: 330, z: 0}
   - serializedVersion: 1
     m_State: {fileID: -7862418330771659689}
-    m_Position: {x: 490, y: 190, z: 0}
+    m_Position: {x: 550, y: 190, z: 0}
   - serializedVersion: 1
     m_State: {fileID: -4766514429777869572}
     m_Position: {x: 290, y: 80, z: 0}
