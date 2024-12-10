@@ -5,7 +5,7 @@ public class BossParticle : MonoBehaviour
     private Animator animator;
     [SerializeField] private TrailRenderer noattack;
     [SerializeField] private GameObject StartAttack;
-    public string[] targetAnimationStates = { "NoReactAttack" };
+    public string[] targetAnimationStates = { "NoReactAttack", "FirstDetect" };
 
     private float trailEndOffset = 0.8f;
     private void Start()
@@ -22,27 +22,58 @@ public class BossParticle : MonoBehaviour
         {
             if (stateInfo.normalizedTime < trailEndOffset)
             {
-                EnableParticleGameObject(StartAttack);
+                
                 EnableTrail(noattack);
 
             }
             else
             {
-                DisableParticleGameObject(StartAttack);
+                
                 DisableTrail(noattack); // 0.1초 일찍 TrailRenderer 비활성화
+            }
+        }
+        if (stateInfo.IsName("FirstDetect"))
+        {
+            if (stateInfo.normalizedTime < trailEndOffset)
+            {
+
+                EnableParticleGameObject(StartAttack);
+
+            }
+            else
+            {
+
+                DisableParticleGameObject(StartAttack); // 0.1초 일찍 TrailRenderer 비활성화
             }
         }
 
     }
+
+    public void EnableParticleObject()
+    {
+        if (StartAttack != null)
+        {
+            StartAttack.SetActive(true);
+        }
+    }
+
+    public void DisableParticleObject()
+    {
+        if (StartAttack != null)
+        {
+            StartAttack.SetActive(false);
+        }
+    }
+
     private void EnableTrail(TrailRenderer trail)
     {
-        DisableAllTrails(); // 먼저 모든 TrailRenderer를 비활성화
+        DisableAllTrails(); 
 
         trail.emitting = true;
 
     }
 
-    // 특정 TrailRenderer만 비활성화
+    
     private void DisableTrail(TrailRenderer trail)
     {
 

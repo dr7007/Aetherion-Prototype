@@ -79,6 +79,8 @@ public class BossMonsterAI : MonoBehaviour
 
     private float offset = 5f;                                      // Boss의 FirstDetect Attack을 위한 offset 값.
     private int rangeLv = 0;
+    private float extraDamage = 0f;
+    private const float NOREACT_ATTACK_INTERVAL = 10f;
 
     #endregion
 
@@ -86,7 +88,7 @@ public class BossMonsterAI : MonoBehaviour
 
     // 애니메이션 상태 이름
     private const string _FIRSTDETECT_ANIM_STATE_NAME = "FirstDetectAttack";
-    private const string _RESPATK_ANIM_STATE_NAME = "ResponsiveAttack";
+    private const string _STUNED_ANIM_STATE_NAME = "Stun";
 
     // 애니메이터 Bool Parameter
     private const string _FIRSTDETECT_ANIM_BOOL_NAME = "FirstDetect";           // Boss의 시작연출 관리를 위한 First Detect 체크 트리거 (게임 시작 후 첫 Detect 이전까지 On, 첫 Detect 이후 Off)
@@ -245,7 +247,7 @@ public class BossMonsterAI : MonoBehaviour
             if (playerAttack != null && currentHp != 0)
             {
                 float damage = playerAttack.GetDamage(); // 플레이어의 공격력 가져오기
-                TakeDamage(damage); // 보스에게 대미지 적용
+                TakeDamage(damage + extraDamage); // 보스에게 대미지 적용
             }
 
             // 충돌한 대상을 HitTracker에 추가
@@ -420,6 +422,14 @@ public class BossMonsterAI : MonoBehaviour
         anim.ResetTrigger(_CRITICAL_ANIM_TRIGGER_NAME);
     }
 
+    public void StunEnd()
+    {
+        Debug.Log("파라미터 꺼야해");
+        anim.ResetTrigger(_CRITICAL_ANIM_TRIGGER_NAME);
+        anim.ResetTrigger(_STUNNED_ANIM_TRIGGER_NAME);
+        extraDamage = 0f;
+    }
+
     public void DieCall()
     {
         Destroy(gameObject, 5f);
@@ -438,6 +448,13 @@ public class BossMonsterAI : MonoBehaviour
                             (
                                 new List<INode>()
                                 {
+                                    new ActionNode(JudgeWalkCheck)
+                                }
+                            ),
+                            new SequenceNode
+                            (
+                                new List<INode>()
+                                {
                                     new ActionNode(CheckRangeLevelOne),
                                     new SelectorNode
                                     (
@@ -448,10 +465,10 @@ public class BossMonsterAI : MonoBehaviour
                                                 new List<INode>()
                                                 {
                                                     new ActionNode(PressAttackCheck),
-                                                    new ActionNode(DefaultMeleeAttackEnemy),
+                                                    new ActionNode(StunnedEnemy),
                                                 }
                                             ),
-                                            new ActionNode(OnGuard),
+                                            new ActionNode(NoReactAttack),
                                         }
                                     ),
                                 }
@@ -550,6 +567,11 @@ public class BossMonsterAI : MonoBehaviour
     #endregion
 
     #region Check Node
+
+    INode.ENodeState JudgeWalkCheck()
+    {
+        return INode.ENodeState.ENS_Failure;
+    }
     INode.ENodeState CheckRangeLevelOne()
     {
         if (rangeLv == 1)
@@ -623,29 +645,28 @@ public class BossMonsterAI : MonoBehaviour
         // 애니메이션 상태가 맞지 않을 경우 Failure 반환
         return INode.ENodeState.ENS_Failure;
     }
-    INode.ENodeState OnGuard()
+    INode.ENodeState NoReactAttack()
     {
-        if(tmpTime >= 10f)
+        if(tmpTime >= NOREACT_ATTACK_INTERVAL)
         {
             tmpTime = 0;
             anim.SetTrigger(_DEFAULTATK_ANIM_TRIGGER_NAME);
             return INode.ENodeState.ENS_Success;
         }
 
-        tmpTime += Time.deltaTime;
-
         return INode.ENodeState.ENS_Failure;
     }
-    INode.ENodeState DefaultMeleeAttackEnemy()
+    INode.ENodeState StunnedEnemy()
     {
         // 현재 애니메이션 상태 정보를 가져옴
         AnimatorStateInfo stateInfo = anim.GetCurrentAnimatorStateInfo(0);
 
         // FirstDetectAttack 애니메이션이 실행 중인지 확인
-        if (stateInfo.IsName(_RESPATK_ANIM_STATE_NAME))
+        if (stateInfo.IsName(_STUNED_ANIM_STATE_NAME))
         {
             if (stateInfo.normalizedTime < 1.0f)
             {
+                extraDamage = 20f;
                 // 애니메이션이 실행 중일 때 Running 반환
                 return INode.ENodeState.ENS_Running;
             }
