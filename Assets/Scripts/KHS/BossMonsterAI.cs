@@ -80,7 +80,9 @@ public class BossMonsterAI : MonoBehaviour
     private float offset = 5f;                                      // Boss의 FirstDetect Attack을 위한 offset 값.
     private int rangeLv = 0;
     private float extraDamage = 0f;
-    private const float NOREACT_ATTACK_INTERVAL = 10f;
+    private float judgeTime = 0f;
+    private const float JUDGE_TIME_INTERVAL = 3f;
+    private const float NOREACT_ATTACK_INTERVAL = 5f;
 
     #endregion
 
@@ -89,23 +91,28 @@ public class BossMonsterAI : MonoBehaviour
     // 애니메이션 상태 이름
     private const string _FIRSTDETECT_ANIM_STATE_NAME = "FirstDetectAttack";
     private const string _STUNED_ANIM_STATE_NAME = "Stun";
+    private const string _JUDGE_ANIM_STATE_NAME = "JudgeWalk";
+    private const string _GUARD_ANIM_STATE_NAME = "Guard";
+    private const string _GUARDBREAK_ANIM_STATE_NAME = "GuardBreak";
 
     // 애니메이터 Bool Parameter
     private const string _FIRSTDETECT_ANIM_BOOL_NAME = "FirstDetect";           // Boss의 시작연출 관리를 위한 First Detect 체크 트리거 (게임 시작 후 첫 Detect 이전까지 On, 첫 Detect 이후 Off)
     private const string _DETECT_ANIM_BOOL_NAME = "Detect";                     // Boss의 실시간 Player Detect 체크 트리거 (범위 내 Player가 존재 시 On, 미존재 시 Off)
-    private const string _JUDGE_ANIM_BOOL_NAME = "Judge";
 
     // 애니메이터 Int Parameter
     private const string _RANGE_ANIM_INT_NAME = "RangeLevel";                   // Boss의 기준으로 Player가 Detect되는 영역 레벨 값 (Range Level = 1, 2 ,3)
 
     // 패턴별 공격 발동 트리거
+    private const string _JUDGE_ANIM_TRIGGER_NAME = "Judge";
     private const string _TPJUMPATTACK_ANIM_TRIGGER_NAME = "TpJumpAtk";         // Boss의 점프 공격 패턴 발동 트리거
     private const string _DEFAULTATK_ANIM_TRIGGER_NAME = "DefaultAtk";          // Boss의 1페이즈 기본 공격 동작의 발동 트리거
     private const string _RESPATK_ANIM_TRIGGER_NAME = "RespAtk";                // Boss의 1페이즈 반응형 공격 동작의 발동 트리거
+    private const string _GUARD_ANIM_TRIGGER_NAME = "OnGuard";
     
     // 보스 상태 유발 트리거
     private const string _CRITICAL_ANIM_TRIGGER_NAME = "Critical";              // 반응형 공격 도중 Critical 상태 체크용 트리거
     private const string _STUNNED_ANIM_TRIGGER_NAME = "IsStun";
+    private const string _GUARDBREAK_ANIM_TRIGGER_NAME = "isGBreak";
 
     // 단방향 트리거
     private const string _DIE_ANIM_TRIGGER_NAME = "Die";                        // Boss의 HP가 0이 될 시 그 즉시 die 트리거 활성화 (Hp = 0일 때 On)
@@ -156,6 +163,10 @@ public class BossMonsterAI : MonoBehaviour
             if(anim.GetBool(_CRITICAL_ANIM_TRIGGER_NAME))
             {
                 HitCritical(_collider);
+            }
+            if(anim.GetBool(_GUARDBREAK_ANIM_TRIGGER_NAME))
+            {
+                HitGBreak(_collider);
             }
             HitJudge(_collider);
         }
@@ -248,7 +259,7 @@ public class BossMonsterAI : MonoBehaviour
             {
                 float damage = playerAttack.GetDamage(); // 플레이어의 공격력 가져오기
                 TakeDamage(damage + extraDamage); // 보스에게 대미지 적용
-                Debug.Log("스턴 추뎀 확인용" + damage + extraDamage);
+                //Debug.Log("스턴 추뎀 확인용" + damage + " + " + extraDamage);
             }
 
             // 충돌한 대상을 HitTracker에 추가
@@ -269,6 +280,18 @@ public class BossMonsterAI : MonoBehaviour
             PlayerAnim criticalAttack = _collider.GetComponentInParent<PlayerAnim>();
             
             if (criticalAttack.critical)
+            {
+                anim.SetTrigger(_STUNNED_ANIM_TRIGGER_NAME);
+            }
+        }
+    }
+    private void HitGBreak(Collider _collider)
+    {
+        if (!hitTargets.Contains(_collider))
+        {
+            PlayerAnim GBreakAttack = _collider.GetComponentInParent<PlayerAnim>();
+
+            if (false/*GBreakAttack.guardbreak*/)
             {
                 anim.SetTrigger(_STUNNED_ANIM_TRIGGER_NAME);
             }
@@ -478,16 +501,16 @@ public class BossMonsterAI : MonoBehaviour
                                 new List<INode>()
                                 {
                                     new ActionNode(CheckRangeLevelTwo),
-                                    new SelectorNode
+                                    new SequenceNode
                                     (
                                         new List<INode>()
                                         {
-                                            new SequenceNode
+                                            new SelectorNode
                                             (
                                                 new List<INode>()
                                                 {
-                                                    new ActionNode(IsApproachCheck),
-                                                    new ActionNode(UpperAttackEnemy),
+                                                    new ActionNode(RandomDecisionCheck),
+                                                    new ActionNode(OnGuard),
                                                 }
                                             ),
                                             new ActionNode(JumpAttackEnemy),
@@ -500,11 +523,11 @@ public class BossMonsterAI : MonoBehaviour
                                 new List<INode>()
                                 {
                                     new ActionNode(CheckRangeLevelThree),
-                                    new SelectorNode
+                                    new SequenceNode
                                     (
                                         new List<INode>()
                                         {
-                                            new SequenceNode
+                                            new SelectorNode
                                             (
                                                 new List<INode>()
                                                 {
@@ -570,8 +593,34 @@ public class BossMonsterAI : MonoBehaviour
 
     INode.ENodeState JudgeWalkCheck()
     {
+        // 현재 애니메이터 상태정보 받아오기
+        AnimatorStateInfo stateInfo = anim.GetCurrentAnimatorStateInfo(0);
+
+        // JudgeWalk 애니메이션이 실행 중인지 확인
+        if (stateInfo.IsName(_JUDGE_ANIM_STATE_NAME))
+        {
+            if (stateInfo.normalizedTime < 1.0f)
+            {
+                judgeTime += Time.deltaTime;
+                tmpTime += Time.deltaTime;
+                if(judgeTime >= JUDGE_TIME_INTERVAL)
+                {
+                    judgeTime = 0.0f;
+                    anim.SetTrigger(_JUDGE_ANIM_TRIGGER_NAME);
+                }
+                // 애니메이션이 실행 중일 때 Running 반환
+                return INode.ENodeState.ENS_Running;
+            }
+            else
+            {
+                // 애니메이션이 종료된 경우 Failure 반환
+                return INode.ENodeState.ENS_Failure;
+            }
+        }
+        // 애니메이션 상태가 맞지 않을 경우 Failure 반환
         return INode.ENodeState.ENS_Failure;
     }
+
     INode.ENodeState CheckRangeLevelOne()
     {
         if (rangeLv == 1)
@@ -604,7 +653,7 @@ public class BossMonsterAI : MonoBehaviour
     {
         if (!isrespAtkOnCooldown)
         {
-            Debug.Log("프레스 어택체크 동작중");
+            //Debug.Log("프레스 어택체크 동작중");
             CheckPlayerAttacking();
             return INode.ENodeState.ENS_Success;
         }
@@ -618,6 +667,11 @@ public class BossMonsterAI : MonoBehaviour
 
     INode.ENodeState RandomDecisionCheck()
     {
+        if(Random.Range(1,11) > 5)
+        {
+            anim.SetTrigger(_GUARD_ANIM_TRIGGER_NAME);
+            return INode.ENodeState.ENS_Success;
+        }
         return INode.ENodeState.ENS_Failure;
     }
     #endregion
@@ -626,7 +680,7 @@ public class BossMonsterAI : MonoBehaviour
 
     INode.ENodeState FirstDetectAttack()
     {
-        // 현재 애니메이션 상태 정보를 가져옴
+        // 현재 애니메이터 상태정보 받아오기
         AnimatorStateInfo stateInfo = anim.GetCurrentAnimatorStateInfo(0);
 
         // FirstDetectAttack 애니메이션이 실행 중인지 확인
@@ -648,29 +702,64 @@ public class BossMonsterAI : MonoBehaviour
     }
     INode.ENodeState NoReactAttack()
     {
-        if (tmpTime >= NOREACT_ATTACK_INTERVAL)
+        if (!anim.GetBool(_RESPATK_ANIM_TRIGGER_NAME))
         {
-            
-            tmpTime = 0;
-            anim.SetTrigger(_DEFAULTATK_ANIM_TRIGGER_NAME);
-            return INode.ENodeState.ENS_Success;
+            if (tmpTime >= NOREACT_ATTACK_INTERVAL)
+            {
+                tmpTime = 0;
+                anim.SetTrigger(_DEFAULTATK_ANIM_TRIGGER_NAME);
+                return INode.ENodeState.ENS_Success;
+            }
         }
 
         return INode.ENodeState.ENS_Failure;
     }
     INode.ENodeState StunnedEnemy()
     {
-        if(anim.GetBool(_CRITICAL_ANIM_TRIGGER_NAME) && anim.GetBool(_STUNNED_ANIM_TRIGGER_NAME))
+        // 현재 애니메이터 상태정보 받아오기
+        AnimatorStateInfo stateInfo = anim.GetCurrentAnimatorStateInfo(0);
+
+        // Stun 애니메이션이 실행 중인지 확인
+        if (stateInfo.IsName(_STUNED_ANIM_STATE_NAME))
         {
-            Debug.Log("스턴드 애너미!");
-            extraDamage = 2000f;
-            return INode.ENodeState.ENS_Success;
+            if (stateInfo.normalizedTime < 1.0f)
+            {
+                extraDamage = 2000f;
+                // 애니메이션이 실행 중일 때 Running 반환
+                return INode.ENodeState.ENS_Running;
+            }
+            else
+            {
+                // 애니메이션이 종료된 경우 Failure 반환
+                return INode.ENodeState.ENS_Failure;
+            }
         }
+        // 애니메이션 상태가 맞지 않을 경우 Failure 반환
         return INode.ENodeState.ENS_Failure;
     }
 
-    INode.ENodeState UpperAttackEnemy()
+    INode.ENodeState OnGuard()
     {
+        // 현재 애니메이터 상태정보 받아오기
+        AnimatorStateInfo stateInfo = anim.GetCurrentAnimatorStateInfo(0);
+
+        // Stun 애니메이션이 실행 중인지 확인
+        if (stateInfo.IsName(_GUARD_ANIM_STATE_NAME))
+        {
+            if (stateInfo.normalizedTime < 1.0f)
+            {
+                // 가드상태일때 가드 브레이크 어택시 가드 파괴상태 유발 트리거 동작
+                // 가드상태일때 일반 어택시 입는 피해 감소 처리 -> 
+                // 애니메이션이 실행 중일 때 Running 반환
+                return INode.ENodeState.ENS_Running;
+            }
+            else
+            {
+                // 애니메이션이 종료된 경우 Failure 반환
+                return INode.ENodeState.ENS_Failure;
+            }
+        }
+        // 애니메이션 상태가 맞지 않을 경우 Failure 반환
         return INode.ENodeState.ENS_Failure;
     }
     INode.ENodeState JumpAttackEnemy()
