@@ -1,5 +1,4 @@
 using System.Collections;
-using Unity.Cinemachine;
 using UnityEngine;
 
 // 플레이어 애니메이션 관련된 스크립트
@@ -31,6 +30,7 @@ public class PlayerAnim : MonoBehaviour
     public bool comboOn;
     public bool combo2On;
     public bool evasion = false;
+    public bool blocking = false;
     private PlayerWeaponChange pWeaponChange;
 
     private float attackStamina = 10f;
@@ -169,6 +169,29 @@ public class PlayerAnim : MonoBehaviour
     public void BattleMode(bool _IsBattleMode)
     {
         anim.SetBool("IsBattleMode", _IsBattleMode);
+    }
+
+    public void Shield(bool _state)
+    {
+        if (_state)
+        {
+            blocking = true;
+            gameObject.tag = "Blocking";
+        }
+        else
+        {
+            blocking = false;
+            gameObject.tag = "Player";
+        }
+        anim.SetBool("IsBlocking", blocking);
+    }
+
+    public void ShieldHit()
+    {
+        anim.SetTrigger("ShieldHit");
+        blocking = false;
+        gameObject.tag = "Player";  
+        anim.SetBool("IsBlocking", blocking);
     }
     #endregion
 

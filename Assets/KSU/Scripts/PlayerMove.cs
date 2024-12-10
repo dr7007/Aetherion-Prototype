@@ -1,6 +1,6 @@
 using UnityEngine;
 
-// 플레이어 키입력과 관련된 스크립트
+// 플레이어 키입력과 움직임 관련된 스크립트
 public class PlayerMove : MonoBehaviour
 {
     public delegate void OnStaminaChangedDelegate(float curStamina, float maxStamina);
@@ -12,7 +12,8 @@ public class PlayerMove : MonoBehaviour
     [SerializeField] private float rollCooldown = 5f; // 구르기 쿨타임
     [SerializeField] private PlayerAnim pAnim; // animation 관리하는 PlayerAnim 스크립트
     [SerializeField] private float evasionTime = 1f;
-    [SerializeField] private Material HDR;
+
+    public Material HDR;
 
     private int curWeaponNum;
     private PlayerBattle battleInfo;
@@ -61,6 +62,12 @@ public class PlayerMove : MonoBehaviour
             HDR.EnableKeyword("_EMISSION");
             pAnim.evasion = false; 
         }
+
+        // 방어키 입력
+        InputShield();
+
+        // 방어중일땐 다른 키입력X
+        if (gameObject.tag == "Blocking") return;
 
         // 키입력 감지
         axisH = Input.GetAxis("Horizontal");
@@ -244,6 +251,19 @@ public class PlayerMove : MonoBehaviour
             IsBattleMode = !IsBattleMode;
 
             pAnim.BattleMode(IsBattleMode);
+        }
+    }
+
+    private void InputShield()
+    {
+        if (Input.GetMouseButtonDown(2))
+        {
+            pAnim.Shield(true);
+        }
+
+        if (Input.GetMouseButtonUp(2))
+        {
+            pAnim.Shield(false);
         }
     }
     #endregion

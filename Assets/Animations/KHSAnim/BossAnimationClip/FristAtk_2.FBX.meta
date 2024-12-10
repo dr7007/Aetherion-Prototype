@@ -579,24 +579,21 @@ ModelImporter:
       - time: 0.33088946
         functionName: FirstAttackTeleport
         data: 
-        objectReferenceParameter: {fileID: 11500000, guid: 201aef397f5431d46bf017b650584d8f,
-          type: 3}
+        objectReferenceParameter: {fileID: 11500000, guid: 201aef397f5431d46bf017b650584d8f, type: 3}
         floatParameter: 0
         intParameter: 0
         messageOptions: 0
       - time: 0.99852467
-        functionName: OnFirstDetectAnimationEnd
+        functionName: UnlockDirection
         data: 
-        objectReferenceParameter: {fileID: 11500000, guid: 201aef397f5431d46bf017b650584d8f,
-          type: 3}
+        objectReferenceParameter: {fileID: 11500000, guid: 201aef397f5431d46bf017b650584d8f, type: 3}
         floatParameter: 0
         intParameter: 0
         messageOptions: 0
       - time: 0.5524317
         functionName: DisableWeaponCollider
         data: 
-        objectReferenceParameter: {fileID: 11500000, guid: 201aef397f5431d46bf017b650584d8f,
-          type: 3}
+        objectReferenceParameter: {fileID: 11500000, guid: 201aef397f5431d46bf017b650584d8f, type: 3}
         floatParameter: 0
         intParameter: 0
         messageOptions: 0
@@ -1404,8 +1401,7 @@ ModelImporter:
     - name: Bone012
       parentName: Bone011
       position: {x: -0.28616843, y: -0.0000009155273, z: 0.000000019073486}
-      rotation: {x: -2.3283067e-10, y: -0.0000000063027983, z: -0.0000000018626451,
-        w: 1}
+      rotation: {x: -2.3283067e-10, y: -0.0000000063027983, z: -0.0000000018626451, w: 1}
       scale: {x: 1, y: 1, z: 1}
     - name: Bone001
       parentName: spine_03
@@ -1509,8 +1505,7 @@ ModelImporter:
     hasTranslationDoF: 0
     hasExtraRoot: 1
     skeletonHasParents: 1
-  lastHumanDescriptionAvatarSource: {fileID: 9000000, guid: 659c7284dc1e16a4bbbf3d746380383e,
-    type: 3}
+  lastHumanDescriptionAvatarSource: {fileID: 9000000, guid: 659c7284dc1e16a4bbbf3d746380383e, type: 3}
   autoGenerateAvatarMappingIfUnspecified: 1
   animationType: 3
   humanoidOversampling: 1
