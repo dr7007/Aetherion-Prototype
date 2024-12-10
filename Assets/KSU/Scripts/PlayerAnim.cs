@@ -31,6 +31,7 @@ public class PlayerAnim : MonoBehaviour
     public bool combo2On;
     public bool evasion = false;
     public bool blocking = false;
+    public bool hitCombo = false;
     private PlayerWeaponChange pWeaponChange;
 
     private float attackStamina = 10f;
@@ -83,6 +84,17 @@ public class PlayerAnim : MonoBehaviour
     private void EvasionOn()
     {
         evasion = true;
+    }
+    private void HitOn()
+    {
+        Debug.Log("HitOn »£√‚µ ");
+        hitCombo = true;
+    }
+
+    private void HitOff()
+    {
+        Debug.Log("HitOn off»£√‚µ ");
+        hitCombo = false;
     }
     #endregion
 
