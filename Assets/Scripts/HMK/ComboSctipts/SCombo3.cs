@@ -1,7 +1,7 @@
 using UnityEngine;
 using UnityEngine.UI;
 
-public class SCombo2 : MonoBehaviour
+public class SCombo3 : MonoBehaviour
 {
     [SerializeField] private Animator animator; // Animator 컴포넌트
     [SerializeField] private GameObject[] combo1img; // 콤보 이미지 배열
@@ -10,7 +10,7 @@ public class SCombo2 : MonoBehaviour
     private float comboTimer = 0f; // 현재 상태에서 경과 시간
     private int currentComboIndex = 0; // 현재 활성화된 콤보 인덱스
 
-    public string[] targetAnimationStates = { "Combo1", "ComboB2", "ComboB3" };
+    public string[] targetAnimationStates = { "Combo1", "Combo2", "ComboC1" };
 
     private void Update()
     {
@@ -67,7 +67,3 @@ public class SCombo2 : MonoBehaviour
         currentComboIndex = -1; // 콤보 인덱스 초기화
     }
 }
-
-
-
-
