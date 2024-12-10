@@ -578,6 +578,13 @@ ModelImporter:
       bodyMask: 01000000010000000100000001000000010000000100000001000000010000000100000001000000010000000100000001000000
       curves: []
       events:
+      - time: 0.19690536
+        functionName: LockDirection
+        data: 
+        objectReferenceParameter: {fileID: 11500000, guid: 201aef397f5431d46bf017b650584d8f, type: 3}
+        floatParameter: 0
+        intParameter: 0
+        messageOptions: 0
       - time: 0.24222559
         functionName: EnableWeaponCollider
         data: 
@@ -589,6 +596,13 @@ ModelImporter:
         functionName: DisableWeaponCollider
         data: 
         objectReferenceParameter: {fileID: 11500000, guid: 201aef397f5431d46bf017b650584d8f, type: 3}
+        floatParameter: 0
+        intParameter: 0
+        messageOptions: 0
+      - time: 0.41314015
+        functionName: StartEffect
+        data: 
+        objectReferenceParameter: {fileID: 11500000, guid: 1e9266146ef783e448ba12fa65061ca7, type: 3}
         floatParameter: 0
         intParameter: 0
         messageOptions: 0
@@ -615,13 +629,6 @@ ModelImporter:
         messageOptions: 0
       - time: 0.6685355
         functionName: DisableWeaponCollider
-        data: 
-        objectReferenceParameter: {fileID: 11500000, guid: 201aef397f5431d46bf017b650584d8f, type: 3}
-        floatParameter: 0
-        intParameter: 0
-        messageOptions: 0
-      - time: 0.19690536
-        functionName: LockDirection
         data: 
         objectReferenceParameter: {fileID: 11500000, guid: 201aef397f5431d46bf017b650584d8f, type: 3}
         floatParameter: 0

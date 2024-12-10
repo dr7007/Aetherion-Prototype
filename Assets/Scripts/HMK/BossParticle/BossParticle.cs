@@ -5,7 +5,9 @@ public class BossParticle : MonoBehaviour
     private Animator animator;
     [SerializeField] private TrailRenderer noattack;
     [SerializeField] private GameObject StartAttack;
-    public string[] targetAnimationStates = { "NoReactAttack" };
+    [SerializeField] private ParticleSystem teleportParticleSystem;
+    [SerializeField] private ParticleSystem teleportParticleSystem2;
+    public string[] targetAnimationStates = { "NoReactAttack", "FirstDetect" };
 
     private float trailEndOffset = 0.8f;
     private void Start()
@@ -22,27 +24,68 @@ public class BossParticle : MonoBehaviour
         {
             if (stateInfo.normalizedTime < trailEndOffset)
             {
-                EnableParticleGameObject(StartAttack);
+                
                 EnableTrail(noattack);
 
             }
             else
             {
-                DisableParticleGameObject(StartAttack);
+                
                 DisableTrail(noattack); // 0.1초 일찍 TrailRenderer 비활성화
+            }
+        }
+        if (stateInfo.IsName("FirstDetect"))
+        {
+            if (stateInfo.normalizedTime < trailEndOffset)
+            {
+
+                EnableParticleGameObject(StartAttack);
+
+            }
+            else
+            {
+
+                DisableParticleGameObject(StartAttack); // 0.1초 일찍 TrailRenderer 비활성화
             }
         }
 
     }
+    public void FirstAttackParticle()
+    {
+            teleportParticleSystem.Play(); // 파티클 실행
+            Debug.Log("FirstAttackParticle 이벤트 실행됨: 파티클 실행");
+        
+    }
+    public void FirstAttackTeleport()
+    {
+        teleportParticleSystem2.Play();
+        Debug.Log("텔포 후");
+    }
+    public void EnableParticleObject()
+    {
+        if (StartAttack != null)
+        {
+            StartAttack.SetActive(true);
+        }
+    }
+
+    public void DisableParticleObject()
+    {
+        if (StartAttack != null)
+        {
+            StartAttack.SetActive(false);
+        }
+    }
+
     private void EnableTrail(TrailRenderer trail)
     {
-        DisableAllTrails(); // 먼저 모든 TrailRenderer를 비활성화
+        DisableAllTrails(); 
 
         trail.emitting = true;
 
     }
 
-    // 특정 TrailRenderer만 비활성화
+    
     private void DisableTrail(TrailRenderer trail)
     {
 
