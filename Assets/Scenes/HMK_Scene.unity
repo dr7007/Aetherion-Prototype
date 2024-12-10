@@ -4141,6 +4141,22 @@ PrefabInstance:
       propertyPath: m_Name
       value: ComboUI
       objectReference: {fileID: 0}
+    - target: {fileID: 1323546049680055303, guid: a94ab316b69287247aec9061c9fa608e, type: 3}
+      propertyPath: m_fontColor.b
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 1323546049680055303, guid: a94ab316b69287247aec9061c9fa608e, type: 3}
+      propertyPath: m_fontColor.g
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 1323546049680055303, guid: a94ab316b69287247aec9061c9fa608e, type: 3}
+      propertyPath: m_fontColor.r
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 1323546049680055303, guid: a94ab316b69287247aec9061c9fa608e, type: 3}
+      propertyPath: m_fontColor32.rgba
+      value: 4294967295
+      objectReference: {fileID: 0}
     - target: {fileID: 3169965493385254356, guid: a94ab316b69287247aec9061c9fa608e, type: 3}
       propertyPath: m_Pivot.x
       value: 0.5
@@ -4221,6 +4237,26 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 3225409730900443051, guid: a94ab316b69287247aec9061c9fa608e, type: 3}
+      propertyPath: m_fontColor.b
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 3225409730900443051, guid: a94ab316b69287247aec9061c9fa608e, type: 3}
+      propertyPath: m_fontColor.g
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 3225409730900443051, guid: a94ab316b69287247aec9061c9fa608e, type: 3}
+      propertyPath: m_fontColor.r
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 3225409730900443051, guid: a94ab316b69287247aec9061c9fa608e, type: 3}
+      propertyPath: m_fontColor32.rgba
+      value: 4294967295
+      objectReference: {fileID: 0}
+    - target: {fileID: 3381322810947090435, guid: a94ab316b69287247aec9061c9fa608e, type: 3}
+      propertyPath: m_text
+      value: '[Powerful combo]'
+      objectReference: {fileID: 0}
     - target: {fileID: 6758098653805539328, guid: a94ab316b69287247aec9061c9fa608e, type: 3}
       propertyPath: animator
       value: 
@@ -4248,6 +4284,26 @@ PrefabInstance:
     - target: {fileID: 7901685749541696154, guid: a94ab316b69287247aec9061c9fa608e, type: 3}
       propertyPath: 'targetAnimationStates.Array.data[2]'
       value: ComboC1
+      objectReference: {fileID: 0}
+    - target: {fileID: 8306880544378702658, guid: a94ab316b69287247aec9061c9fa608e, type: 3}
+      propertyPath: m_fontColor.b
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 8306880544378702658, guid: a94ab316b69287247aec9061c9fa608e, type: 3}
+      propertyPath: m_fontColor.g
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 8306880544378702658, guid: a94ab316b69287247aec9061c9fa608e, type: 3}
+      propertyPath: m_fontColor.r
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 8306880544378702658, guid: a94ab316b69287247aec9061c9fa608e, type: 3}
+      propertyPath: m_fontColor32.rgba
+      value: 4294967295
+      objectReference: {fileID: 0}
+    - target: {fileID: 8670799249330532244, guid: a94ab316b69287247aec9061c9fa608e, type: 3}
+      propertyPath: m_text
+      value: '[Undead combo]'
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
