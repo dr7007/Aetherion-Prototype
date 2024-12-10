@@ -1972,10 +1972,6 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 0}
     m_Modifications:
-    - target: {fileID: 387813719515523616, guid: f078953f0e8d60441bf9467f9f90f809, type: 3}
-      propertyPath: m_IsTrigger
-      value: 1
-      objectReference: {fileID: 0}
     - target: {fileID: 1546719071579332864, guid: f078953f0e8d60441bf9467f9f90f809, type: 3}
       propertyPath: followCameraTr
       value: 
@@ -1983,14 +1979,6 @@ PrefabInstance:
     - target: {fileID: 7167467010801608799, guid: f078953f0e8d60441bf9467f9f90f809, type: 3}
       propertyPath: m_Name
       value: Paladin WProp J Nordstrom
-      objectReference: {fileID: 0}
-    - target: {fileID: 7295182706534014731, guid: f078953f0e8d60441bf9467f9f90f809, type: 3}
-      propertyPath: m_IsActive
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 7295182706534014731, guid: f078953f0e8d60441bf9467f9f90f809, type: 3}
-      propertyPath: m_TagString
-      value: PlayerAttack
       objectReference: {fileID: 0}
     - target: {fileID: 7510919965040014053, guid: f078953f0e8d60441bf9467f9f90f809, type: 3}
       propertyPath: m_LocalPosition.x
@@ -2030,14 +2018,6 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 7510919965040014053, guid: f078953f0e8d60441bf9467f9f90f809, type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 7666470070677763612, guid: f078953f0e8d60441bf9467f9f90f809, type: 3}
-      propertyPath: m_IsTrigger
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 8437369374800403493, guid: f078953f0e8d60441bf9467f9f90f809, type: 3}
-      propertyPath: m_IsActive
       value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 9204204868587267876, guid: f078953f0e8d60441bf9467f9f90f809, type: 3}
