@@ -10,9 +10,10 @@ using static PlayerAnim;
 public class PlayerBattle : MonoBehaviour
 {
     [SerializeField] private float detectRange = 50f;
-    [SerializeField] private BoxCollider attackCollider;
     [SerializeField] private LayerMask monsterLayer;
     [SerializeField] private float shieldTime;
+    [SerializeField] private BoxCollider sword;
+    [SerializeField] private BoxCollider axe;
 
     private HashSet<Collider> hitTargets = new HashSet<Collider>(); // 대미지 중복 적용 내부쿨 관리용
 
@@ -24,6 +25,7 @@ public class PlayerBattle : MonoBehaviour
     private CharacterController controller;
     private PlayerWeaponChange weaponChange;
     private PlayerMove moveInfo;
+    private BoxCollider attackCollider = null;
 
     private float PlayerMaxHp = 100f;
     private float PlayerCurHp;
@@ -109,10 +111,10 @@ public class PlayerBattle : MonoBehaviour
         // 방어중에 맞았을때
         if (other.CompareTag("MonsterWeapon") && gameObject.tag == "Blocking")
         {
-            // 맞는 방향구하고
+            // 맞는 방향의 반대방향 (바라볼 방향)구하고
             hitDir = new Vector3(-(transform.position.x - mosterPosition.x), 0f, -(transform.position.z - mosterPosition.z)).normalized;
 
-            // 맞는 방향 바라보도록
+            // 그쪽으로 바라보도록
             transform.forward = hitDir;
 
             // 실드에서 맞는 애니메이션 실행
@@ -135,8 +137,6 @@ public class PlayerBattle : MonoBehaviour
         // 무기에 맞았을때 리액션
         if (other.CompareTag("MonsterWeapon") && transform.gameObject.tag == "Player")
         {
-            Debug.Log("으악 맞았어요!!");
-
             BossMonsterAI bossAttack = other.GetComponentInParent<BossMonsterAI>();
             // 대미지 적용
             if (bossAttack != null && PlayerCurHp != 0)
@@ -172,6 +172,9 @@ public class PlayerBattle : MonoBehaviour
 
             // 회피 상태도 초기화
             anim.SetInteger("EvasionNum", 0);
+
+            // 공격 상태 초기화
+            pAnim.hitCombo = false;
         }
         
     }
@@ -196,7 +199,17 @@ public class PlayerBattle : MonoBehaviour
     // 만약 공격중이라면 공격 콜라이더를 킴.
     private void AttackOn()
     {
-        if (CheckAttackVisible())
+        curWeaponNum = weaponChange.CurWeaponNum;
+        if (curWeaponNum == 0)
+        {
+            attackCollider = sword;
+        }
+        else
+        {
+            attackCollider = axe;
+        }
+
+        if (pAnim.hitCombo)
         {
             attackCollider.enabled = true;
         }
@@ -204,22 +217,6 @@ public class PlayerBattle : MonoBehaviour
         {
             attackCollider.enabled = false;
         }
-    }
-
-    // 어택시 콜라이더 켜둠
-    private bool CheckAttackVisible()
-    {
-        curWeaponNum = weaponChange.CurWeaponNum;
-
-        AnimatorStateInfo stateInfo = anim.GetCurrentAnimatorStateInfo(curWeaponNum);
-
-        if ((stateInfo.IsName("Combo1") && stateInfo.normalizedTime < 0.8f) ||
-        (stateInfo.IsName("Combo2") && stateInfo.normalizedTime < 0.8f) ||
-        (stateInfo.IsName("Combo3") && stateInfo.normalizedTime < 0.8f))
-        {
-            return true;
-        }
-        return false;
     }
 
     // 맞는 애니메이션 중인지 확인
