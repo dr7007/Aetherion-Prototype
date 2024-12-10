@@ -83,6 +83,9 @@ public class BossMonsterAI : MonoBehaviour
 
     #region Animator Parameters
 
+    private const string _FIRSTDETECT_ANIM_STATE_NAME = "FirstDetectAttack";
+    private const string _FIRSTATTACK_ANIM_TRIGGER_NAME = "FirstAttack";
+
     private const string _ATTACK_ANIM_TRIGGER_NAME = "attack";                  // Boss의 Attack관련 행동 체크 트리거 (공격 시작/공격 중 On, 공격 끝/공격 외 Off)
     private const string _FIRSTDETECT_ANIM_BOOL_NAME = "first_detect";          // Boss의 시작연출 관리를 위한 First Detect 체크 트리거 (게임 시작 후 첫 Detect 이전까지 On, 첫 Detect 이후 Off)
     private const string _DETECT_ANIM_BOOL_NAME = "detect";                     // Boss의 실시간 Player Detect 체크 트리거 (범위 내 Player가 존재 시 On, 미존재 시 Off)
@@ -284,22 +287,9 @@ public class BossMonsterAI : MonoBehaviour
         }
     }
 
-    public void FirstDetectRecord()
-    {
-        firstdetPos = detectedPlayerTr.position;
-        Debug.Log(firstdetPos);
-    }
-    public void OnFirstDetectAnimationTrigger()
-    {
-        anim.SetBool(_FIRSTDETECT_ANIM_BOOL_NAME, false);
-    }
     public void FirstAttackTeleport()
     {
         StartCoroutine(FirstAttackTeleportCoroutine());
-    }
-    public void OnFirstDetectAnimationEnd()
-    {
-        UnlockDirection();
     }
     
 
@@ -336,7 +326,6 @@ public class BossMonsterAI : MonoBehaviour
                 (
                     new List<INode>()
                     {
-                        new ActionNode(CheckDetectEnemy),
                         new SelectorNode
                         (
                             new List<INode>()
@@ -419,12 +408,11 @@ public class BossMonsterAI : MonoBehaviour
         (
             new List<INode>()
             {
-                new SequenceNode
-                (
+                new SequenceNode(
                     new List<INode>()
                     {
                         new ActionNode(FirstDetectCheck),
-                        new ActionNode(CheckDetectEnemy),
+                        new ActionNode(FirstDetectAttack),
                     }
                 ),
                 CreateAttackBehavior(),
@@ -438,24 +426,15 @@ public class BossMonsterAI : MonoBehaviour
     {
         if (anim.GetBool(_FIRSTDETECT_ANIM_BOOL_NAME) && anim.GetBool(_DETECT_ANIM_BOOL_NAME))
         {
-            //Debug.Log("FirstDetect!");
+            anim.SetTrigger(_FIRSTATTACK_ANIM_TRIGGER_NAME);
+            firstdetPos = detectedPlayerTr.position;
+            anim.SetBool(_FIRSTDETECT_ANIM_BOOL_NAME,false);
             return INode.ENodeState.ENS_Success;
         }
 
         return INode.ENodeState.ENS_Failure;
     }
-
-    INode.ENodeState CheckDetectEnemy()
-    {
-        if (anim.GetBool(_DETECT_ANIM_BOOL_NAME) && !anim.GetBool(_FIRSTDETECT_ANIM_BOOL_NAME))
-        {
-            //Debug.Log("Detected!");
-            return INode.ENodeState.ENS_Success;
-        }
-
-        return INode.ENodeState.ENS_Failure;
-    }
-
+    
     INode.ENodeState NonDetect()
     {
         if(!anim.GetBool(_DETECT_ANIM_BOOL_NAME))
@@ -517,6 +496,29 @@ public class BossMonsterAI : MonoBehaviour
     #endregion
 
     #region Attack Node
+
+    INode.ENodeState FirstDetectAttack()
+    {
+        // 현재 애니메이션 상태 정보를 가져옴
+        AnimatorStateInfo stateInfo = anim.GetCurrentAnimatorStateInfo(0);
+
+        // FirstDetectAttack 애니메이션이 실행 중인지 확인
+        if (stateInfo.IsName(_FIRSTDETECT_ANIM_STATE_NAME))
+        {
+            if (stateInfo.normalizedTime < 1.0f)
+            {
+                // 애니메이션이 실행 중일 때 Running 반환
+                return INode.ENodeState.ENS_Running;
+            }
+            else
+            {
+                // 애니메이션이 종료된 경우 Failure 반환
+                return INode.ENodeState.ENS_Failure;
+            }
+        }
+        // 애니메이션 상태가 맞지 않을 경우 Failure 반환
+        return INode.ENodeState.ENS_Failure;
+    }
     INode.ENodeState OnGuard()
     {
         if(tmpTime >= 10f)
