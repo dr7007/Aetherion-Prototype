@@ -1972,6 +1972,10 @@ PrefabInstance:
       propertyPath: followCameraTr
       value: 
       objectReference: {fileID: 1679009099}
+    - target: {fileID: 5597066719079295186, guid: f078953f0e8d60441bf9467f9f90f809, type: 3}
+      propertyPath: shieldTime
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 7167467010801608799, guid: f078953f0e8d60441bf9467f9f90f809, type: 3}
       propertyPath: m_Name
       value: Paladin WProp J Nordstrom

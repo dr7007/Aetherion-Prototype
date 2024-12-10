@@ -23,6 +23,7 @@ public class PlayerBattle : MonoBehaviour
     private Vector3 hitDir;
     private CharacterController controller;
     private PlayerWeaponChange weaponChange;
+    private PlayerMove moveInfo;
 
     private float PlayerMaxHp = 100f;
     private float PlayerCurHp;
@@ -67,6 +68,7 @@ public class PlayerBattle : MonoBehaviour
         pAnim = GetComponent<PlayerAnim>();
         controller = GetComponent<CharacterController>();
         weaponChange = GetComponent<PlayerWeaponChange>();
+        moveInfo = GetComponent<PlayerMove>();
 
         Keyframe reactCurve_lastFrame = reactCurve[reactCurve.length - 1];
         reactTimer = reactCurve_lastFrame.time;
@@ -118,6 +120,8 @@ public class PlayerBattle : MonoBehaviour
 
             // 몇초간 무적상태로 만듦.
             StartCoroutine(ShieldReactTime());
+
+            // 쿨타임을 넣고싶다면 넣으면 되긴 함. 코드(쿨타임 코루틴)와 조건으로.
 
             return;
         }
@@ -258,10 +262,12 @@ public class PlayerBattle : MonoBehaviour
     private IEnumerator ShieldReactTime()
     {
         IsShieldHit = true;
+        moveInfo.HDR.EnableKeyword("_EMISSION");
 
         yield return new WaitForSeconds(shieldTime);
 
         IsShieldHit = false;
+        moveInfo.HDR.DisableKeyword("_EMISSION");
     }
 
 }
