@@ -25,8 +25,8 @@ public class PlayerBattle : MonoBehaviour
     private PlayerMove moveInfo;
     private BoxCollider attackCollider = null;
 
-    private float PlayerMaxHp = 100f;
-    private float PlayerCurHp;
+    public float PlayerMaxHp = 100f;
+    public float PlayerCurHp;
     private float PlayerAtk = 3000f;
     private float playerMaxStamina = 100f;
     private float playerCurStamina;
@@ -81,6 +81,12 @@ public class PlayerBattle : MonoBehaviour
 
         // 공격중일때 콜라이더를 키는 함수
         AttackOn();
+
+        // 잠시 테스트용 죽음키
+        if (Input.GetKeyDown(KeyCode.P))
+        {
+            anim.SetTrigger(_DIE_ANUM_TRIGGER_NAME);
+        }
     }
 
     // 몬스터의 위치 정보를 얻어오는 코드

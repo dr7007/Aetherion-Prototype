@@ -5,6 +5,9 @@ using UnityEngine.UI;
 // 플레이어 애니메이션 관련된 스크립트
 public class PlayerAnim : MonoBehaviour
 {
+    public delegate void DieDelegate();
+    public DieDelegate diedelegate;
+
     // 플레이어 애니메이션 상태를 확인하기 위한 Enum
     public enum EAnim
     {
@@ -299,8 +302,11 @@ public class PlayerAnim : MonoBehaviour
         // 로딩 씬 On
         loading.SetActive(true);
 
+        // 콜백 함수 호출
         // 플레이어 초기화
         // 보스 초기화
+        diedelegate?.Invoke();
+
 
         // 페이드 인
         elapsedTime = 0f;

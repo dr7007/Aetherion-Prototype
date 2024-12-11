@@ -38,6 +38,14 @@ public class PlayerWeaponChange : MonoBehaviour
         }
     }
 
+    public void Init()
+    {
+        anim.SetLayerWeight(0, 1);
+        anim.SetLayerWeight(1, 0);
+        anim.Play("Nothing", 1);
+        curWeaponNum = 0;
+    }
+
     // 검으로 바꾸는 이벤트 콜백
     public void ChangeSword()
     {
