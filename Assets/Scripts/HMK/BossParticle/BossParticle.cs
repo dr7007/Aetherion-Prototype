@@ -38,6 +38,20 @@ public class BossParticle : MonoBehaviour
                 DisableTrail(noattack); // 0.1초 일찍 TrailRenderer 비활성화
             }
         }
+        if (stateInfo.IsName("JumpAttack1"))
+        {
+            if (stateInfo.normalizedTime < trailEndOffset)
+            {
+
+                EnableTrail(noattack);
+
+            }
+            else
+            {
+
+                DisableTrail(noattack); // 0.1초 일찍 TrailRenderer 비활성화
+            }
+        }
         if (stateInfo.IsName("ResponsiveAttack"))
         {
             if (stateInfo.normalizedTime < trailEndOffset)
