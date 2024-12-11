@@ -41821,6 +41821,8 @@ MonoBehaviour:
   fadeOut: {fileID: 0}
   loading: {fileID: 0}
   footstep: {fileID: 8300000, guid: a1c68c336c9648745a976af8c33c75f0, type: 3}
+  swordAttack: {fileID: 8300000, guid: 8e5eb619d2af7e84985a02a9c8ef96ad, type: 3}
+  axeAttack: {fileID: 0}
   comboOn: 0
   combo2On: 0
   evasion: 0

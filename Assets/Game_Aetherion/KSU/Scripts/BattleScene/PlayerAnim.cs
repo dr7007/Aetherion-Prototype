@@ -30,6 +30,8 @@ public class PlayerAnim : MonoBehaviour
     [SerializeField] private Image fadeOut;
     [SerializeField] private GameObject loading;
     [SerializeField] private AudioClip footstep;
+    [SerializeField] private AudioClip swordAttack;
+    [SerializeField] private AudioClip axeAttack;
 
     private PlayerMove moveInfo;
     private PlayerBattle battleInfo;
@@ -116,7 +118,19 @@ public class PlayerAnim : MonoBehaviour
     private void FootStep()
     {
         // 이벤트가 발생하면 발소리 사운드 재생
-        AudioSource.PlayClipAtPoint(footstep, Camera.main.transform.position);
+        AudioSource.PlayClipAtPoint(footstep, followCam.transform.position, 0.5f);
+    }
+
+    private void SwordAttack()
+    {
+        // 이벤트가 발생하면 발소리 사운드 재생
+        AudioSource.PlayClipAtPoint(swordAttack, followCam.transform.position, 0.5f);
+    }
+
+    private void AxeAttack()
+    {
+        // 이벤트가 발생하면 발소리 사운드 재생
+        AudioSource.PlayClipAtPoint(axeAttack, followCam.transform.position, 0.5f);
     }
     #endregion
 
