@@ -34,6 +34,20 @@ public class BossParticle : MonoBehaviour
                 DisableTrail(noattack); // 0.1초 일찍 TrailRenderer 비활성화
             }
         }
+        if (stateInfo.IsName("ResponsiveAttack"))
+        {
+            if (stateInfo.normalizedTime < trailEndOffset)
+            {
+
+                EnableTrail(noattack);
+
+            }
+            else
+            {
+
+                DisableTrail(noattack); // 0.1초 일찍 TrailRenderer 비활성화
+            }
+        }
         if (stateInfo.IsName("FirstDetect"))
         {
             if (stateInfo.normalizedTime < trailEndOffset)
@@ -56,7 +70,7 @@ public class BossParticle : MonoBehaviour
             Debug.Log("FirstAttackParticle 이벤트 실행됨: 파티클 실행");
         
     }
-    public void FirstAttackTeleport()
+    public void tp()
     {
         teleportParticleSystem2.Play();
         Debug.Log("텔포 후");

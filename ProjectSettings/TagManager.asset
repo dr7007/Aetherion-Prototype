@@ -9,6 +9,9 @@ TagManager:
   - MonsterWeapon
   - Evasion
   - Blocking
+  - Floor
+  - Pilar
+  - pilar
   layers:
   - Default
   - TransparentFX

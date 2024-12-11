@@ -24,7 +24,7 @@ public class ScreenHitEffect : MonoBehaviour
     public void TriggerHitEffect()
     {
         isHit = true; //활성화 되면
-        intensity = -0.7f; //-0.5만큼 왜곡
+        intensity = -0.6f; //-0.5만큼 왜곡
     }
 
     private void Update()
