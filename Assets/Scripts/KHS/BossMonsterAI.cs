@@ -578,13 +578,8 @@ public class BossMonsterAI : MonoBehaviour
                     (
                         new List<INode>()
                         {
-                            new SequenceNode
-                            (
-                                new List<INode>()
-                                {
-                                    new ActionNode(JudgeWalkCheck)
-                                }
-                            ),
+                            new ActionNode(JudgeWalkCheck),
+                            new ActionNode(PhaseCheck),
                             new SequenceNode
                             (
                                 new List<INode>()
@@ -715,6 +710,16 @@ public class BossMonsterAI : MonoBehaviour
             }
         }
         // 애니메이션 상태가 맞지 않을 경우 Failure 반환
+        return INode.ENodeState.ENS_Failure;
+    }
+
+    INode.ENodeState PhaseCheck()
+    {
+        if((currentHp / maxHp) <= 0.05f)
+        {
+            anim.SetTrigger(_PHASE2_ANIM_TRIGGER_NAME);
+            return INode.ENodeState.ENS_Success;
+        }
         return INode.ENodeState.ENS_Failure;
     }
 
