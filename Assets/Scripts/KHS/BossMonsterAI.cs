@@ -35,18 +35,25 @@ public class BossMonsterAI : MonoBehaviour
     #region Delegate Region
     
     public delegate void OnHpChangedDelegate(float currentHp, float maxHp);     // Boss HP 변화값을 UI에 전달하기 위한 Delegate
+    public delegate void OnPhase2Delegate();
 
     #endregion
 
     #region Callback Region
 
     private OnHpChangedDelegate hpChangedCallback = null;                       // Boss HP 변화값을 UI에 전달하기 위한 Callback
-
+    private OnPhase2Delegate phase2Callback = null;
 
     public OnHpChangedDelegate HpChangedCallback
     {
         get {  return hpChangedCallback; }
         set { hpChangedCallback = value; }
+    }
+
+    public OnPhase2Delegate Phase2DCallback
+    {
+        get { return phase2Callback; }
+        set { phase2Callback = value; }
     }
 
     #endregion
@@ -115,6 +122,7 @@ public class BossMonsterAI : MonoBehaviour
     private const string _DETECT_ANIM_BOOL_NAME = "Detect";                     // Boss의 실시간 Player Detect 체크 트리거 (범위 내 Player가 존재 시 On, 미존재 시 Off)
     private const string _JUMPATK_ANIM_BOOL_NAME = "JumpAtk";
     private const string _HEAL_ANIM_BOOL_NAME = "nowheal";
+    private const string _PHASE2_ANIM_BOOL_NAME = "2ndPhase";                // Boss의 2페이즈 판단. (HP <= 10% 일때 On)
     
 
     // 애니메이터 Int Parameter
@@ -135,7 +143,6 @@ public class BossMonsterAI : MonoBehaviour
 
     // 단방향 트리거
     private const string _DIE_ANIM_TRIGGER_NAME = "Die";                        // Boss의 HP가 0이 될 시 그 즉시 die 트리거 활성화 (Hp = 0일 때 On)
-    private const string _PHASE2_ANIM_TRIGGER_NAME = "2ndPhase";                // Boss의 2페이즈 판단. (HP <= 10% 일때 On)
 
     #endregion
 
@@ -221,6 +228,7 @@ public class BossMonsterAI : MonoBehaviour
         // 보스 사망 처리
         if (currentHp <= 0)
         {
+            phase2Callback?.Invoke();
             isheal = false;
             anim.SetBool(_HEAL_ANIM_BOOL_NAME, false);
             anim.SetTrigger(_DIE_ANIM_TRIGGER_NAME);
@@ -579,7 +587,6 @@ public class BossMonsterAI : MonoBehaviour
                         new List<INode>()
                         {
                             new ActionNode(JudgeWalkCheck),
-                            new ActionNode(PhaseCheck),
                             new SequenceNode
                             (
                                 new List<INode>()
@@ -710,16 +717,6 @@ public class BossMonsterAI : MonoBehaviour
             }
         }
         // 애니메이션 상태가 맞지 않을 경우 Failure 반환
-        return INode.ENodeState.ENS_Failure;
-    }
-
-    INode.ENodeState PhaseCheck()
-    {
-        if((currentHp / maxHp) <= 0.05f)
-        {
-            anim.SetTrigger(_PHASE2_ANIM_TRIGGER_NAME);
-            return INode.ENodeState.ENS_Success;
-        }
         return INode.ENodeState.ENS_Failure;
     }
 
