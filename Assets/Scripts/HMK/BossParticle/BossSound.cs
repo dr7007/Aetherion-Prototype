@@ -4,15 +4,25 @@ public class BossSound : MonoBehaviour
 {
     [SerializeField] AudioClip attack;
     [SerializeField] AudioClip bangsound;
+    [SerializeField] AudioClip houling;
+    [SerializeField] AudioClip step2;
+    [SerializeField] AudioClip healing;
+    [SerializeField] AudioClip break2;
     
     private void First()
     {
         AudioSource.PlayClipAtPoint(attack, gameObject.transform.position, 2f);
+        AudioSource.PlayClipAtPoint(houling, gameObject.transform.position, 2f);
     }
     private void FirstDetect()
     {
         AudioSource.PlayClipAtPoint(attack, gameObject.transform.position, 2f);
     }
+    private void break1()
+    {
+        AudioSource.PlayClipAtPoint(break2, gameObject.transform.position, 2f);
+    }
+    
     private void ResponAttack()
     {
         AudioSource.PlayClipAtPoint(attack, gameObject.transform.position, 2f);
@@ -24,6 +34,22 @@ public class BossSound : MonoBehaviour
     private void No2()
     {
         AudioSource.PlayClipAtPoint(attack, gameObject.transform.position, 2f);
+    }
+    private void heal()
+    {
+        AudioSource.PlayClipAtPoint(healing, gameObject.transform.position, 2f);
+    }
+    private void step()
+    {
+        AudioSource.PlayClipAtPoint(step2, gameObject.transform.position, 2f);
+    }
+    private void step1()
+    {
+        AudioSource.PlayClipAtPoint(step2, gameObject.transform.position, 2f);
+    }
+    private void step3()
+    {
+        AudioSource.PlayClipAtPoint(step2, gameObject.transform.position, 2f);
     }
     private void No3()
     {
