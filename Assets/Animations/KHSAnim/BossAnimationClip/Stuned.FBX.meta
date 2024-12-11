@@ -768,7 +768,7 @@ ModelImporter:
       bodyMask: 01000000010000000100000001000000010000000100000001000000010000000100000001000000010000000100000001000000
       curves: []
       events:
-      - time: 0.9180779
+      - time: 0.98367345
         functionName: StunEnd
         data: 
         objectReferenceParameter: {fileID: 11500000, guid: 201aef397f5431d46bf017b650584d8f, type: 3}
