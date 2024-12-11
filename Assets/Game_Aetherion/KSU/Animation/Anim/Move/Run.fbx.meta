@@ -56,9 +56,16 @@ ModelImporter:
       curves: []
       events:
       - time: 0.41881445
-        functionName: NewEvent
+        functionName: FootStep
         data: 
-        objectReferenceParameter: {instanceID: 0}
+        objectReferenceParameter: {fileID: 11500000, guid: da5000581862c7549bc64049df2c9d41, type: 3}
+        floatParameter: 0
+        intParameter: 0
+        messageOptions: 0
+      - time: 0.88148147
+        functionName: FootStep
+        data: 
+        objectReferenceParameter: {fileID: 11500000, guid: da5000581862c7549bc64049df2c9d41, type: 3}
         floatParameter: 0
         intParameter: 0
         messageOptions: 0

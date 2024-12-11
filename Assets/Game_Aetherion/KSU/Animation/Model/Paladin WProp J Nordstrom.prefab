@@ -41497,11 +41497,6 @@ MonoBehaviour:
   combo3Trail: {fileID: 7383697716315662428}
   ComboC1Trail: {fileID: 9179634604103934592}
   ComboC2Trail: {fileID: 6656320085172242252}
-  guard: {fileID: 2236151994313950242}
-  targetAnimationStates:
-  - Combo1
-  - Combo2
-  - Combo3
 --- !u!4 &9201811132473609760 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 1986443258684733985, guid: 2d045258da1ec534eb3c26fa7aa09cde, type: 3}
@@ -41821,14 +41816,22 @@ MonoBehaviour:
   fadeOut: {fileID: 0}
   loading: {fileID: 0}
   footstep: {fileID: 8300000, guid: a1c68c336c9648745a976af8c33c75f0, type: 3}
-  swordAttack: {fileID: 8300000, guid: 8e5eb619d2af7e84985a02a9c8ef96ad, type: 3}
-  axeAttack: {fileID: 0}
+  swordAttack1: {fileID: 8300000, guid: 60856c416b672284d9027af79851ae50, type: 3}
+  swordAttack2: {fileID: 8300000, guid: 1eedd97f08ebbaa418b239db4d6b2c10, type: 3}
+  swordAttack3: {fileID: 8300000, guid: 5ff914b9cf7262a4d88e6d8bd1eee9de, type: 3}
+  swordAttack4: {fileID: 8300000, guid: d4d0b57d6af65dc43b61cbeecdbac7a6, type: 3}
+  swordAttack5: {fileID: 8300000, guid: 68097758f6fb3da49b3806c5c5d2be24, type: 3}
+  axeAttack: {fileID: 8300000, guid: eb9adf58143eed640865a752767e0c2d, type: 3}
+  spearAttack: {fileID: 8300000, guid: d9a10e7f83e9ae3469644a4255176bad, type: 3}
+  block: {fileID: 8300000, guid: 991eb6191726dea429f772c699861590, type: 3}
   comboOn: 0
   combo2On: 0
   evasion: 0
   blocking: 0
   hitCombo: 0
   critical: 0
+  guardbreak: 0
+  healbane: 0
 --- !u!114 &5597066719079295186
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -42193,10 +42196,5 @@ PrefabInstance:
 --- !u!4 &1145189684166204160 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 8461846582903198423, guid: ccf28ea29cf499744ac31bab90073aba, type: 3}
-  m_PrefabInstance: {fileID: 8829873666392541655}
-  m_PrefabAsset: {fileID: 0}
---- !u!1 &2236151994313950242 stripped
-GameObject:
-  m_CorrespondingSourceObject: {fileID: 7314526620251459061, guid: ccf28ea29cf499744ac31bab90073aba, type: 3}
   m_PrefabInstance: {fileID: 8829873666392541655}
   m_PrefabAsset: {fileID: 0}
