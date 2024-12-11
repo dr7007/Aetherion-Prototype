@@ -1,34 +1,61 @@
+using System;
 using UnityEngine;
 
 public class PillarManager : MonoBehaviour
 {
-    [SerializeField] private GameObject[] pillars; 
+    public GameObject[] pillars; // 기둥 배열
+    public Action OnAllPillarsDestroyed; // 모든 기둥이 없어질 때 호출되는 콜백
 
-    private void OnTriggerEnter(Collider other)
+    private int remainingPillars;
+
+    private void Start()
     {
-        if (other.CompareTag("Player")) 
+        remainingPillars = pillars.Length;
+
+        // 기본 콜백 설정
+        if (OnAllPillarsDestroyed == null)
         {
-            for (int i = 0; i < pillars.Length; i++)
+            OnAllPillarsDestroyed = () => Debug.Log("모든 기둥이 파괴되었습니다!");
+        }
+    }
+
+    public void DestroyPillar(GameObject pillar)
+    {
+        // 기둥 제거
+        for (int i = 0; i < pillars.Length; i++)
+        {
+            if (pillars[i] == pillar)
             {
-                if (pillars[i] != null) 
+                Destroy(pillars[i]);
+                pillars[i] = null; // 배열에서 제거
+                remainingPillars--;
+
+                // 모든 기둥이 없어지면 콜백 호출
+                if (remainingPillars <= 0)
                 {
-                    Collider pillarCollider = pillars[i].GetComponent<Collider>();
-                    if (pillarCollider != null && pillarCollider.bounds.Intersects(other.bounds))
-                    {
-                        DestroyPillar(i);
-                        break; 
-                    }
+                    OnAllPillarsDestroyed?.Invoke();
                 }
+                break;
             }
         }
     }
 
-    private void DestroyPillar(int index)
+    private void OnTriggerEnter(Collider other)
     {
-        // 기둥 파괴
-        Destroy(pillars[index]);
-        pillars[index] = null; 
+        // Monster 태그를 가진 오브젝트가 충돌했을 때
+        if (other.CompareTag("Monster"))
+        {
+            foreach (GameObject pillar in pillars)
+            {
+                if (pillar != null && other.gameObject == pillar)
+                {
+                    DestroyPillar(pillar);
+                    break;
+                }
+            }
+        }
     }
 }
+
 
 
