@@ -11,13 +11,17 @@ public class PillarManager : MonoBehaviour
     private void Start()
     {
         remainingPillars = pillars.Length;
+        Debug.Log($"남은 기둥 수: {remainingPillars}");
 
-        // 기본 콜백 설정
-        if (OnAllPillarsDestroyed == null)
+        foreach (GameObject pillar in pillars)
         {
-            OnAllPillarsDestroyed = () => Debug.Log("모든 기둥이 파괴되었습니다!");
+            if (pillar != null)
+            {
+                Debug.Log($"기둥 등록: {pillar.name}");
+            }
         }
     }
+
 
     public void DestroyPillar(GameObject pillar)
     {
@@ -43,8 +47,9 @@ public class PillarManager : MonoBehaviour
     private void OnTriggerEnter(Collider other)
     {
         // Monster 태그를 가진 오브젝트가 충돌했을 때
-        if (other.CompareTag("Monster"))
+        if (other.CompareTag("Player"))
         {
+            Debug.Log("기둥과 충돌");
             foreach (GameObject pillar in pillars)
             {
                 if (pillar != null && other.gameObject == pillar)

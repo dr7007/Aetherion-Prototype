@@ -11,6 +11,7 @@ TagManager:
   - Blocking
   - Floor
   - Pilar
+  - pilar
   layers:
   - Default
   - TransparentFX

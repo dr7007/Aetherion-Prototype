@@ -3415,6 +3415,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: PlayerHPBar
       objectReference: {fileID: 0}
+    - target: {fileID: 3155491338521090832, guid: c92fc2ee5fe1b144ea29e57d54337c40, type: 3}
+      propertyPath: m_IsActive
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 3159423791911240459, guid: c92fc2ee5fe1b144ea29e57d54337c40, type: 3}
       propertyPath: m_Pivot.x
       value: 0.5
@@ -3495,6 +3499,21 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+<<<<<<< HEAD
+=======
+    - target: {fileID: 6275851762112782187, guid: c92fc2ee5fe1b144ea29e57d54337c40, type: 3}
+      propertyPath: m_AnchoredPosition.x
+      value: -400
+      objectReference: {fileID: 0}
+    - target: {fileID: 6275851762112782187, guid: c92fc2ee5fe1b144ea29e57d54337c40, type: 3}
+      propertyPath: m_AnchoredPosition.y
+      value: -50
+      objectReference: {fileID: 0}
+    - target: {fileID: 7157645645543824716, guid: c92fc2ee5fe1b144ea29e57d54337c40, type: 3}
+      propertyPath: m_text
+      value: Player
+      objectReference: {fileID: 0}
+>>>>>>> 316ed48bf1869671cf16f515ca81d690890be5f0
     - target: {fileID: 7157645645543824716, guid: c92fc2ee5fe1b144ea29e57d54337c40, type: 3}
       propertyPath: m_hasFontAssetChanged
       value: 0
