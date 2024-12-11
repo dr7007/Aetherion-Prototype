@@ -29,6 +29,7 @@ public class PlayerAnim : MonoBehaviour
     [SerializeField] private GameObject DieImage;
     [SerializeField] private Image fadeOut;
     [SerializeField] private GameObject loading;
+    [SerializeField] private AudioClip footstep;
 
     private PlayerMove moveInfo;
     private PlayerBattle battleInfo;
@@ -110,6 +111,12 @@ public class PlayerAnim : MonoBehaviour
     private void CriticalOff()
     {
         critical = false;
+    }
+
+    private void FootStep()
+    {
+        // 이벤트가 발생하면 발소리 사운드 재생
+        AudioSource.PlayClipAtPoint(footstep, Camera.main.transform.position);
     }
     #endregion
 

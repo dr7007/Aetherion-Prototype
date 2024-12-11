@@ -41818,6 +41818,9 @@ MonoBehaviour:
   battleModeShiftSpeed: 1.5
   followCam: {fileID: 0}
   DieImage: {fileID: 0}
+  fadeOut: {fileID: 0}
+  loading: {fileID: 0}
+  footstep: {fileID: 8300000, guid: a1c68c336c9648745a976af8c33c75f0, type: 3}
   comboOn: 0
   combo2On: 0
   evasion: 0
@@ -41843,6 +41846,8 @@ MonoBehaviour:
   shieldTime: 1
   sword: {fileID: 6744770363226793581}
   axe: {fileID: 387813719515523616}
+  PlayerMaxHp: 100
+  PlayerCurHp: 0
   reactCurve:
     serializedVersion: 2
     m_Curve:
