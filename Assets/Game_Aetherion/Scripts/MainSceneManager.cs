@@ -16,12 +16,22 @@ public class MainSceneManager : MonoBehaviour
 
     [SerializeField] private Animator BossAnimator = null;
     [SerializeField] private Animator PhaseBossAnimator = null;
+    [SerializeField] private Animator DieBossAnimator = null;
     [SerializeField] private GameObject fadeOut = null;
+    [SerializeField] private GameObject fadeOut2 = null;
+    [SerializeField] private GameObject fadeWhite = null;
+    [SerializeField] private GameObject gameClear = null;
     [SerializeField] private GameObject phaseBoss = null;
     [SerializeField] private GameObject phaseCam = null;
 
     [SerializeField] private GameObject CanvasUI = null;
     [SerializeField] private GameObject PhaseBossWeapon = null;
+    [SerializeField] private Boss2PhaseAI boss2die = null;
+    [SerializeField] private GameObject Audio1 = null;
+    [SerializeField] private GameObject Audio2 = null;
+
+    [SerializeField] private GameObject DieBoss = null;
+    [SerializeField] private GameObject DieCam = null;
 
     private string ClickName = null;
     private Animator playerAnimInfo;
@@ -37,11 +47,16 @@ public class MainSceneManager : MonoBehaviour
         playerWeaponInfo = player.GetComponent<PlayerWeaponChange>();
         playerBattleInfo = player.GetComponent<PlayerBattle>();
 
+        // 나중에 보스죽으면 콜백받을꺼임.
+        boss2die.bossDieCallback += BossDie;
+
         // 프리펩에 저장된 정보를 가져옴.
         ClickName = PlayerPrefs.GetString("ClickBtn");
 
         // 플레이어 위치를 입력에 맞게 초기화
         SettingScene(ClickName);
+
+        loading.SetActive(true);
 
         // 로딩씬 2초후 닫기
         Invoke("DisableLoading", 2f);
@@ -102,11 +117,14 @@ public class MainSceneManager : MonoBehaviour
         // 보스 정보(애니메이션 상태, 체력) 초기화 - 페이즈 1일떄와 2일떄와 다름.
         if (!phase2)
         {
+            // 체력 초기화 하는 코드
             InitBoss1AnimationParameter();
             boss.transform.position = BossStartPosition;
         }
         else
         {
+            // 체력 초기화 하는 코드?
+            // 기둥 초기화 하는 코드?
             InitBoss2AnimationParameter();
             boss.transform.position = Phase2Boss;
         }
@@ -178,8 +196,15 @@ public class MainSceneManager : MonoBehaviour
 
     }
 
+    private void BossDie()
+    {
+        StartCoroutine("BossDieScene");
+    }
+
     private IEnumerator PhaseChange()
     {
+        // 브금 끄기
+        Audio1.SetActive(false);
         phase2 = true;
 
         //UI 끄고
@@ -248,6 +273,11 @@ public class MainSceneManager : MonoBehaviour
         phaseBoss.SetActive(true);
         followCam.SetActive(true);
 
+        if (playerAnimInfo.applyRootMotion == false)
+        {
+            playerAnimInfo.applyRootMotion = !playerAnimInfo.applyRootMotion;
+        }
+
         yield return new WaitForSeconds(1f);
 
         // 페이드 아웃한거 비활성화
@@ -261,8 +291,72 @@ public class MainSceneManager : MonoBehaviour
 
         // phase2에 맞게 수정
         // 플레이어 시작지점
-        // 보스 시작지점
-        // 
+        // 보스 시작지점 (이건 알아서 되어있음)
+        // 브금 바꾸기
         StartPosition = Phase2Player;
+        Audio2.SetActive(true);
+
+        yield return new WaitForSeconds(1f);
+
+        // 온필드 on
+        PhaseBossAnimator.SetTrigger("OnField");
+
     }
+
+    private IEnumerator BossDieScene()
+    {
+        // 다시 페이드 아웃
+        fadeOut2.SetActive(true);
+
+        //플레이어, 카메라, 보스 비활성화
+        player.SetActive(false);
+        phaseBoss.SetActive(false);
+        followCam.SetActive(false);
+        CanvasUI.SetActive(false);
+
+        //다이 프리펩, 카메라 on
+        DieBoss.SetActive(true);
+        DieCam.SetActive(true);
+
+        // 페이드 인
+        Image fadeOutImg = fadeOut2.GetComponent<Image>();
+
+        float elapsedTime = 0f;
+        while (elapsedTime < 1.5f)
+        {
+            Color color = fadeOutImg.color;
+            color.a = 1f - (elapsedTime / 1.5f);
+            fadeOutImg.color = color;
+
+            elapsedTime += Time.deltaTime;
+            yield return null;
+        }
+
+        // 보스 죽는 애니메이션
+        DieBossAnimator.SetTrigger("Die");
+
+        yield return new WaitForSeconds(15f);
+
+        // 이미지의 Lerp로 알파값을 올리고
+        Image fadeWhiteImg = fadeWhite.GetComponent<Image>();
+
+        elapsedTime = 0f;
+        while (elapsedTime < 1.5f)
+        {
+            Color color = fadeWhiteImg.color;
+            color.a = (elapsedTime / 1.5f);
+            fadeWhiteImg.color = color;
+
+            elapsedTime += Time.deltaTime;
+            yield return null;
+        }
+
+        yield return new WaitForSeconds(1f);
+
+        // game Clear 메세지 출력
+        gameClear.SetActive(true);
+
+        yield return null;
+    }
+
 }
