@@ -1,5 +1,6 @@
 using System.Collections;
 using UnityEngine;
+using UnityEngine.Rendering;
 using UnityEngine.UI;
 
 // 플레이어 애니메이션 관련된 스크립트
@@ -42,6 +43,8 @@ public class PlayerAnim : MonoBehaviour
     public bool blocking = false;
     public bool hitCombo = false;
     public bool critical = false;
+    public bool guardbreak = false;
+    public bool healbane = false;
     private PlayerWeaponChange pWeaponChange;
 
     private float attackStamina = 10f;
@@ -113,6 +116,26 @@ public class PlayerAnim : MonoBehaviour
     private void CriticalOff()
     {
         critical = false;
+    }
+
+    private void GuardBreakOn()
+    {
+        guardbreak = true;
+    }
+
+    private void GuardBreakOff()
+    {
+        guardbreak = false;
+    }
+
+    private void HealBaneOn()
+    {
+        healbane = true;
+    }
+
+    private void HealBaneOff()
+    {
+        healbane = false;
     }
 
     private void FootStep()

@@ -180,6 +180,8 @@ public class PlayerBattle : MonoBehaviour
             // 공격 상태 초기화
             pAnim.hitCombo = false;
             pAnim.critical = false;
+            pAnim.guardbreak = false;
+            pAnim.healbane = false;
         }
         
     }
