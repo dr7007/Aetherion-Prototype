@@ -74,17 +74,7 @@ public class SwordTrail : MonoBehaviour
                 DisableParticleGameObject(ComboC1Trail); // GameObject와 파티클 비활성화
             }
         }
-        else if (stateInfo.IsName("ComboC2"))
-        {
-            if (stateInfo.normalizedTime < trailnomaloffset)
-            {
-                EnableParticleGameObject(ComboC2Trail); // GameObject와 파티클 활성화 및 실행
-            }
-            else
-            {
-                DisableParticleGameObject(ComboC2Trail); // GameObject와 파티클 비활성화
-            }
-        }
+        
         else if (stateInfo.IsName("Block"))
         {
             if (stateInfo.normalizedTime < trailnomaloffset)
