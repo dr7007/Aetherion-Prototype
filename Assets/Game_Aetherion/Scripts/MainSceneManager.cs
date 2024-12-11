@@ -1,6 +1,6 @@
 using System.Collections;
 using UnityEngine;
-using static PlayerAnim;
+using UnityEngine.UI;
 
 public class MainSceneManager : MonoBehaviour
 {
@@ -10,11 +10,23 @@ public class MainSceneManager : MonoBehaviour
     [SerializeField] private GameObject followCam = null;
     [SerializeField] private Vector3 TestPosition = Vector3.zero;
     [SerializeField] private Vector3 StartPosition = Vector3.zero;
-    
+    [SerializeField] private Vector3 Phase2Player = Vector3.zero;
+    [SerializeField] private Vector3 Phase2Boss = Vector3.zero;
+
+    [SerializeField] private Animator BossAnimator = null;
+    [SerializeField] private Animator PhaseBossAnimator = null;
+    [SerializeField] private GameObject fadeOut = null;
+    [SerializeField] private GameObject phaseBoss = null;
+    [SerializeField] private GameObject phaseCam = null;
+
+    [SerializeField] private GameObject CanvasUI = null;
+    [SerializeField] private GameObject PhaseBossWeapon = null;
+
     private string ClickName = null;
     private Animator playerAnimInfo;
     private PlayerWeaponChange playerWeaponInfo;
     private PlayerBattle playerBattleInfo;
+    private bool coroutineStart = false;
 
     private void Start()
     {
@@ -34,6 +46,19 @@ public class MainSceneManager : MonoBehaviour
 
         // 플레이어가 죽고 타이밍 맞게 콜백을 받으면 상태를 초기화 하는 함수 실행
         player.GetComponent<PlayerAnim>().diedelegate += DieCallback;
+    }
+
+    private void Update()
+    {
+        if (BossAnimator.GetBool("Die") == true)
+        {
+            if (!coroutineStart)
+            {
+                StartCoroutine(PhaseChange());
+            }
+
+            coroutineStart = true;
+        }
     }
 
     private void SettingScene(string _ClickBtn)
@@ -115,5 +140,87 @@ public class MainSceneManager : MonoBehaviour
         playerAnimInfo.Play("Idle", 0);
         playerWeaponInfo.Init();
         playerWeaponInfo.ChangeSword();
+    }
+
+    private IEnumerator PhaseChange()
+    {
+        //UI 끄고
+        CanvasUI.SetActive(false);
+
+        // 바로 페이드 아웃 setActive 하고
+        fadeOut.SetActive(true);
+
+        // 플레이어, 카메라, 보스 비활성화
+        player.SetActive(false);
+        boss.SetActive(false);
+        followCam.SetActive(false);
+
+        // phase보스와 캠을 활성화
+        phaseBoss.SetActive(true);
+        phaseCam.SetActive(true);
+
+        // 1초정도 검정화면 지속
+        yield return new WaitForSeconds(1f);
+
+        // 페이드 인
+        Image fadeOutImg = fadeOut.GetComponent<Image>();
+
+        float elapsedTime = 0f;
+        while (elapsedTime < 1.5f)
+        {
+            Color color = fadeOutImg.color;
+            color.a = 1f - (elapsedTime / 1.5f);
+            fadeOutImg.color = color;
+
+            elapsedTime += Time.deltaTime;
+            yield return null;
+        }
+
+        // trigger on 시켜서 보스 애니메이션 하고
+        PhaseBossAnimator.SetTrigger("Phase");
+       
+        // 3초후 페이드 아웃
+        yield return new WaitForSeconds(6f);
+
+        // 페이드 아웃
+        elapsedTime = 0f;
+        while (elapsedTime < 1f)
+        {
+            Color color = fadeOutImg.color;
+            color.a = elapsedTime / 1f;
+            fadeOutImg.color = color;
+
+            elapsedTime += Time.deltaTime;
+            yield return null;
+        }
+
+        Color colorB = fadeOutImg.color;
+        colorB.a = 255;
+        fadeOutImg.color = colorB;
+
+        // 플레이어와 보스를 이동시키고
+        player.transform.position = Phase2Player;
+        phaseBoss.transform.position = Phase2Boss;
+
+        // 보스 바라보는 카메라만 비활성화
+        phaseCam.SetActive(false);
+
+        // 플레이어, 카메라, 보스 활성화
+        player.SetActive(true);
+        phaseBoss.SetActive(true);
+        followCam.SetActive(true);
+
+        yield return new WaitForSeconds(1f);
+
+        // 페이드 아웃한거 비활성화
+        fadeOut.SetActive(false);
+
+        // UI 키고
+        CanvasUI.SetActive(true);
+        
+        // 무기 때고
+        PhaseBossWeapon.SetActive(false);
+
+
     }
 }

@@ -8,7 +8,7 @@ public class Pillar : MonoBehaviour
     {
         
 
-        if (other.CompareTag("Player"))
+        if (other.CompareTag("BossMonster"))
         {
             Destroy(gameObject); // ±âµÕ ¿ÀºêÁ§Æ® ÆÄ±«
             Destory.Play();

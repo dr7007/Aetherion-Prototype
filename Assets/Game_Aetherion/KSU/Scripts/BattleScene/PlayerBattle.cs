@@ -27,7 +27,7 @@ public class PlayerBattle : MonoBehaviour
 
     public float PlayerMaxHp = 100f;
     public float PlayerCurHp;
-    private float PlayerAtk = 3000f;
+    private float PlayerAtk = 3000000f;
     private float playerMaxStamina = 100f;
     private float playerCurStamina;
     private int curWeaponNum;
