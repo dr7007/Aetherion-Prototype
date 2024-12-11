@@ -1,4 +1,5 @@
 using UnityEngine;
+using System.Collections;
 
 public class BossParticle : MonoBehaviour
 {
@@ -7,9 +8,12 @@ public class BossParticle : MonoBehaviour
     [SerializeField] private GameObject StartAttack;
     [SerializeField] private ParticleSystem teleportParticleSystem;
     [SerializeField] private ParticleSystem teleportParticleSystem2;
-    public string[] targetAnimationStates = { "NoReactAttack", "FirstDetect" };
-
+    [SerializeField] private GameObject bossheal;
+    public string[] targetAnimationStates = { "NoReactAttack", "FirstDetect" , "Healing" };
+    [SerializeField] private AudioSource audioSource;
     private float trailEndOffset = 0.8f;
+    private bool IsHeal = false;
+
     private void Start()
     {
         animator = GetComponentInParent<Animator>();
@@ -47,6 +51,18 @@ public class BossParticle : MonoBehaviour
 
                 DisableTrail(noattack); // 0.1초 일찍 TrailRenderer 비활성화
             }
+        }
+        if (stateInfo.IsName("Healing"))
+        {
+            if (!IsHeal)
+            {
+                IsHeal = true;
+                Debug.Log("코루틴이 몇번 호출될까");
+                StartCoroutine(Particle());
+            }
+
+
+
         }
         if (stateInfo.IsName("FirstDetect"))
         {
@@ -120,6 +136,21 @@ public class BossParticle : MonoBehaviour
             particle.Play(); // 파티클 실행
         }
 
+    }
+    private IEnumerator Particle()
+    {
+        while (true)
+        {
+            bossheal.SetActive(true);
+            yield return new WaitForSeconds(1f); // 1초 대기
+            bossheal.SetActive(false);
+
+            Debug.Log("힐 파티클 실행됨");
+            // 힐밴 됬을때 -> BREAK
+            // if (animator.GetBool("힐상태") == false) break;
+        }
+
+        IsHeal = false;
     }
 
     // GameObject와 ParticleSystem 비활성화
