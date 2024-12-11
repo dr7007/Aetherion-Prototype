@@ -81,8 +81,8 @@ public class BossMonsterAI : MonoBehaviour
 
     #region Functional values
     
-    private const float GUARD_DEFAULT_INTERVAL = 10f;
-    private const float JUMPATK_DEFAULT_INTERVAL = 3f;
+    private const float GUARD_DEFAULT_INTERVAL = 5f;
+    private const float JUMPATK_DEFAULT_INTERVAL = 13f;
     private const float JUDGE_TIME_INTERVAL = 3f;
     private const float NOREACT_ATTACK_INTERVAL = 5f;
 
@@ -107,6 +107,7 @@ public class BossMonsterAI : MonoBehaviour
     // 애니메이터 Bool Parameter
     private const string _FIRSTDETECT_ANIM_BOOL_NAME = "FirstDetect";           // Boss의 시작연출 관리를 위한 First Detect 체크 트리거 (게임 시작 후 첫 Detect 이전까지 On, 첫 Detect 이후 Off)
     private const string _DETECT_ANIM_BOOL_NAME = "Detect";                     // Boss의 실시간 Player Detect 체크 트리거 (범위 내 Player가 존재 시 On, 미존재 시 Off)
+    private const string _JUMPATK_ANIM_BOOL_NAME = "JumpAtk";
 
     // 애니메이터 Int Parameter
     private const string _RANGE_ANIM_INT_NAME = "RangeLevel";                   // Boss의 기준으로 Player가 Detect되는 영역 레벨 값 (Range Level = 1, 2 ,3)
@@ -117,7 +118,6 @@ public class BossMonsterAI : MonoBehaviour
     private const string _DEFAULTATK_ANIM_TRIGGER_NAME = "DefaultAtk";          // Boss의 1페이즈 기본 공격 동작의 발동 트리거
     private const string _RESPATK_ANIM_TRIGGER_NAME = "RespAtk";                // Boss의 1페이즈 반응형 공격 동작의 발동 트리거
     private const string _GUARD_ANIM_TRIGGER_NAME = "OnGuard";
-    private const string _JUMPATK_ANIM_TRIGGER_NAME = "JumpAtk";
 
     // 보스 상태 유발 트리거
     private const string _CRITICAL_ANIM_TRIGGER_NAME = "Critical";              // 반응형 공격 도중 Critical 상태 체크용 트리거
@@ -501,7 +501,10 @@ public class BossMonsterAI : MonoBehaviour
         extraDamage = 0f;
     }
 
-    
+    public void healingEnd()
+    {
+        anim.SetBool(_JUMPATK_ANIM_BOOL_NAME, false);
+    }
 
     public void DieCall()
     {
@@ -565,14 +568,6 @@ public class BossMonsterAI : MonoBehaviour
                                             ),
                                         }
                                     ),
-                                }
-                            ),
-                            new SequenceNode
-                            (
-                                new List<INode>()
-                                {
-                                    new ActionNode(CheckRangeLevelThree),
-                                    new ActionNode(TPJAndHealing),
                                 }
                             ),
                         }
@@ -785,13 +780,13 @@ public class BossMonsterAI : MonoBehaviour
 
     INode.ENodeState JumpAttackEnemy()
     {
-        if (!anim.GetBool(_JUMPATK_ANIM_TRIGGER_NAME))
+        if (!anim.GetBool(_JUMPATK_ANIM_BOOL_NAME))
         {
             if (jumpATKCooldown >= JUMPATK_DEFAULT_INTERVAL)
             {
-                Debug.Log("점프공격 실행");
+                Debug.Log("점프공격 실행후 힐");
                 jumpATKCooldown = 0.0f;
-                anim.SetTrigger(_JUMPATK_ANIM_TRIGGER_NAME);
+                anim.SetBool(_JUMPATK_ANIM_BOOL_NAME, true);
                 return INode.ENodeState.ENS_Success;
             }
         }
