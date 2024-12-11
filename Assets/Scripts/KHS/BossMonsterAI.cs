@@ -23,6 +23,8 @@ public class BossMonsterAI : MonoBehaviour
     [SerializeField] private float maxHp = 30000f;                  // 보스의 최대 체력
     [SerializeField] private float currentHp;                       // 보스의 현제 체력
     [SerializeField] private float atk = 30f;                       // 보스의 공격력
+    [SerializeField] private float healvalue = 300f;
+    [SerializeField] private float healbaneDamage = 9000f;
 
     [Header("Collider")]
     [SerializeField] private Collider weaponCollider;               // 보스 무기의 콜라이더 (공격시 On/Off를 위함)
@@ -91,6 +93,10 @@ public class BossMonsterAI : MonoBehaviour
     private float extraDamage = 0f;
     private float damageRedemtion = 0.0f;
     private float judgeTime = 0f;
+    private float healTmp = 0f;
+    
+
+    private bool isheal = false;
     
 
     #endregion
@@ -108,6 +114,8 @@ public class BossMonsterAI : MonoBehaviour
     private const string _FIRSTDETECT_ANIM_BOOL_NAME = "FirstDetect";           // Boss의 시작연출 관리를 위한 First Detect 체크 트리거 (게임 시작 후 첫 Detect 이전까지 On, 첫 Detect 이후 Off)
     private const string _DETECT_ANIM_BOOL_NAME = "Detect";                     // Boss의 실시간 Player Detect 체크 트리거 (범위 내 Player가 존재 시 On, 미존재 시 Off)
     private const string _JUMPATK_ANIM_BOOL_NAME = "JumpAtk";
+    private const string _HEAL_ANIM_BOOL_NAME = "nowheal";
+    
 
     // 애니메이터 Int Parameter
     private const string _RANGE_ANIM_INT_NAME = "RangeLevel";                   // Boss의 기준으로 Player가 Detect되는 영역 레벨 값 (Range Level = 1, 2 ,3)
@@ -123,6 +131,7 @@ public class BossMonsterAI : MonoBehaviour
     private const string _CRITICAL_ANIM_TRIGGER_NAME = "Critical";              // 반응형 공격 도중 Critical 상태 체크용 트리거
     private const string _STUNNED_ANIM_TRIGGER_NAME = "IsStun";
     private const string _GUARDBREAK_ANIM_TRIGGER_NAME = "isGBreak";
+    private const string _HEALBANE_ANIM_TRIGGER_NAME = "healbane";
 
     // 단방향 트리거
     private const string _DIE_ANIM_TRIGGER_NAME = "Die";                        // Boss의 HP가 0이 될 시 그 즉시 die 트리거 활성화 (Hp = 0일 때 On)
@@ -139,6 +148,8 @@ public class BossMonsterAI : MonoBehaviour
     }
     private void Start()
     {
+        isheal = false;
+        anim.SetBool(_HEAL_ANIM_BOOL_NAME, false);
         anim.SetBool(_FIRSTDETECT_ANIM_BOOL_NAME, true);
         anim.SetBool(_DETECT_ANIM_BOOL_NAME, false);
         anim.SetInteger(_RANGE_ANIM_INT_NAME, 0);
@@ -162,6 +173,12 @@ public class BossMonsterAI : MonoBehaviour
     private void FixedUpdate()
     {
         DetectPlayer();
+        if (isheal)
+        {
+            anim.SetBool(_HEAL_ANIM_BOOL_NAME, true);
+            healTmp += Time.deltaTime;
+            HealSelf();
+        }
     }
 
     private void OnTriggerEnter(Collider _collider)
@@ -177,6 +194,10 @@ public class BossMonsterAI : MonoBehaviour
             if(anim.GetBool(_GUARD_ANIM_TRIGGER_NAME))
             {
                 HitGBreak(_collider);
+            }
+            if(isheal)
+            {
+                HitHealbane(_collider);
             }
 
             HitJudge(_collider);
@@ -200,6 +221,8 @@ public class BossMonsterAI : MonoBehaviour
         // 보스 사망 처리
         if (currentHp <= 0)
         {
+            isheal = false;
+            anim.SetBool(_HEAL_ANIM_BOOL_NAME, false);
             anim.SetTrigger(_DIE_ANIM_TRIGGER_NAME);
         }
     }
@@ -245,6 +268,24 @@ public class BossMonsterAI : MonoBehaviour
         {
             detectedPlayerTr = null;
             anim.SetBool(_DETECT_ANIM_BOOL_NAME, false);
+        }
+    }
+    private void HealSelf()
+    {
+        if (healTmp >= 1f)
+        {
+            healTmp = 0.0f;
+            Debug.Log("체력회복 전: " + currentHp);
+            currentHp += healvalue;
+            currentHp = Mathf.Min(currentHp, maxHp);
+            Debug.Log("체력회복 후: " + currentHp);
+            if(currentHp >= maxHp)
+            {
+                isheal = false;
+                anim.SetBool(_HEAL_ANIM_BOOL_NAME, false);
+                Debug.Log("회복 한계치");
+            }
+            
         }
     }
 
@@ -308,6 +349,22 @@ public class BossMonsterAI : MonoBehaviour
             {
                 Debug.Log("가드 브레이크 조건");
                 anim.SetTrigger(_GUARDBREAK_ANIM_TRIGGER_NAME);
+            }
+        }
+    }
+    private void HitHealbane(Collider _collider)
+    {
+        if (!hitTargets.Contains(_collider))
+        {
+            PlayerAnim HbaneAttack = _collider.GetComponentInParent<PlayerAnim>();
+
+            if (HbaneAttack.healbane)
+            {
+                Debug.Log("힐밴 조건");
+                isheal = false;
+                TakeDamage(healbaneDamage);
+                anim.SetBool(_HEAL_ANIM_BOOL_NAME, false);
+                anim.SetBool(_HEALBANE_ANIM_TRIGGER_NAME, true);
             }
         }
     }
@@ -504,6 +561,7 @@ public class BossMonsterAI : MonoBehaviour
     public void healingEnd()
     {
         anim.SetBool(_JUMPATK_ANIM_BOOL_NAME, false);
+        isheal = true;
     }
 
     public void DieCall()
