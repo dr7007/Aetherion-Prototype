@@ -10,7 +10,6 @@ public class PhaseBoss : MonoBehaviour
     {
         if (phaseChanged)
         {
-            Debug.Log("파티클 터지는 그거 들어와야함");
             particle.GetComponent<ParticleSystem>().Play();
             StartCoroutine(PauseParticle());
         }

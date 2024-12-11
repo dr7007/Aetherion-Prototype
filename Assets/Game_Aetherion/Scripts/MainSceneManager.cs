@@ -27,6 +27,7 @@ public class MainSceneManager : MonoBehaviour
     private PlayerWeaponChange playerWeaponInfo;
     private PlayerBattle playerBattleInfo;
     private bool coroutineStart = false;
+    private bool phase2 = false;
 
     private void Start()
     {
@@ -88,7 +89,7 @@ public class MainSceneManager : MonoBehaviour
         // 플레이어 애니메이션 초기화 및 무기레이어와 상태 초기화
         InitAnimationParameter();
 
-        // 플레이어 위치 (루트모션일때 이동 안되는 오류가 있어 잠시 끄고 위치 이동후 킴)
+        // 플레이어 위치 (캐릭터 컨트롤러와 충돌이 있을때 이동 안되는 오류가 있어 잠시 끄고 위치 이동후 킴)
         StartCoroutine(NoRootMotionForDie());
 
         // 플레이어 체력
@@ -97,23 +98,29 @@ public class MainSceneManager : MonoBehaviour
         // 카메라 상태 초기화
         followCam.SetActive(true);
 
-        // 보스 정보(애니메이션 상태, 체력) 초기화
+        // 보스 정보(애니메이션 상태, 체력) 초기화 - 페이즈 1일떄와 2일떄와 다름.
+        if (!phase2)
+        {
+
+        }
+        else
+        {
+
+        }
 
         // UI초기화 하는것도 필요한가..?
     }
 
-    // 0.5초간 rootmotion 끄는 함수
+    // 0.5초간 캐릭터 콜라이더 끄는 함수
     private IEnumerator NoRootMotionForDie()
     {
-        playerAnimInfo.applyRootMotion = !playerAnimInfo.applyRootMotion;
-
+        player.GetComponent<CharacterController>().enabled = false;
         yield return new WaitForSeconds(0.5f);
 
-        player.transform.position = TestPosition;
+        player.transform.position = StartPosition;
 
+        player.GetComponent<CharacterController>().enabled = true;
         yield return new WaitForSeconds(0.5f);
-
-        playerAnimInfo.applyRootMotion = !playerAnimInfo.applyRootMotion;
     }
 
     // 플레이어 애니메이션 초기화 및 무기레이어와 상태 초기화
@@ -144,6 +151,8 @@ public class MainSceneManager : MonoBehaviour
 
     private IEnumerator PhaseChange()
     {
+        phase2 = true;
+
         //UI 끄고
         CanvasUI.SetActive(false);
 
@@ -221,6 +230,10 @@ public class MainSceneManager : MonoBehaviour
         // 무기 때고
         PhaseBossWeapon.SetActive(false);
 
-
+        // phase2에 맞게 수정
+        // 플레이어 시작지점
+        // 보스 시작지점
+        // 
+        StartPosition = Phase2Player;
     }
 }
