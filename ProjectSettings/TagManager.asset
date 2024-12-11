@@ -12,6 +12,7 @@ TagManager:
   - Floor
   - Pilar
   - pilar
+  - BossMonster
   layers:
   - Default
   - TransparentFX

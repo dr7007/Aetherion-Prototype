@@ -777,6 +777,13 @@ ModelImporter:
         floatParameter: 0
         intParameter: 0
         messageOptions: 0
+      - time: 0.071428575
+        functionName: SwordAttack
+        data: 
+        objectReferenceParameter: {fileID: 11500000, guid: da5000581862c7549bc64049df2c9d41, type: 3}
+        floatParameter: 0
+        intParameter: 5
+        messageOptions: 0
       transformMask: []
       maskType: 3
       maskSource: {fileID: 101100000, guid: 3e4e408fdcc93ee468a1275b69104d63, type: 2}

@@ -31,8 +31,14 @@ public class PlayerAnim : MonoBehaviour
     [SerializeField] private Image fadeOut;
     [SerializeField] private GameObject loading;
     [SerializeField] private AudioClip footstep;
-    [SerializeField] private AudioClip swordAttack;
+    [SerializeField] private AudioClip swordAttack1;
+    [SerializeField] private AudioClip swordAttack2;
+    [SerializeField] private AudioClip swordAttack3;
+    [SerializeField] private AudioClip swordAttack4;
+    [SerializeField] private AudioClip swordAttack5;
     [SerializeField] private AudioClip axeAttack;
+    [SerializeField] private AudioClip spearAttack;
+    [SerializeField] private AudioClip block;
 
     private PlayerMove moveInfo;
     private PlayerBattle battleInfo;
@@ -144,16 +150,45 @@ public class PlayerAnim : MonoBehaviour
         AudioSource.PlayClipAtPoint(footstep, followCam.transform.position, 0.5f);
     }
 
-    private void SwordAttack()
+    private void SwordAttack(int _num)
     {
-        // 이벤트가 발생하면 발소리 사운드 재생
-        AudioSource.PlayClipAtPoint(swordAttack, followCam.transform.position, 0.5f);
+
+        if (_num == 1)
+        {
+            AudioSource.PlayClipAtPoint(swordAttack1, followCam.transform.position, 0.5f);
+        }
+        else if (_num == 2)
+        {
+            AudioSource.PlayClipAtPoint(swordAttack2, followCam.transform.position, 0.5f);
+        }
+        else if (_num == 3)
+        {
+            AudioSource.PlayClipAtPoint(swordAttack3, followCam.transform.position, 0.5f);
+        }
+        else if (_num == 4)
+        {
+            AudioSource.PlayClipAtPoint(swordAttack4, followCam.transform.position, 0.5f);
+        }
+        else if (_num == 5)
+        {
+            AudioSource.PlayClipAtPoint(swordAttack5, followCam.transform.position, 0.5f);
+        }
     }
 
     private void AxeAttack()
     {
         // 이벤트가 발생하면 발소리 사운드 재생
         AudioSource.PlayClipAtPoint(axeAttack, followCam.transform.position, 0.5f);
+    }
+
+    private void SpearAttack()
+    {
+        AudioSource.PlayClipAtPoint(spearAttack, followCam.transform.position, 0.5f);
+    }
+
+    private void Block()
+    {
+        AudioSource.PlayClipAtPoint(block, followCam.transform.position, 1f);
     }
     #endregion
 

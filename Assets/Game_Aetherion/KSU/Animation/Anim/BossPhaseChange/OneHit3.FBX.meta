@@ -578,7 +578,14 @@ ModelImporter:
       mirror: 0
       bodyMask: 01000000010000000100000001000000010000000100000001000000010000000100000001000000010000000100000001000000
       curves: []
-      events: []
+      events:
+      - time: 0.31465414
+        functionName: PhaseChange
+        data: 
+        objectReferenceParameter: {fileID: 11500000, guid: 2c5a58c8e051b1a48a95d474ba16d97e, type: 3}
+        floatParameter: 0
+        intParameter: 0
+        messageOptions: 0
       transformMask: []
       maskType: 3
       maskSource: {instanceID: 0}
@@ -1383,8 +1390,7 @@ ModelImporter:
     - name: Bone012
       parentName: Bone011
       position: {x: -0.28616843, y: -0.0000009155273, z: 0.000000019073486}
-      rotation: {x: -2.3283067e-10, y: -0.0000000063027983, z: -0.0000000018626451,
-        w: 1}
+      rotation: {x: -2.3283067e-10, y: -0.0000000063027983, z: -0.0000000018626451, w: 1}
       scale: {x: 1, y: 1, z: 1}
     - name: Bone001
       parentName: spine_03
@@ -1488,8 +1494,7 @@ ModelImporter:
     hasTranslationDoF: 0
     hasExtraRoot: 1
     skeletonHasParents: 1
-  lastHumanDescriptionAvatarSource: {fileID: 9000000, guid: 659c7284dc1e16a4bbbf3d746380383e,
-    type: 3}
+  lastHumanDescriptionAvatarSource: {fileID: 9000000, guid: 659c7284dc1e16a4bbbf3d746380383e, type: 3}
   autoGenerateAvatarMappingIfUnspecified: 1
   animationType: 3
   humanoidOversampling: 1
