@@ -7,7 +7,8 @@ public class BossParticle : MonoBehaviour
     [SerializeField] private GameObject StartAttack;
     [SerializeField] private ParticleSystem teleportParticleSystem;
     [SerializeField] private ParticleSystem teleportParticleSystem2;
-    public string[] targetAnimationStates = { "NoReactAttack", "FirstDetect" };
+    [SerializeField] private GameObject bossheal;
+    public string[] targetAnimationStates = { "NoReactAttack", "FirstDetect" , "Healing" };
 
     private float trailEndOffset = 0.8f;
     private void Start()
@@ -47,6 +48,16 @@ public class BossParticle : MonoBehaviour
 
                 DisableTrail(noattack); // 0.1초 일찍 TrailRenderer 비활성화
             }
+        }
+        if (stateInfo.IsName("Healing"))
+        {
+            if (stateInfo.normalizedTime < trailEndOffset)
+            {
+
+                EnableParticleGameObject(bossheal);
+
+            }
+            
         }
         if (stateInfo.IsName("FirstDetect"))
         {
