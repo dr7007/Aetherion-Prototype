@@ -304,7 +304,7 @@ public class BossMonsterAI : MonoBehaviour
         {
             PlayerAnim GBreakAttack = _collider.GetComponentInParent<PlayerAnim>();
 
-            if (GBreakAttack.critical)
+            if (GBreakAttack.guardbreak)
             {
                 Debug.Log("가드 브레이크 조건");
                 anim.SetTrigger(_GUARDBREAK_ANIM_TRIGGER_NAME);
@@ -564,6 +564,7 @@ public class BossMonsterAI : MonoBehaviour
                                                 {
                                                     new ActionNode(OnGuardCheck),
                                                     new ActionNode(JumpAttackEnemy),
+                                                    new ActionNode(NoReactAttack),
                                                 }
                                             ),
                                         }
@@ -632,7 +633,7 @@ public class BossMonsterAI : MonoBehaviour
             if (stateInfo.normalizedTime < 1.0f)
             {
                 judgeTime += Time.deltaTime;
-                if (rangeLv == 1)
+                if (rangeLv == 1 || rangeLv == 2)
                 {
                     tmpTime += Time.deltaTime;
                 }

@@ -233,9 +233,6 @@ AnimatorStateTransition:
   - m_ConditionMode: 1
     m_ConditionEvent: DefaultAtk
     m_EventTreshold: 0
-  - m_ConditionMode: 6
-    m_ConditionEvent: RangeLevel
-    m_EventTreshold: 1
   m_DstStateMachine: {fileID: 0}
   m_DstState: {fileID: -8880779265387474932}
   m_Solo: 0
@@ -558,9 +555,6 @@ AnimatorStateTransition:
   - m_ConditionMode: 1
     m_ConditionEvent: Judge
     m_EventTreshold: 0
-  - m_ConditionMode: 6
-    m_ConditionEvent: RangeLevel
-    m_EventTreshold: 1
   m_DstStateMachine: {fileID: 0}
   m_DstState: {fileID: 4898184738386849575}
   m_Solo: 0
