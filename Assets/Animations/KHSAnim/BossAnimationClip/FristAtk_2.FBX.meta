@@ -583,8 +583,15 @@ ModelImporter:
         floatParameter: 0
         intParameter: 0
         messageOptions: 0
-      - time: 0.3516102
+      - time: 0.38845232
         functionName: FirstAttackTeleport
+        data: 
+        objectReferenceParameter: {fileID: 11500000, guid: 1e9266146ef783e448ba12fa65061ca7, type: 3}
+        floatParameter: 0
+        intParameter: 0
+        messageOptions: 0
+      - time: 0.44592512
+        functionName: tp
         data: 
         objectReferenceParameter: {fileID: 11500000, guid: 1e9266146ef783e448ba12fa65061ca7, type: 3}
         floatParameter: 0
@@ -592,13 +599,6 @@ ModelImporter:
         messageOptions: 0
       - time: 0.5524317
         functionName: DisableWeaponCollider
-        data: 
-        objectReferenceParameter: {fileID: 11500000, guid: 201aef397f5431d46bf017b650584d8f, type: 3}
-        floatParameter: 0
-        intParameter: 0
-        messageOptions: 0
-      - time: 0.99852467
-        functionName: UnlockDirection
         data: 
         objectReferenceParameter: {fileID: 11500000, guid: 201aef397f5431d46bf017b650584d8f, type: 3}
         floatParameter: 0

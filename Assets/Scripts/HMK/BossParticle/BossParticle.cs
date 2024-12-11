@@ -56,7 +56,7 @@ public class BossParticle : MonoBehaviour
             Debug.Log("FirstAttackParticle 이벤트 실행됨: 파티클 실행");
         
     }
-    public void FirstAttackTeleport()
+    public void tp()
     {
         teleportParticleSystem2.Play();
         Debug.Log("텔포 후");
