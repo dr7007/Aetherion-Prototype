@@ -270,6 +270,10 @@ PrefabInstance:
       value: 5
       objectReference: {fileID: 0}
     - target: {fileID: 7382937333383845712, guid: b45c6347dae84514592d6da44695f780, type: 3}
+      propertyPath: ShapeModule.radiusThickness
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 7382937333383845712, guid: b45c6347dae84514592d6da44695f780, type: 3}
       propertyPath: InitialModule.startLifetime.scalar
       value: 1.5
       objectReference: {fileID: 0}
@@ -392,15 +396,15 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 4299738629470430756, guid: 82066d902ed0dd6488ddfd32eb994801, type: 3}
       propertyPath: m_LocalPosition.x
-      value: 0
+      value: -1.125
       objectReference: {fileID: 0}
     - target: {fileID: 4299738629470430756, guid: 82066d902ed0dd6488ddfd32eb994801, type: 3}
       propertyPath: m_LocalPosition.y
-      value: 0
+      value: -1.428
       objectReference: {fileID: 0}
     - target: {fileID: 4299738629470430756, guid: 82066d902ed0dd6488ddfd32eb994801, type: 3}
       propertyPath: m_LocalPosition.z
-      value: 0
+      value: -1.24
       objectReference: {fileID: 0}
     - target: {fileID: 4299738629470430756, guid: 82066d902ed0dd6488ddfd32eb994801, type: 3}
       propertyPath: m_LocalRotation.w
@@ -452,15 +456,15 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 4891440538664600065, guid: 82066d902ed0dd6488ddfd32eb994801, type: 3}
       propertyPath: InitialModule.startColor.maxColor.b
-      value: 0
+      value: 0.4716981
       objectReference: {fileID: 0}
     - target: {fileID: 4891440538664600065, guid: 82066d902ed0dd6488ddfd32eb994801, type: 3}
       propertyPath: InitialModule.startColor.maxColor.g
-      value: 0
+      value: 0.4716981
       objectReference: {fileID: 0}
     - target: {fileID: 4891440538664600065, guid: 82066d902ed0dd6488ddfd32eb994801, type: 3}
       propertyPath: InitialModule.startColor.maxColor.r
-      value: 1
+      value: 0.4716981
       objectReference: {fileID: 0}
     - target: {fileID: 4891440538664600065, guid: 82066d902ed0dd6488ddfd32eb994801, type: 3}
       propertyPath: EmissionModule.m_Bursts.Array.data[0].countCurve.scalar
@@ -793,7 +797,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e9c973c2b11ff8041b28643b167eee42, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  hitParticle: {fileID: 0}
+  hitParticle: {fileID: 8434252760798706704, guid: df24798cfe26f6341a2055961867e6c1, type: 3}
   playerAttackTag: PlayerAttack
   screenHitEffect: {fileID: 0}
 --- !u!114 &2937173807860340528
