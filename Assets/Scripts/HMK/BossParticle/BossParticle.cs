@@ -147,7 +147,7 @@ public class BossParticle : MonoBehaviour
 
             Debug.Log("Èú ÆÄÆ¼Å¬ ½ÇÇàµÊ");
             // Èú¹ê ‰çÀ»¶§ -> BREAK
-            // if (animator.GetBool("Èú»óÅÂ") == false) break;
+             if (animator.GetBool("healbane") == true) break;
         }
 
         IsHeal = false;
