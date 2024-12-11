@@ -10,6 +10,7 @@ public class MainSceneManager : MonoBehaviour
     [SerializeField] private GameObject followCam = null;
     [SerializeField] private Vector3 TestPosition = Vector3.zero;
     [SerializeField] private Vector3 StartPosition = Vector3.zero;
+    [SerializeField] private Vector3 BossStartPosition = Vector3.zero;
     [SerializeField] private Vector3 Phase2Player = Vector3.zero;
     [SerializeField] private Vector3 Phase2Boss = Vector3.zero;
 
@@ -101,11 +102,13 @@ public class MainSceneManager : MonoBehaviour
         // 보스 정보(애니메이션 상태, 체력) 초기화 - 페이즈 1일떄와 2일떄와 다름.
         if (!phase2)
         {
-
+            InitBoss1AnimationParameter();
+            boss.transform.position = BossStartPosition;
         }
         else
         {
-
+            InitBoss2AnimationParameter();
+            boss.transform.position = Phase2Boss;
         }
 
         // UI초기화 하는것도 필요한가..?
@@ -147,6 +150,32 @@ public class MainSceneManager : MonoBehaviour
         playerAnimInfo.Play("Idle", 0);
         playerWeaponInfo.Init();
         playerWeaponInfo.ChangeSword();
+    }
+
+    private void InitBoss1AnimationParameter()
+    {
+        BossAnimator.SetBool("FirstDetect", true);
+        BossAnimator.SetBool("Detect", false);
+        BossAnimator.SetBool("JumpAtk", false);
+        BossAnimator.SetBool("2ndPhase", false);
+        BossAnimator.SetBool("nowheal", false);
+        BossAnimator.ResetTrigger("Judge");
+        BossAnimator.ResetTrigger("TpJumpAtk");
+        BossAnimator.ResetTrigger("DefaultAtk");
+        BossAnimator.ResetTrigger("RespAtk");
+        BossAnimator.ResetTrigger("OnGuard");
+        BossAnimator.ResetTrigger("Critical");
+        BossAnimator.ResetTrigger("IsStun");
+        BossAnimator.ResetTrigger("isGBreak");
+        BossAnimator.ResetTrigger("Die");
+        BossAnimator.ResetTrigger("healbane");
+        BossAnimator.SetInteger("RangeLevel", 0);
+        BossAnimator.Play("Peaceful");
+    }
+
+    private void InitBoss2AnimationParameter()
+    {
+
     }
 
     private IEnumerator PhaseChange()
