@@ -65,24 +65,33 @@ public class BossMonsterAI : MonoBehaviour
 
     private float respAtkCooldown = 10f;                    // 플레이어 공격 상태 추격 쿨타임.
     private float tmpTime = 0f;                                     // Boss의 특정 행동 쿨타임.
+    private float guardCooldown = 0f;
+    private float jumpATKCooldown = 0f;
+    private float breakbenefitCooldown = 15f;
+
 
     #endregion
 
     #region Judge Bool Region
 
-    private bool isAnimationLocked = false;                         // 애니메이션 도중 진행 방향 고정 트리거.         (Animator Parameter로 변경 예정)
-    private bool isrespAtkOnCooldown = false;               // 플레이어 공격 상태 추격 트리거.               (Animator Parameter로 변경 예정)
+    private bool isAnimationLocked = false;                         // 애니메이션 도중 진행 방향 고정 판단.
+    private bool isrespAtkOnCooldown = false;                       // 플레이어 공격 상태 추격 쿨타임 판단.
 
     #endregion
 
     #region Functional values
+    
+    private const float GUARD_DEFAULT_INTERVAL = 10f;
+    private const float JUMPATK_DEFAULT_INTERVAL = 3f;
+    private const float JUDGE_TIME_INTERVAL = 3f;
+    private const float NOREACT_ATTACK_INTERVAL = 5f;
 
     private float offset = 5f;                                      // Boss의 FirstDetect Attack을 위한 offset 값.
     private int rangeLv = 0;
     private float extraDamage = 0f;
+    private float damageRedemtion = 0.0f;
     private float judgeTime = 0f;
-    private const float JUDGE_TIME_INTERVAL = 3f;
-    private const float NOREACT_ATTACK_INTERVAL = 5f;
+    
 
     #endregion
 
@@ -108,7 +117,8 @@ public class BossMonsterAI : MonoBehaviour
     private const string _DEFAULTATK_ANIM_TRIGGER_NAME = "DefaultAtk";          // Boss의 1페이즈 기본 공격 동작의 발동 트리거
     private const string _RESPATK_ANIM_TRIGGER_NAME = "RespAtk";                // Boss의 1페이즈 반응형 공격 동작의 발동 트리거
     private const string _GUARD_ANIM_TRIGGER_NAME = "OnGuard";
-    
+    private const string _JUMPATK_ANIM_TRIGGER_NAME = "JumpAtk";
+
     // 보스 상태 유발 트리거
     private const string _CRITICAL_ANIM_TRIGGER_NAME = "Critical";              // 반응형 공격 도중 Critical 상태 체크용 트리거
     private const string _STUNNED_ANIM_TRIGGER_NAME = "IsStun";
@@ -164,10 +174,11 @@ public class BossMonsterAI : MonoBehaviour
             {
                 HitCritical(_collider);
             }
-            if(anim.GetBool(_GUARDBREAK_ANIM_TRIGGER_NAME))
+            if(anim.GetBool(_GUARD_ANIM_TRIGGER_NAME))
             {
                 HitGBreak(_collider);
             }
+
             HitJudge(_collider);
         }
         
@@ -257,9 +268,11 @@ public class BossMonsterAI : MonoBehaviour
             // 대미지 적용
             if (playerAttack != null && currentHp != 0)
             {
-                float damage = playerAttack.GetDamage(); // 플레이어의 공격력 가져오기
-                TakeDamage(damage + extraDamage); // 보스에게 대미지 적용
+                float damage = playerAttack.GetDamage() + extraDamage; // 플레이어의 공격력 가져오기
+                damage = damage * (1 - damageRedemtion);
+                TakeDamage(damage); // 보스에게 대미지 적용
                 //Debug.Log("스턴 추뎀 확인용" + damage + " + " + extraDamage);
+                Debug.Log("가드 감쇠율 확인용 " + damageRedemtion);
             }
 
             // 충돌한 대상을 HitTracker에 추가
@@ -291,9 +304,10 @@ public class BossMonsterAI : MonoBehaviour
         {
             PlayerAnim GBreakAttack = _collider.GetComponentInParent<PlayerAnim>();
 
-            if (false/*GBreakAttack.guardbreak*/)
+            if (GBreakAttack.critical)
             {
-                anim.SetTrigger(_STUNNED_ANIM_TRIGGER_NAME);
+                Debug.Log("가드 브레이크 조건");
+                anim.SetTrigger(_GUARDBREAK_ANIM_TRIGGER_NAME);
             }
         }
     }
@@ -312,7 +326,6 @@ public class BossMonsterAI : MonoBehaviour
         {
             // 반응형 공격 애니메이션 트리거
             anim.SetTrigger(_RESPATK_ANIM_TRIGGER_NAME);
-            anim.SetTrigger(_CRITICAL_ANIM_TRIGGER_NAME);
             Debug.Log("공격탐지");
 
             // 반응형 공격 내부 쿨타임 시작
@@ -397,6 +410,15 @@ public class BossMonsterAI : MonoBehaviour
         anim.speed = 1f;
     }
 
+    private IEnumerator GuardBreakChance()
+    {
+        damageRedemtion = -0.2f;
+        Debug.Log("가드파괴 이득시간 : " + damageRedemtion);
+        yield return new WaitForSeconds(breakbenefitCooldown);
+        damageRedemtion = 0.0f;
+        Debug.Log("가드파괴 이득종료 : " + damageRedemtion);
+    }
+
     #endregion
 
     #region Animation-Event Essentials
@@ -441,9 +463,35 @@ public class BossMonsterAI : MonoBehaviour
         StartCoroutine(FirstAttackTeleportCoroutine());
     }
 
+    public void CriticalStart()
+    {
+        anim.SetTrigger(_CRITICAL_ANIM_TRIGGER_NAME);
+    }
     public void CriticalEnd()
     {
         anim.ResetTrigger(_CRITICAL_ANIM_TRIGGER_NAME);
+    }
+    public void OnGuardStart()
+    {
+        damageRedemtion = 0.5f;
+        Debug.Log("OGSTART : " + damageRedemtion);
+        anim.SetTrigger(_GUARD_ANIM_TRIGGER_NAME);
+    }
+    public void OnGuardEnd()
+    {
+        Debug.Log("OGEND");
+        anim.ResetTrigger(_GUARD_ANIM_TRIGGER_NAME);
+    }
+    public void GBbenefit()
+    {
+        Debug.Log("이득 쿨타임 시작");
+        StartCoroutine(GuardBreakChance());
+    }
+    public void GBreakEnd()
+    {
+        Debug.Log("GBreakEnd");
+        anim.ResetTrigger(_GUARD_ANIM_TRIGGER_NAME);
+        anim.ResetTrigger(_GUARDBREAK_ANIM_TRIGGER_NAME);
     }
 
     public void StunEnd()
@@ -452,6 +500,8 @@ public class BossMonsterAI : MonoBehaviour
         anim.ResetTrigger(_STUNNED_ANIM_TRIGGER_NAME);
         extraDamage = 0f;
     }
+
+    
 
     public void DieCall()
     {
@@ -509,11 +559,10 @@ public class BossMonsterAI : MonoBehaviour
                                             (
                                                 new List<INode>()
                                                 {
-                                                    new ActionNode(RandomDecisionCheck),
-                                                    new ActionNode(OnGuard),
+                                                    new ActionNode(OnGuardCheck),
+                                                    new ActionNode(JumpAttackEnemy),
                                                 }
                                             ),
-                                            new ActionNode(JumpAttackEnemy),
                                         }
                                     ),
                                 }
@@ -523,21 +572,7 @@ public class BossMonsterAI : MonoBehaviour
                                 new List<INode>()
                                 {
                                     new ActionNode(CheckRangeLevelThree),
-                                    new SequenceNode
-                                    (
-                                        new List<INode>()
-                                        {
-                                            new SelectorNode
-                                            (
-                                                new List<INode>()
-                                                {
-                                                    new ActionNode(RandomDecisionCheck),
-                                                    new ActionNode(LongRangeAttackEnemy),
-                                                }
-                                            ),
-                                            new ActionNode(RushEnemy),
-                                        }
-                                    ),
+                                    new ActionNode(TPJAndHealing),
                                 }
                             ),
                         }
@@ -602,7 +637,15 @@ public class BossMonsterAI : MonoBehaviour
             if (stateInfo.normalizedTime < 1.0f)
             {
                 judgeTime += Time.deltaTime;
-                tmpTime += Time.deltaTime;
+                if (rangeLv == 1)
+                {
+                    tmpTime += Time.deltaTime;
+                }
+                if (rangeLv == 2)
+                {
+                    guardCooldown += Time.deltaTime;
+                    jumpATKCooldown += Time.deltaTime;
+                }
                 if(judgeTime >= JUDGE_TIME_INTERVAL)
                 {
                     judgeTime = 0.0f;
@@ -659,21 +702,23 @@ public class BossMonsterAI : MonoBehaviour
         }
         return INode.ENodeState.ENS_Failure;
     }
-
-    INode.ENodeState IsApproachCheck()
+    INode.ENodeState OnGuardCheck()
     {
-        return INode.ENodeState.ENS_Failure;
-    }
-
-    INode.ENodeState RandomDecisionCheck()
-    {
-        if(Random.Range(1,11) > 5)
+        if (!anim.GetBool(_GUARD_ANIM_TRIGGER_NAME))
         {
-            anim.SetTrigger(_GUARD_ANIM_TRIGGER_NAME);
-            return INode.ENodeState.ENS_Success;
+            if (guardCooldown >= GUARD_DEFAULT_INTERVAL)
+            {
+                guardCooldown = 0.0f;
+                Debug.Log("가드 실행");
+                anim.SetTrigger(_GUARD_ANIM_TRIGGER_NAME);
+
+                return INode.ENodeState.ENS_Success;
+            }
         }
+
         return INode.ENodeState.ENS_Failure;
     }
+
     #endregion
 
     #region Attack Node
@@ -738,39 +783,22 @@ public class BossMonsterAI : MonoBehaviour
         return INode.ENodeState.ENS_Failure;
     }
 
-    INode.ENodeState OnGuard()
-    {
-        // 현재 애니메이터 상태정보 받아오기
-        AnimatorStateInfo stateInfo = anim.GetCurrentAnimatorStateInfo(0);
-
-        // Stun 애니메이션이 실행 중인지 확인
-        if (stateInfo.IsName(_GUARD_ANIM_STATE_NAME))
-        {
-            if (stateInfo.normalizedTime < 1.0f)
-            {
-                // 가드상태일때 가드 브레이크 어택시 가드 파괴상태 유발 트리거 동작
-                // 가드상태일때 일반 어택시 입는 피해 감소 처리 -> 
-                // 애니메이션이 실행 중일 때 Running 반환
-                return INode.ENodeState.ENS_Running;
-            }
-            else
-            {
-                // 애니메이션이 종료된 경우 Failure 반환
-                return INode.ENodeState.ENS_Failure;
-            }
-        }
-        // 애니메이션 상태가 맞지 않을 경우 Failure 반환
-        return INode.ENodeState.ENS_Failure;
-    }
     INode.ENodeState JumpAttackEnemy()
     {
+        if (!anim.GetBool(_JUMPATK_ANIM_TRIGGER_NAME))
+        {
+            if (jumpATKCooldown >= JUMPATK_DEFAULT_INTERVAL)
+            {
+                Debug.Log("점프공격 실행");
+                jumpATKCooldown = 0.0f;
+                anim.SetTrigger(_JUMPATK_ANIM_TRIGGER_NAME);
+                return INode.ENodeState.ENS_Success;
+            }
+        }
+
         return INode.ENodeState.ENS_Failure;
     }
-    INode.ENodeState LongRangeAttackEnemy()
-    {
-        return INode.ENodeState.ENS_Failure;
-    }
-    INode.ENodeState RushEnemy()
+    INode.ENodeState TPJAndHealing()
     {
         return INode.ENodeState.ENS_Failure;
     }
