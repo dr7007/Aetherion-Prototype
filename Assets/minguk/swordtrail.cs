@@ -10,6 +10,8 @@ public class SwordTrail : MonoBehaviour
     [SerializeField] private GameObject ComboC1Trail;
     [SerializeField] private GameObject ComboC2Trail;
 
+    [SerializeField] private GameObject blockParticleEffect; // Block 상태에서 사용할 효과
+
     private string currentAnimationState = ""; // 현재 상태 추적
 
     private float trailEndOffset = 0.8f;
@@ -19,6 +21,7 @@ public class SwordTrail : MonoBehaviour
     {
         animator = GetComponentInParent<Animator>();
         DisableAllTrails();
+        DisableParticleGameObject(blockParticleEffect); // Block 효과 초기화
     }
 
     void Update()
@@ -26,7 +29,9 @@ public class SwordTrail : MonoBehaviour
         AnimatorStateInfo stateInfo = animator.GetCurrentAnimatorStateInfo(0);
 
         // 현재 애니메이션 상태 확인
-        string newAnimationState = stateInfo.IsName("ComboC2") ? "ComboC2" : stateInfo.IsName("ComboC1") ? "ComboC1" : "";
+        string newAnimationState = stateInfo.IsName("ComboC2") ? "ComboC2" :
+                                    stateInfo.IsName("ComboC1") ? "ComboC1" :
+                                    stateInfo.IsName("Block") ? "Block" : "";
 
         // 상태가 변경되었을 때 처리
         if (currentAnimationState != newAnimationState)
@@ -71,8 +76,13 @@ public class SwordTrail : MonoBehaviour
             else
                 DisableParticleGameObject(ComboC2Trail);
         }
+        else if (stateInfo.IsName("Block")) // Block 상태 처리
+        {
+            EnableParticleGameObject(blockParticleEffect);
+        }
         else
         {
+            DisableParticleGameObject(blockParticleEffect); // Block 상태가 아닐 때 비활성화
             DisableAllTrails();
         }
     }
@@ -88,37 +98,35 @@ public class SwordTrail : MonoBehaviour
         {
             DisableParticleGameObject(ComboC1Trail); // ComboC1Trail 비활성화
         }
+        else if (stateName == "Block")
+        {
+            DisableParticleGameObject(blockParticleEffect); // Block 효과 비활성화
+        }
     }
 
     private void EnableTrail(TrailRenderer trail)
     {
         DisableAllTrails();
-        if (trail != null)
-        {
-            trail.emitting = true;
-        }
+        trail.emitting = true;
     }
 
     private void DisableTrail(TrailRenderer trail)
     {
-        if (trail != null)
-        {
-            trail.emitting = false;
-        }
+        trail.emitting = false;
     }
 
     private void DisableAllTrails()
     {
-        if (combo1Trail != null) combo1Trail.emitting = false;
-        if (combo2Trail != null) combo2Trail.emitting = false;
-        if (combo3Trail != null) combo3Trail.emitting = false;
+        combo1Trail.emitting = false;
+        combo2Trail.emitting = false;
+        combo3Trail.emitting = false;
     }
 
     private void EnableParticleGameObject(GameObject obj)
     {
         obj.SetActive(true);
         ParticleSystem particle = obj.GetComponent<ParticleSystem>();
-        if (particle != null && !particle.isPlaying)
+        if (!particle.isPlaying)
         {
             particle.Play();
         }
@@ -127,13 +135,14 @@ public class SwordTrail : MonoBehaviour
     private void DisableParticleGameObject(GameObject obj)
     {
         ParticleSystem particle = obj.GetComponent<ParticleSystem>();
-        if (particle != null && particle.isPlaying)
+        if (particle.isPlaying)
         {
             particle.Stop();
         }
         obj.SetActive(false);
     }
 }
+
 
 
 
