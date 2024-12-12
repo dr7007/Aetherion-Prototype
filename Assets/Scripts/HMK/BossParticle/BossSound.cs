@@ -8,6 +8,8 @@ public class BossSound : MonoBehaviour
     [SerializeField] AudioClip step2;
     [SerializeField] AudioClip healing;
     [SerializeField] AudioClip break2;
+    [SerializeField] AudioClip baum;
+    [SerializeField] AudioClip kkang1;
     
     private void First()
     {
@@ -59,4 +61,25 @@ public class BossSound : MonoBehaviour
     {
         AudioSource.PlayClipAtPoint(bangsound, gameObject.transform.position, 1f);
     }
+    private void take1()
+    {
+        AudioSource.PlayClipAtPoint(baum, gameObject.transform.position, 1f);
+    }
+    private void take2()
+    {
+        AudioSource.PlayClipAtPoint(baum, gameObject.transform.position, 1f);
+    }
+    private void take3()
+    {
+        AudioSource.PlayClipAtPoint(baum, gameObject.transform.position, 1f);
+    }
+    private void kkang()
+    {
+        AudioSource.PlayClipAtPoint(kkang1, gameObject.transform.position, 1f);
+    }
+    private void hitt()
+    {
+        AudioSource.PlayClipAtPoint(baum, gameObject.transform.position, 1f);
+    }
+
 }
