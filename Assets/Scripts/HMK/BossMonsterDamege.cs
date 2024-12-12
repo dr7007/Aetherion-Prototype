@@ -5,7 +5,7 @@ public class BossHitHandler : MonoBehaviour
     [SerializeField] private ParticleSystem hitParticle;  // 플레이어 공격 시 발생할 파티클 시스템
     [SerializeField] private string playerAttackTag = "PlayerAttack";  // 플레이어 공격 태그
     [SerializeField] private ScreenHitEffect screenHitEffect; // 화면 충격 효과 스크립트
-
+    [SerializeField] private AudioClip playerattack;
     // 트리거 충돌 시 호출
     private void OnTriggerEnter(Collider other)
     {
@@ -37,6 +37,7 @@ public class BossHitHandler : MonoBehaviour
 
         // 파티클 실행
         hitParticle.Play();
+        AudioSource.PlayClipAtPoint(playerattack, gameObject.transform.position, 1f);
     }
 
     // 화면 충격 효과 실행 함수

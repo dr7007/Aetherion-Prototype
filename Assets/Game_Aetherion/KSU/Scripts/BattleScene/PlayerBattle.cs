@@ -138,6 +138,45 @@ public class PlayerBattle : MonoBehaviour
             return;
         }
 
+        // 2페이지 보스몬스터에게 맞았을떄
+        if (other.CompareTag("BossMonster") && transform.gameObject.tag == "Player")
+        {
+            TakeDamage(30);
+
+            // 맞는 방향을 구하고
+            hitDir = new Vector3(transform.position.x - mosterPosition.x, 0f, transform.position.z - mosterPosition.z).normalized;
+
+            // 히트 리액션 보정을 위한 움직임 코루틴
+            StartCoroutine("HitReactCoroutine", hitDir);
+
+            // 방향을 플레이어 방향에 맞춰서 한번 바꾸고
+            hitDir = transform.InverseTransformDirection(hitDir);
+
+            // 애니메이션 실행시킴.
+            anim.SetFloat("HitDirX", hitDir.x);
+            anim.SetFloat("HitDirZ", hitDir.z);
+            anim.CrossFade("HitReact", 0.05f, curWeaponNum);
+
+            // 맞았다면 무기도 상태에 맞게 초기화
+            if (curWeaponNum == 0)
+            {
+                weaponChange.ChangeSword();
+            }
+            else
+            {
+                weaponChange.ChangeAxe();
+            }
+
+            // 회피 상태도 초기화
+            anim.SetInteger("EvasionNum", 0);
+
+            // 공격 상태 초기화
+            pAnim.hitCombo = false;
+            pAnim.critical = false;
+            pAnim.guardbreak = false;
+            pAnim.healbane = false;
+        }
+
         // 무기에 맞았을때 리액션
         if (other.CompareTag("MonsterWeapon") && transform.gameObject.tag == "Player")
         {

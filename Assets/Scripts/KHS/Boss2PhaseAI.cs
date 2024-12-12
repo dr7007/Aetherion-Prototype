@@ -1,10 +1,11 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
-using static PlayerAnim;
+
 
 public class Boss2PhaseAI : MonoBehaviour
 {
+    public delegate void boss2Delegate();
+    public boss2Delegate bossDieCallback;
+
     [Header("Condition")]
     [SerializeField] private float NeedClear = 5f;
     [SerializeField] private float CurCount = 0f;
@@ -85,7 +86,7 @@ public class Boss2PhaseAI : MonoBehaviour
 
     public void DieCall()
     {
-
+        bossDieCallback?.Invoke();
     }
     public void LockDirection()
     {
