@@ -578,7 +578,14 @@ ModelImporter:
       mirror: 0
       bodyMask: 01000000010000000100000001000000010000000100000001000000010000000100000001000000010000000100000001000000
       curves: []
-      events: []
+      events:
+      - time: 0.41751358
+        functionName: take2
+        data: 
+        objectReferenceParameter: {fileID: 11500000, guid: a1a2203793d1b1742916dd0241e0557d, type: 3}
+        floatParameter: 0
+        intParameter: 0
+        messageOptions: 0
       transformMask: []
       maskType: 3
       maskSource: {instanceID: 0}
