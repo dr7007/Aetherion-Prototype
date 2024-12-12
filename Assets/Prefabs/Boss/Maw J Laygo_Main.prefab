@@ -716,12 +716,16 @@ PrefabInstance:
       value: Maw J Laygo_Main
       objectReference: {fileID: 0}
     - target: {fileID: 919132149155446097, guid: 3566bad897c419744a77ff160603e2e7, type: 3}
+      propertyPath: m_Layer
+      value: 7
+      objectReference: {fileID: 0}
+    - target: {fileID: 919132149155446097, guid: 3566bad897c419744a77ff160603e2e7, type: 3}
       propertyPath: m_IsActive
       value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 919132149155446097, guid: 3566bad897c419744a77ff160603e2e7, type: 3}
       propertyPath: m_TagString
-      value: BossMonster
+      value: Monster
       objectReference: {fileID: 0}
     - target: {fileID: 5866666021909216657, guid: 3566bad897c419744a77ff160603e2e7, type: 3}
       propertyPath: m_Controller
@@ -760,6 +764,12 @@ PrefabInstance:
     - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: 3566bad897c419744a77ff160603e2e7, type: 3}
       insertIndex: -1
       addedObject: {fileID: 6563729742266091700}
+    - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: 3566bad897c419744a77ff160603e2e7, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 4915318354646029264}
+    - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: 3566bad897c419744a77ff160603e2e7, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 6902978942945752479}
   m_SourcePrefab: {fileID: 100100000, guid: 3566bad897c419744a77ff160603e2e7, type: 3}
 --- !u!4 &7278380172258525276 stripped
 Transform:
@@ -817,7 +827,7 @@ Rigidbody:
   m_UseGravity: 1
   m_IsKinematic: 0
   m_Interpolate: 0
-  m_Constraints: 84
+  m_Constraints: 80
   m_CollisionDetection: 0
 --- !u!95 &727512632364908446
 Animator:
@@ -867,6 +877,41 @@ MonoBehaviour:
   healbaneDamage: 9000
   weaponCollider: {fileID: 1527399281470501317}
   hitCooldown: 0.2
+--- !u!114 &4915318354646029264
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7947112372366678758}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a1a2203793d1b1742916dd0241e0557d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  attack: {fileID: 8300000, guid: a652877b012108e41871f867ada9f176, type: 3}
+  bangsound: {fileID: 8300000, guid: a62e9ee102aec5a4bbb2b03dbc4bac4f, type: 3}
+  houling: {fileID: 8300000, guid: 6b1cbdc112340f945b83151b23810c4b, type: 3}
+  step2: {fileID: 8300000, guid: 207b3921817e5684d92d1ae891798563, type: 3}
+  healing: {fileID: 8300000, guid: 4ff2bd295334ff14e80425f5c9a340bf, type: 3}
+  break2: {fileID: 8300000, guid: a62e9ee102aec5a4bbb2b03dbc4bac4f, type: 3}
+  baum: {fileID: 8300000, guid: 9e96bfe8a76fba24f95a610ccd3ecee1, type: 3}
+  kkang1: {fileID: 8300000, guid: 9e96bfe8a76fba24f95a610ccd3ecee1, type: 3}
+--- !u!114 &6902978942945752479
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7947112372366678758}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e9c973c2b11ff8041b28643b167eee42, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  hitParticle: {fileID: 0}
+  playerAttackTag: PlayerAttack
+  screenHitEffect: {fileID: 0}
 --- !u!4 &8880277694581954687 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 1852576806548013000, guid: 3566bad897c419744a77ff160603e2e7, type: 3}
