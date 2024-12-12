@@ -12,7 +12,7 @@ GameObject:
   - component: {fileID: 7794282024426152237}
   m_Layer: 0
   m_Name: nullObject
-  m_TagString: Pilar
+  m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0

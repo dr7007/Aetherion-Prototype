@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using UnityEngine;
 
 
@@ -17,6 +18,7 @@ public class Boss2PhaseAI : MonoBehaviour
     private Quaternion lockedRotation;                              // 애니메이션 시작 시 고정된 로테이션 값 버퍼
     private Animator anim = null;
     private float tmpTime = 0.0f;
+    private HashSet<Collider> hitTargets = new HashSet<Collider>();
 
     private const string _ONFIELD_ANIM_TRIGGER_NAME = "OnField";
     private const string _JUDGE_ANIM_TRIGGER_NAME = "Judge";
@@ -65,7 +67,6 @@ public class Boss2PhaseAI : MonoBehaviour
         }
     }
 
-
     private void OnTriggerEnter(Collider _collider)
     {
         if (_collider.CompareTag("pilar")) // 플레이어 무기에 의해 공격받은 경우
@@ -73,15 +74,23 @@ public class Boss2PhaseAI : MonoBehaviour
             PilerBreak();
             anim.SetTrigger(_STRIKE_ANIM_TRIGGER_NAME);
         }
-        else if(_collider.CompareTag("Pilar"))
-        {
-            anim.SetTrigger(_STRIKE_ANIM_TRIGGER_NAME);
-        }
         else if (_collider.CompareTag("Player"))
         {
             anim.SetTrigger(_STRIKE_ANIM_TRIGGER_NAME);
         }
+        else if (_collider.CompareTag("Pilar"))
+        {
+            if (!hitTargets.Contains(_collider))
+            {
+                anim.SetTrigger(_STRIKE_ANIM_TRIGGER_NAME);
 
+                hitTargets.Add(_collider);
+            }
+            else
+            {
+                hitTargets.Remove(_collider);
+            }
+        }
     }
 
     public void DieCall()
