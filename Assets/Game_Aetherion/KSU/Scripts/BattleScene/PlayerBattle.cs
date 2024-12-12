@@ -26,7 +26,7 @@ public class PlayerBattle : MonoBehaviour
     private PlayerMove moveInfo;
     private BoxCollider attackCollider = null;
 
-    public float PlayerAtk = 3000000f;
+    public float PlayerAtk = 0f;
     public float PlayerMaxHp = 100f;
     public float PlayerCurHp;
     private float playerMaxStamina = 100f;
@@ -90,6 +90,13 @@ public class PlayerBattle : MonoBehaviour
             anim.SetTrigger(_DIE_ANUM_BOOL_NAME);
             anim.SetTrigger(_DIECHK_ANIM_BOOL_NAME);
         }
+
+        // 죽었을때 UI초기화 하는거
+        if (pAnim.dieplayerUi)
+        {
+            HpChangedCallback?.Invoke(PlayerCurHp, PlayerMaxHp);
+            pAnim.dieplayerUi = false;
+        }
     }
 
     // 몬스터의 위치 정보를 얻어오는 코드
@@ -136,9 +143,8 @@ public class PlayerBattle : MonoBehaviour
         }
 
         // 만약 피격모션 중이라면 return
-        if ((CheckHitReact() || pAnim.CheckAnim(curWeaponNum) == PlayerAnim.EAnim.Death) && !anim.GetBool(_DIECHK_ANIM_BOOL_NAME))
+        if ((CheckHitReact() || pAnim.CheckAnim(curWeaponNum) == PlayerAnim.EAnim.Death))
         {
-            
             return;
         }
 

@@ -10,7 +10,7 @@ public class Pillar : MonoBehaviour
 
         if (other.CompareTag("BossMonster"))
         {
-            Destroy(gameObject); // ±âµÕ ¿ÀºêÁ§Æ® ÆÄ±«
+            gameObject.SetActive(false); // ±âµÕ ¿ÀºêÁ§Æ® ÆÄ±«
             Destory.Play();
         }
     }

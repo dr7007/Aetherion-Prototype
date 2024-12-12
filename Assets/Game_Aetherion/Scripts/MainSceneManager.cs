@@ -1,3 +1,4 @@
+using JetBrains.Annotations;
 using System.Collections;
 using Unity.Cinemachine;
 using UnityEngine;
@@ -34,6 +35,9 @@ public class MainSceneManager : MonoBehaviour
 
     [SerializeField] private GameObject DieBoss = null;
     [SerializeField] private GameObject DieCam = null;
+
+    public delegate void bossHpUI();
+    public bossHpUI bossHpUireset;
 
     private string ClickName = null;
     private Animator playerAnimInfo;
@@ -117,12 +121,35 @@ public class MainSceneManager : MonoBehaviour
         // 카메라 상태 초기화
         followCam.SetActive(true);
 
+        // 1초 대기후 보스 이동
+        StartCoroutine(Wait1Sec());
+
+
+        // UI초기화 하는것도 필요한가..?
+    }
+
+    // 0.5초간 캐릭터 콜라이더 끄는 함수
+    private IEnumerator NoRootMotionForDie()
+    {
+        player.GetComponent<CharacterController>().enabled = false;
+
+        player.transform.position = StartPosition;
+        yield return null;
+
+        player.GetComponent<CharacterController>().enabled = true;
+    }
+
+    private IEnumerator Wait1Sec()
+    {
+        yield return new WaitForSeconds(1f);
         // 보스 정보(애니메이션 상태, 체력) 초기화 - 페이즈 1일떄와 2일떄와 다름.
         if (!phase2)
         {
             // 체력 초기화 하는 코드
             InitBoss1AnimationParameter();
+            boss.GetComponent<BossMonsterAI>().currentHp = boss.GetComponent<BossMonsterAI>().maxHp;
             boss.transform.position = BossStartPosition;
+            bossHpUireset?.Invoke();
         }
         else
         {
@@ -132,19 +159,6 @@ public class MainSceneManager : MonoBehaviour
             boss.transform.position = Phase2Boss;
         }
 
-        // UI초기화 하는것도 필요한가..?
-    }
-
-    // 0.5초간 캐릭터 콜라이더 끄는 함수
-    private IEnumerator NoRootMotionForDie()
-    {
-        player.GetComponent<CharacterController>().enabled = false;
-        yield return new WaitForSeconds(0.5f);
-
-        player.transform.position = StartPosition;
-
-        player.GetComponent<CharacterController>().enabled = true;
-        yield return new WaitForSeconds(0.5f);
     }
 
     // 플레이어 애니메이션 초기화 및 무기레이어와 상태 초기화

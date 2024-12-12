@@ -51,6 +51,7 @@ public class PlayerAnim : MonoBehaviour
     public bool critical = false;
     public bool guardbreak = false;
     public bool healbane = false;
+    public bool dieplayerUi = false;
     private PlayerWeaponChange pWeaponChange;
 
     private float attackStamina = 10f;
@@ -341,7 +342,6 @@ public class PlayerAnim : MonoBehaviour
         yield return new WaitForSeconds(3f);
 
         // 3초동안 생겼다가 사라지는것까지 1.5초 생성 -> 1.5초 사라짐
-
         CanvasGroup canvasGroup = DieImage.GetComponent<CanvasGroup>();
 
         // 1.5초 동안 알파 값 증가 (0 -> 1)
@@ -385,7 +385,7 @@ public class PlayerAnim : MonoBehaviour
         // 플레이어 초기화
         // 보스 초기화
         diedelegate?.Invoke();
-
+        dieplayerUi = true;
 
         // 페이드 인
         elapsedTime = 0f;

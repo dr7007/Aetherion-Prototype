@@ -20,8 +20,9 @@ public class BossMonsterAI : MonoBehaviour
     [SerializeField] private float rotationSpeed = 2f;              // 플레이어를 LookAt할 때의 회전 속도
 
     [Header("BossStats")]
-    [SerializeField] private float maxHp = 30000f;                  // 보스의 최대 체력
-    [SerializeField] private float currentHp;                       // 보스의 현제 체력
+    // 임시용으로 귀찮아서 public 해뒀습니다.
+    [SerializeField] public float maxHp = 30000f;                  // 보스의 최대 체력
+    [SerializeField] public float currentHp;                       // 보스의 현제 체력
     [SerializeField] private float atk = 30f;                       // 보스의 공격력
     [SerializeField] private float healvalue = 300f;
     [SerializeField] private float healbaneDamage = 9000f;
@@ -146,6 +147,9 @@ public class BossMonsterAI : MonoBehaviour
 
     #endregion
 
+    // 메인에서 콜백받기 위해 넣어둠
+    public GameObject MainGM = null; 
+
     private void Awake()
     {
         currentHp = maxHp;
@@ -160,6 +164,9 @@ public class BossMonsterAI : MonoBehaviour
         anim.SetBool(_FIRSTDETECT_ANIM_BOOL_NAME, true);
         anim.SetBool(_DETECT_ANIM_BOOL_NAME, false);
         anim.SetInteger(_RANGE_ANIM_INT_NAME, 0);
+
+        // 체력회복 콜백
+        MainGM.GetComponent<MainSceneManager>().bossHpUireset += CallbackHp;
     }
     private void Update()
     {
@@ -175,6 +182,11 @@ public class BossMonsterAI : MonoBehaviour
             LookAtPlayer();
         }
         
+    }
+
+    private void CallbackHp()
+    {
+        HpChangedCallback?.Invoke(currentHp, maxHp);
     }
 
     private void FixedUpdate()
