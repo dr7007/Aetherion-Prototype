@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
+using System.Runtime.CompilerServices;
 using UnityEngine;
 
 
@@ -25,15 +26,16 @@ public class PlayerBattle : MonoBehaviour
     private PlayerMove moveInfo;
     private BoxCollider attackCollider = null;
 
+    public float PlayerAtk = 3000000f;
     public float PlayerMaxHp = 100f;
     public float PlayerCurHp;
-    private float PlayerAtk = 3000000f;
     private float playerMaxStamina = 100f;
     private float playerCurStamina;
     private int curWeaponNum;
     private bool IsShieldHit = false;
 
-    private const string _DIE_ANUM_TRIGGER_NAME = "Die";
+    private const string _DIE_ANUM_BOOL_NAME = "Die";
+    private const string _DIECHK_ANIM_BOOL_NAME = "DieChk";
 
     public delegate void OnHpChangedDelegate(float currentHp, float maxHp);
 
@@ -85,7 +87,8 @@ public class PlayerBattle : MonoBehaviour
         // 잠시 테스트용 죽음키
         if (Input.GetKeyDown(KeyCode.P))
         {
-            anim.SetTrigger(_DIE_ANUM_TRIGGER_NAME);
+            anim.SetTrigger(_DIE_ANUM_BOOL_NAME);
+            anim.SetTrigger(_DIECHK_ANIM_BOOL_NAME);
         }
     }
 
@@ -133,8 +136,9 @@ public class PlayerBattle : MonoBehaviour
         }
 
         // 만약 피격모션 중이라면 return
-        if (CheckHitReact() || pAnim.CheckAnim(curWeaponNum) == PlayerAnim.EAnim.Death)
+        if ((CheckHitReact() || pAnim.CheckAnim(curWeaponNum) == PlayerAnim.EAnim.Death) && !anim.GetBool(_DIECHK_ANIM_BOOL_NAME))
         {
+            
             return;
         }
 
@@ -155,7 +159,7 @@ public class PlayerBattle : MonoBehaviour
             // 애니메이션 실행시킴.
             anim.SetFloat("HitDirX", hitDir.x);
             anim.SetFloat("HitDirZ", hitDir.z);
-            anim.CrossFade("HitReact", 0.05f, curWeaponNum);
+            anim.CrossFade("HitReact", 0f, curWeaponNum);
 
             // 맞았다면 무기도 상태에 맞게 초기화
             if (curWeaponNum == 0)
@@ -293,7 +297,9 @@ public class PlayerBattle : MonoBehaviour
         // 플레이어 사망 처리
         if (PlayerCurHp <= 0)
         {
-            anim.SetTrigger(_DIE_ANUM_TRIGGER_NAME);
+            Debug.Log("정상 죽음");
+
+            StartCoroutine(DieCoroutine());
         }
     }
 
@@ -313,6 +319,14 @@ public class PlayerBattle : MonoBehaviour
 
         IsShieldHit = false;
         moveInfo.HDR.DisableKeyword("_EMISSION");
+    }
+
+    private IEnumerator DieCoroutine()
+    {
+        yield return new WaitForSeconds(0.5f);
+
+        anim.SetTrigger(_DIE_ANUM_BOOL_NAME);
+        anim.SetTrigger(_DIECHK_ANIM_BOOL_NAME);
     }
 
 }

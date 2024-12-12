@@ -1,4 +1,5 @@
 using System.Collections;
+using Unity.Cinemachine;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -13,6 +14,7 @@ public class MainSceneManager : MonoBehaviour
     [SerializeField] private Vector3 BossStartPosition = Vector3.zero;
     [SerializeField] private Vector3 Phase2Player = Vector3.zero;
     [SerializeField] private Vector3 Phase2Boss = Vector3.zero;
+    [SerializeField] private Material BossHit = null;
 
     [SerializeField] private Animator BossAnimator = null;
     [SerializeField] private Animator PhaseBossAnimator = null;
@@ -42,6 +44,7 @@ public class MainSceneManager : MonoBehaviour
 
     private void Start()
     {
+        BossHit.DisableKeyword("_EMISSION");
         // 초기화를 위한 플레이어 상태 가져옴.
         playerAnimInfo = player.GetComponent<Animator>();
         playerWeaponInfo = player.GetComponent<PlayerWeaponChange>();
@@ -152,6 +155,7 @@ public class MainSceneManager : MonoBehaviour
         playerAnimInfo.SetBool("IsBattleMode", false);
         playerAnimInfo.SetBool("IsChange", false);
         playerAnimInfo.SetBool("IsBlocking", false);
+        playerAnimInfo.SetBool("DieChk", false);
         playerAnimInfo.ResetTrigger("SpaceTrigger");
         playerAnimInfo.ResetTrigger("AttackTrigger");
         playerAnimInfo.ResetTrigger("ComboTrigger");
@@ -203,6 +207,9 @@ public class MainSceneManager : MonoBehaviour
 
     private IEnumerator PhaseChange()
     {
+        //
+        followCam.GetComponent<CinemachineDecollider>().enabled = false;
+
         // 브금 끄기
         Audio1.SetActive(false);
         phase2 = true;
