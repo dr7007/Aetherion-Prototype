@@ -4,68 +4,68 @@ using System.Collections;
 public class BossParticle : MonoBehaviour
 {
     private Animator animator;
-    [SerializeField] private TrailRenderer noattack;
-    [SerializeField] private GameObject StartAttack;
+    //[SerializeField] private TrailRenderer noattack;
+    //[SerializeField] private GameObject StartAttack;
     [SerializeField] private ParticleSystem teleportParticleSystem;
     [SerializeField] private ParticleSystem teleportParticleSystem2;
     [SerializeField] private GameObject bossheal;
     public string[] targetAnimationStates = { "NoReactAttack", "FirstDetect" , "Healing" };
-    [SerializeField] private AudioSource audioSource;
+ 
     private float trailEndOffset = 0.8f;
     private bool IsHeal = false;
 
     private void Start()
     {
         animator = GetComponentInParent<Animator>();
-        DisableAllTrails();
+       // DisableAllTrails();
     }
     void Update()
     {
         AnimatorStateInfo stateInfo = animator.GetCurrentAnimatorStateInfo(0);
 
         // ComboB1 상태
-        if (stateInfo.IsName("NoReactAttack"))
-        {
-            if (stateInfo.normalizedTime < trailEndOffset)
-            {
+        //if (stateInfo.IsName("NoReactAttack"))
+        //{
+        //    if (stateInfo.normalizedTime < trailEndOffset)
+        //    {
                 
-                EnableTrail(noattack);
+        //        EnableTrail(noattack);
 
-            }
-            else
-            {
+        //    }
+        //    else
+        //    {
                 
-                DisableTrail(noattack); // 0.1초 일찍 TrailRenderer 비활성화
-            }
-        }
-        if (stateInfo.IsName("JumpAttack1"))
-        {
-            if (stateInfo.normalizedTime < trailEndOffset)
-            {
+        //        DisableTrail(noattack); // 0.1초 일찍 TrailRenderer 비활성화
+        //    }
+        //}
+        //if (stateInfo.IsName("JumpAttack1"))
+        //{
+        //    if (stateInfo.normalizedTime < trailEndOffset)
+        //    {
 
-                EnableTrail(noattack);
+        //        EnableTrail(noattack);
 
-            }
-            else
-            {
+        //    }
+        //    else
+        //    {
 
-                DisableTrail(noattack); // 0.1초 일찍 TrailRenderer 비활성화
-            }
-        }
-        if (stateInfo.IsName("ResponsiveAttack"))
-        {
-            if (stateInfo.normalizedTime < trailEndOffset)
-            {
+        //        DisableTrail(noattack); // 0.1초 일찍 TrailRenderer 비활성화
+        //    }
+        //}
+        //if (stateInfo.IsName("ResponsiveAttack"))
+        //{
+        //    if (stateInfo.normalizedTime < trailEndOffset)
+        //    {
 
-                EnableTrail(noattack);
+        //        EnableTrail(noattack);
 
-            }
-            else
-            {
+        //    }
+        //    else
+        //    {
 
-                DisableTrail(noattack); // 0.1초 일찍 TrailRenderer 비활성화
-            }
-        }
+        //        DisableTrail(noattack); // 0.1초 일찍 TrailRenderer 비활성화
+        //    }
+        //}
         if (stateInfo.IsName("Healing"))
         {
             if (!IsHeal)
@@ -78,20 +78,20 @@ public class BossParticle : MonoBehaviour
 
 
         }
-        if (stateInfo.IsName("FirstDetect"))
-        {
-            if (stateInfo.normalizedTime < trailEndOffset)
-            {
+        //if (stateInfo.IsName("FirstDetect"))
+        //{
+        //    if (stateInfo.normalizedTime < trailEndOffset)
+        //    {
 
-                EnableParticleGameObject(StartAttack);
+        //        EnableParticleGameObject(StartAttack);
 
-            }
-            else
-            {
+        //    }
+        //    else
+        //    {
 
-                DisableParticleGameObject(StartAttack); // 0.1초 일찍 TrailRenderer 비활성화
-            }
-        }
+        //        DisableParticleGameObject(StartAttack); // 0.1초 일찍 TrailRenderer 비활성화
+        //    }
+        //}
 
     }
     public void FirstAttackParticle()
@@ -105,41 +105,41 @@ public class BossParticle : MonoBehaviour
         teleportParticleSystem2.Play();
         Debug.Log("텔포 후");
     }
-    public void EnableParticleObject()
-    {
-        if (StartAttack != null)
-        {
-            StartAttack.SetActive(true);
-        }
-    }
+    //public void EnableParticleObject()
+    //{
+    //    if (StartAttack != null)
+    //    {
+    //        StartAttack.SetActive(true);
+    //    }
+    //}
 
-    public void DisableParticleObject()
-    {
-        if (StartAttack != null)
-        {
-            StartAttack.SetActive(false);
-        }
-    }
+    //public void DisableParticleObject()
+    //{
+    //    if (StartAttack != null)
+    //    {
+    //        StartAttack.SetActive(false);
+    //    }
+    //}
 
     private void EnableTrail(TrailRenderer trail)
     {
-        DisableAllTrails(); 
+        //DisableAllTrails(); 
 
         trail.emitting = true;
 
     }
 
     
-    private void DisableTrail(TrailRenderer trail)
-    {
+    //private void DisableTrail(TrailRenderer trail)
+    //{
 
-        trail.emitting = false;
-    }
-    private void DisableAllTrails()
-    {
-        if (noattack != null) noattack.emitting = false;
+    //    trail.emitting = false;
+    //}
+    //private void DisableAllTrails()
+    //{
+    //    if (noattack != null) noattack.emitting = false;
 
-    }
+    //}
 
     private void EnableParticleGameObject(GameObject obj)
     {

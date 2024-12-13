@@ -298,6 +298,7 @@ public class BossMonsterAI : MonoBehaviour
             Debug.Log("체력회복 전: " + currentHp);
             currentHp += healvalue;
             currentHp = Mathf.Min(currentHp, maxHp);
+            CallbackHp();
             Debug.Log("체력회복 후: " + currentHp);
             if(currentHp >= maxHp)
             {
